@@ -266,14 +266,41 @@ $.ajax({
 
 ## git
 分布式命令管理系统
+- 创建
 git init
 git add
 git commit -m ''
+- 查看/比较
 git status
-git diff
+git diff 比较的是工作区文件与暂存区文件的区别（上次git add 的内容）
+git diff --cached 比较的是暂存区的文件与仓库分支里（上次git commit 后的内容）的区别
 git log
 git reflog
+- 版本回退
 git reset --hard HEAD^(commit_id)
+- 撤销修改
+git checkout -- filename 丢弃工作区的修改
+git reset HEAD filename 丢弃添加到暂存区的文件修改
+已经提交,使用版本回退
+- 删除
+git rm filename 
+git commit -m '' 提交删除
+git checkout -- filename 恢复删除 前提文件已commit,删除后没有git rm
+
+- 创建ssh
+ssh-keygen -t rsa -C "youremail@example.com"
+
+- 关联远程库
+git remote add origin git@server-name:path/repo-name.git
+git push -u origin master 第一次加上-u 关联本地与远程
+git clone
+- 创建分支
+git checkout -b dev 创建并切换到dev分支
+git branch 查看当前分支
+git branch <name> 创建分支
+git branch -d dev 删除分支
+git checkout dev 切换分支
+git merge dev 将dev分支合并到当前分支
 
 ## fetch用法
 
