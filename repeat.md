@@ -266,6 +266,14 @@ $.ajax({
 
 ## git
 分布式命令管理系统
+git init
+git add
+git commit -m ''
+git status
+git diff
+git log
+git reflog
+git reset --hard HEAD^(commit_id)
 
 ## fetch用法
 
