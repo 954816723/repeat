@@ -286,12 +286,10 @@ git reset HEAD filename 丢弃添加到暂存区的文件修改
 git rm filename 
 git commit -m '' 提交删除
 git checkout -- filename 恢复删除 前提文件已commit,删除后没有git rm
-
 - 创建ssh
 ssh-keygen -t rsa -C "youremail@example.com"
-
 - 关联远程库
-git remote add origin git@server-name:path/repo-name.git
+git remote add origin git@server-name:path/repo-name.git 关联多个远程仓库,修改origin
 git push -u origin master 第一次加上-u 关联本地与远程
 git clone
 - 创建分支
@@ -299,8 +297,35 @@ git checkout -b dev 创建并切换到dev分支
 git branch 查看当前分支
 git branch <name> 创建分支
 git branch -d dev 删除分支
+git branch -D dev 强行删除一个没有合并的分支
 git checkout dev 切换分支
-git merge dev 将dev分支合并到当前分支
+git merge dev 将dev分支快速合并到当前分支
+git merge --no-ff dev -m '' 合并分支,保留合并信息
+git stash 保存当前工作现场
+- 多人协作
+git remote -v 查看远程仓库信息
+git remote rm origin 删除已有的远程关联
+git clone
+git checkout -b dev origin/dev 创建远程origin的dev分支到本地dev
+git push origin branch-name 推送本地分支
+git pull 如果推送push失败时使用pull
+git branch --set-upstream origin/branch-name branch-name  pull报错时,创建关联
+- 标签
+git tag 查看所有标签
+git tag <name> 新建一个标签 默认打在最新提交的commit上
+git tag <name> commit_id 打在指定commit_id上
+git tag -a <name> -m '' commit_id 指定标签创建说明
+git show <name> 查看说明
+git push orgin <name> 推送书签到远程
+git push origin --tags 一次性推送所有未推送的标签
+git tag -d <name> 删除一个本地标签
+git push orign :refs/tags/<name> 删除远程书签
+- 忽略
+.gitignore文件
+git check-ignore 查看是哪条规则忽略的
+git add -f <name> 强制添加
+- 别名
+git config --global alias.st status
 
 ## fetch用法
 
@@ -420,7 +445,6 @@ function extend(source){
 ## 设计模式
 
 ## websocket
-
 
 ## vue
 
