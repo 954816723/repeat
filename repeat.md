@@ -1,7 +1,7 @@
 ## 常用js方法
 - 全局函数
-parseInt(string, radix) radix 2~36
-parseFloat()
+`parseInt(string, radix) radix 2~36`
+`parseFloat()`
 
 - bom
 window
