@@ -121,30 +121,42 @@ Array.
     reduce() 迭代,第二参数指定prev默认值,返回最终值
     every() 遍历数组,都返回true返回true,否则false
     some() 遍历数组,有一项是true就返回true,否则返回false
-    isArray()
+    isArray() 确定传递的值是不是Array
 
 - Object
-Object.freeze()阻止修改现有属性的特性和值，并阻止添加新属性
-Object.assign()
-Object.create()
-Object.is()
-Object.defineProperty()
-Object.defineProperties()
-Object.getOwnPropertyDescriptors()
-Object.getOwnPropertyNames()
-Object.getOwnPropertySymbols()
-Object.getPrototypeOf()
-Object.setPrototypeOf()
-Object.entries()
-Object.keys()
-Object.values()
+Object.prorotype 给对象原型上添加方法
+Object.freeze() 冻结对象,阻止修改现有属性的特性和值，并阻止添加新属性
+Object.seal() 防止其他代码删除对象的属性
+Object.assign() 通过赋值一个或多个对象的可枚举自有属性来获得一个新的对象
+Object.create(proto, [propertiesObject]) 使用指定的原型对象和属性创建一个新对象,指定新创建对象的__proto__
+Object.is() 比较两个值是否相等 所有NaN都相等
+Object.defineProperty(obj, prop, descriptor) 给对象添加一个属性并指定该属性的配置
+    obj:目标对象
+    prop:需要定义的属性和方法的名字
+    descriptor:目标属性所拥有的特性
+        value:属性的值
+        writable:是否能被重写
+        configurable:是否能删除目标属性或修改属性以下特性（writable, configurable, enumerable）
+        enumerable:是否是可枚举属性
+Object.defineProperties() 给对象添加多个属性并分别指定它们的配置
+Object.getOwnPropertyDescriptor() 返回对象指定的属性配置
+Object.getOwnPropertyDescriptors() 
+Object.getOwnPropertyNames() 返回一个数组,包含指定对象所有可枚举和不可枚举的属性名
+Object.getOwnPropertySymbols() 返回一个数组,包含指定对象所有的符号属性
+Object.getPrototypeOf() 返回指定对象的原型对象
+Object.setPrototypeOf() 设置对象的原型,即内部[[prototype]]属性
+Object.entries() 返回给定对象可枚举属性的[key:value]数组
+Object.keys() 返回一个包含给定对象自身可枚举属性名称的数组y
+Object.values() 返回对象自身可枚举值的数组
+Object.preventExtensions() 防止对象的任何扩展
+Object.isExtensible() 判断对象是否可扩展
 
-Object.hasOwnProperty()
-Object.isPrototypeOf()
-Object.toString()
-Object.valueOf()
+Object.prototype.hasOwnProperty() 返回一个布尔值,表示对象是否含有指定的属性,并且不是来自原型继承的
+Object.prototype.isPrototypeOf() 返回一个布尔值,表示指定对象是否在本对象的原型链中
+Object.prototype.toString() 返回对象的字符串表示
+Object.prototype.valueOf() 返回指定对象的原始值
 
-- this
+## this
 函数执行前面是否有.
 自执行函数this永远是window,严格模式下为undefined
 元素事件绑定方法,事件触发,方法中this指向当前元素
@@ -190,6 +202,10 @@ $.ajax({
 
     }
 })
+
+## fetch用法
+
+## axios用法
 
 ## 从浏览器输入到页面渲染完成
 浏览器(或其他客户端如微信)向服务器发出一个HTTP请求
@@ -261,6 +277,36 @@ $.ajax({
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 ## 缓存
+- cookie
+大小限制在4kb左右,个数一般不超过20个
+一般用于保存登录信息和标记用户
+每次都会写到在HTTP头中
+生命周期在设置的过期时间内
+在所有同源窗口中是共享的
+`document.cookie="username=John Doe; expires=Thu, 18 Dec 2013 12:00:00 GMT; path=/;Domain=<domain-value>";`
+可选参数:expires max-age path Domain Secure(SSL/HTTPS协议时cookie才会被发送) HttpOnly(服务器设置,客户端无法更改cookie)
+删除cookie需将cookie的有效时间更改
+- session
+服务器端保存数据的结构
+session的运行依赖session id
+而session id存在于cookie中
+- sessionStorage
+大小可达到5M或更多
+仅在当前窗口关闭前有效
+仅在本地存储,不会发送给服务器
+不在不同的浏览器窗口中共享,即使相同页面
+API:同localStorage
+- localStorage
+大小可达到5M或更多
+始终有效,除非手动删除
+仅在本地存储,不会发送给服务器
+在所有同源窗口中是共享的
+API:
+localStorage.setItem("key","value")
+localStorage.getItem("key")
+localStorage.key(i) 获取第i对的名字
+localStorage.removeItem("key")
+localStorage.clear() 清空
 
 ## 跨域header头
 
@@ -327,10 +373,6 @@ git add -f <name> 强制添加
 - 别名
 git config --global alias.st status
 
-## fetch用法
-
-## axios用法
-
 ## 动画属性
 
 ## bootstrap
@@ -356,21 +398,19 @@ js引擎创建执行上下文栈来管理执行上下文,当函数调用完成�
 
 不同的异步任务被分为两类:微任务 和 宏任务
 当前执行栈为空时,主线程会查看微任务队列是否有事件存在,不存在,再去宏任务队列中取出一个事件将对应回调加入当前执行栈,存在,就执行完微任务队列,再去执行宏任务队列,如此反复
-微任务
+宏任务
 setTimeout
 setInterval
 setImmediate
 I/O
 UI rendering
-宏任务
+微任务
 process.nextTick
 promise
 Object.observe
 MutationObserver
 
 ## 原型链
-
-## 跨域和安全
 
 ## 性能优化
 
@@ -415,18 +455,74 @@ function extend(source){
 
 ## MVC / MVP / MVVM
 
-## AMD / CMD
+## AMD / CMD / common.js / UMD
+模块就是实现特定功能的文件
+- AMD
+RequireJs对模块定义的规范产出
+采用异步方式加载模块
+define(id?, dependencies?, factory);
+依赖前置,提前执行,requirejs2.0也可以延迟执行
+- CMD
+SeaJs对模块定义的规范产出
+依赖就近,延迟执行
+- common.js
+服务器端模块的规范,node采用此规范
+采用同步方式加载模块
+提供四个环境变量module exports require global
+使用module.exports/exports定义当前模块对外输出的接口
+使用require加载模块
+模块输出的是值的拷贝
+模块运行时全部加载,生成一个对象
+- ES6 Module
+export规定模块的对外接口
+export default指定默认接口,对应import不需要使用大括号
+import用于加载模块
+模块输出的是值的引用
+ES6是编译时加载,模块不是对象,是通过export输出的代码,通过import指定加载某个输出值,不是加载整个模块
+- UMD
+是AMD和CommonJS的糅合
+先判断是否支持node.js模块(exports是否存在),存在则使用node.js模块模式
+再判断是否支持AMD(define是否存在),存在则使用AMD方式加载模块
+```
+(function (window, factory) {
+    if (typeof exports === 'object') {
+        module.exports = factory();
+    } else if (typeof define === 'function' && define.amd) {
+        define(factory);
+    } else {
+        window.Util = factory();
+    }
+})(this, function () {
+    //module ...
+});
+```
 
 ## 正则
 
 ## css知识点
 
+## 数组扁平化
+讲一个多维数组转为一维数组
+Array.prototype.flat = function() {
+    var arr = [];
+    this.forEach((item,idx) => {
+        if(Array.isArray(item)) {
+            arr = arr.concat(item.flat()); //递归去处理数组元素
+        } else {
+            arr.push(item)   //非数组直接push进去
+        }
+    })
+    return arr;   //递归出口
+}
+
+arr.prototype.flat = function() {
+    this.toString().split(',').map(item=> +item )
+}
+
 ## 算法
 - 冒泡排序 
 
 - 选择排序
-
-- 快速排序
 
 - 插入排序
 
@@ -442,9 +538,11 @@ function extend(source){
 
 ## Diff
 
+## AST
+
 ## 设计模式
 
-## websocket
+## websocket/socket.io
 
 ## vue
 
@@ -456,10 +554,21 @@ function extend(source){
 
 ## express
 
+## GraphQL
+
+## weex
+
+## echarts/d3
+
 ## mongodb
+
+## adonisjs
 
 ## 颜色渐变 shadow
 
 ## html标签
 <input type="range">
 <input type="color">
+
+
+

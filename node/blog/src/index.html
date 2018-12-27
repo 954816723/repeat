@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-Type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="content-language" content="zh-CN">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="author" content="me">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>blog</title>
+</head>
+
+<body>
+    <div class="box">
+        用户名：
+        <input type="text" class='name' name="name" maxlength="10">
+        密码：
+        <input type="password" class="pass" name="pass" maxlength="10">
+        注册：
+        <input type="submit" class="register">
+    </div>
+
+    <script>
+        let reg = document.querySelector('.register');
+        reg.addEventListener('click', () => {
+            let name = document.querySelector('.name');
+            let pass = document.querySelector('.pass');
+            if (!name.value) {
+                alert('请输入用户名');
+                name.focus()
+            } else if (!pass.value) {
+                alert('请输入密码');
+                pass.focus()
+            }else{
+                let content = {name:name.value,pass:pass.value}
+                fetch('http://localhost:9000/login',{
+                    method:'post',
+                    headers:{
+                        'Accept': 'application/json',
+                        "Content-Type":"application/json"
+                    },
+                    body:JSON.stringify(content)
+                }).then(response=>response.text())
+                .then(data=>{
+                    console.log(data);
+                })
+            }
+        })
+    </script>
+</body>
+
+</html>
