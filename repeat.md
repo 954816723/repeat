@@ -1,9 +1,25 @@
 ## 常用js方法
+- 全局属性  
+Infinity  无穷大  
+NaN  
+undefined  
+
 - 全局函数  
 parseInt(string, radix) radix 2~36  
 parseFloat()  
+String()  
+Number() 
+isNaN()  
+isFinite()  
+eval()  
+escape()  
+unescape()  
+encodeURI() 把字符串编码为URI  
+decodeURI() 解码某个编码的URI  
+encodeURIComponent()  
+decodeURIComponent()  
 
-- bom
+- bom  
 window  
 setTimeout() clearTimeout()  
 setInterval() cleatInterval()  
@@ -15,9 +31,16 @@ location.href完整url host主机名和端口号 hostname主机名 pathname路�
 screen  
 navigator  
 
-- dom
-document.getElmentById() context.getElementsByClassName() context.getElementsByTagName()   
-document.getElementByName() document.body document.documentElement document.head context.querySelector() context.querySelectorAll()  
+- dom  
+document.getElmentById()  
+context.getElementsByClassName()  
+context.getElementsByTagName()   
+document.getElementByName()  
+document.body  
+document.documentElement  
+document.head  
+context.querySelector()  
+context.querySelectorAll()  
 childNodes获取元素的子节点(元素,文本,注释)  
 children所有的元素子节点  
 previousSibling/proviousElmentSibling  
@@ -33,7 +56,7 @@ docuemnt.creatElement()
 元素.cloneNode(true/false)  
 set/get/removeAttribute()  
 
-- 盒子模型
+- 盒子模型  
 clientWidth/height 容器不包括溢出和边框的宽/高   
 clientTop/Left 上/左边框的宽度  
 offsetWidth/height clientWidth/height+边框  
@@ -44,9 +67,13 @@ scrollTop/Left 滚动条卷去的距离 可读写
 document.documentElement.clientHeight || document.body.clientHeight 当前屏  
 document.documentElement.scrollHeight || document.body.scrollHeight 当前文档  
 
-- 常用方法
-Number String Boolean Null Undefined Symbol Object Function  
+- 数据类型  
+Number String Boolean Null Undefined Symbol Object  
+
+- 检测数据类型  
 typeof instanceof constructor Object.prototype.toString.call()  
+
+- js方法  
 Math.  
     abs()  
     floor()向下取整  
@@ -171,7 +198,7 @@ DomContentLoaded dom结构加载完成,图片音视频未加载
 transitionend CSS完成过渡后触发  e.propertyName触发css效果  
 
 ## 原生ajax
-- get
+- get  
 ```
 let xhr = new XMLHttpRequest();
 xhr.open('get','ajax.php?name='+hehe);
@@ -182,7 +209,7 @@ xhr.onreadystatechange = function(){
 }
 xhr.send()
 ```
-- post
+- post  
 ```
 let xhr = new XHRHttpRequest();
 xhr.setRequestHeader("content-type","application/x-www-form-urlencode;charset=UTF-8");
@@ -567,7 +594,54 @@ arr.prototype.flat = function() {
 
 ## echarts/d3
 
+## mysql
+- 安装mysql  
+- `npm install mysql -D`  
+- 引入mysql  
+`let mysql = reuqire('mysql')`  
+- 配置mysql  
+```
+let connection = mysql.createConnection({
+    host:'localhost',
+    user:'root',
+    password:'xxx',
+    database:'node'
+})
+```
+- 连接数据库  
+`connection.connect()`
+- 增  
+```
+let sql = 'insert into user(user_name,user_pass) value(?,?)';
+let sqlParams = [name,pass];
+connection.query(sql,sqlParams,(err,data)=>{});
+//成功返回新增ID
+```
+- 删  
+```
+let sql = 'DELETE FROM user WHERE id = 6';
+connection.query(sql,(err,result)=>{})
+//成功返回影响行数result.affectedRows
+```
+- 改  
+```
+let sql = 'UPDATE user SET user_name=?,user_pass=? WHERE id = ?'
+let sqlParams = [name.pass,1];
+connection.query(sql,sqlParams,(err,data)=>{})
+//成功返回影响行数result.affectedRows
+```
+
+- 查  
+```
+let sql = 'select * from user where username = "'+name+'" ' ;
+connection.query(sql,(err,data)=>{});
+//成功返回数组[RowDataPacket{},RowDataPacket{}]
+```
+- 关闭数据库  
+`connection.end();`
 ## mongodb
+
+## nginx
 
 ## adonisjs
 
