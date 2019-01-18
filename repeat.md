@@ -102,6 +102,7 @@ String.
     fromCharCode()  
     indexOf() 没有返回-1  
     lastIndexOf() 没有返回-1  
+    includes()是否包含,返回布尔值  
     substr(m,n)截取 从m开始 n位  
     substring(m,n)m开始n结束  
     slice(m,n)同上,支持负数  
@@ -109,7 +110,6 @@ String.
     replace()替换,支持正则  
     toUpperCase()/toLowerCase()大小写  
     trim()/trimLeft()/trimRight()  
-    includes()是否包含,返回布尔值  
     startsWidth()头部是否包含,返回布尔  
     endsWidth()尾部是否包含,返回布尔  
     repeat(n)重复字符n次  
@@ -341,6 +341,39 @@ localStorage.removeItem("key")
 localStorage.clear() 清空  
 
 ## 跨域header头
+
+## 请求头/响应头
+1) 请求(客户端->服务端[request])  
+    GET(请求的方式) /newcoder/hello.html(请求的目标资源) HTTP/1.1(请求采用的协议和版本号)  
+    Accept: */*(客户端能接收的资源类型)  
+    Accept-Language: en-us(客户端接收的语言类型)  
+    Connection: Keep-Alive(维护客户端和服务端的连接关系)  
+    Host: localhost:8080(连接的目标主机和端口号)  
+    Referer: http://localhost/links.asp(告诉服务器我来自于哪里)  
+    User-Agent: Mozilla/4.0(客户端版本号的名字)  
+    Accept-Encoding: gzip, deflate(客户端能接收的压缩数据的类型)   
+    If-Modified-Since: Tue, 11 Jul 2000 18:23:51 GMT(缓存时间)  
+    Cookie(客户端暂存服务端的信息)  
+    Date: Tue, 11 Jul 2000 18:23:51 GMT(客户端请求服务端的时间)  
+
+2) 响应(服务端->客户端[response])  
+    HTTP/1.1(响应采用的协议和版本号) 200(状态码) OK(描述信息)  
+    Location: http://www.baidu.com(服务端需要客户端访问的页面路径)  
+    Server:apache tomcat(服务端的Web服务端名)  
+    Content-Encoding: gzip(服务端能够发送压缩编码类型)   
+    Content-Length: 80(服务端发送的压缩数据的长度)  
+    Content-Language: zh-cn(服务端发送的语言类型)  
+    Content-Type: text/html; charset=GB2312(服务端发送的类型及采用的编码方式)  
+    Last-Modified: Tue, 11 Jul 2000 18:23:51 GMT(服务端对该资源最后修改的时间)  
+    Refresh: 1;url=http://www.it315.org(服务端要求客户端1秒钟后，刷新，然后访问指定的页面路径)  
+    Content-Disposition: attachment; filename=aaa.zip(服务端要求客户端以下载文件的方式打开该文件)  
+    Transfer-Encoding: chunked(分块传递数据到客户端）  
+    Set-Cookie:SS=Q0=5Lb_nQ; path=/search(服务端发送到客户端的暂存数据)  
+    Expires: -1//3种(服务端禁止客户端缓存页面数据)  
+    Cache-Control: no-cache(服务端禁止客户端缓存页面数据)    
+    Pragma: no-cache(服务端禁止客户端缓存页面数据)   
+    Connection: close(1.0)/(1.1)Keep-Alive(维护客户端和服务端的连接关系)    
+    Date: Tue, 11 Jul 2000 18:23:51 GMT(服务端响应客户端的时间)  
 
 ## git  
 分布式命令管理系统  
@@ -594,6 +627,15 @@ arr.prototype.flat = function() {
 
 ## echarts/d3
 
+## 数据库
+- 关系型数据库(RDBMS)  
+Mysql Oracle DB2 SQLServer  
+数据库中都是表  
+- 非关系型数据库(NoSQL)  
+键值对数据库(redis)  
+文档数据库(mongodb)      
+
+
 ## mysql
 - 安装mysql  
 - `npm install mysql -D`  
@@ -640,6 +682,176 @@ connection.query(sql,(err,data)=>{});
 - 关闭数据库  
 `connection.end();`
 ## mongodb
+- mongodb的数据模型是面向文档的，文档是一种类似于JSON的结构
+- 版本偶数版为稳定版，奇数版为开发版  
+- 安装mogodb  
+- windows  
+安装mongodb安装包  
+配置环境变量  
+c盘创建根目录data,data中创建文件夹db  
+打开cmd，输入mongod,启动服务器  
+新打开一个cmd，输入mongo,连接服务器  
+- 修改数据库路径端口号
+`mongod --dbpath 路径 --port 端口号`
+- 基本指令  
+show dbs(databases)  
+use <数据库名> 进入到指定数据库中，没有则自动创建  
+db  当前数据库  
+show collections 显示数据库中所有集合  
+- CRUD
+db.<集合名>.insert(doc)  插入一条或多条数据，多条用数组，插入时没有_id，自动生成  
+db.<集合名>。insertOne()  插入一条数据  
+db.<集合名>。insertMany()  插入多条数据  
+db.<集合名>.find()  查询集合中的所有文档，可以接受一个对象作为查询条件，返回数组  
+db.<集合名>.find({},{num:1}) 接受第二参数，作为查询结果的投影，只显示所需项，1显示 0不显示  
+db.<集合名>.findOne()  返回符合条件的第一个文档，返回一个对象  
+db.<集合名>.find().count()  查询所有数据返回数据长度  
+db.<集合名>.updata(查询条件，新对象)  
+    默认情况下会用新对象替换就对象  
+    如果需要修改而不是替换，需要使用修改操作符  
+    `$set`修改文档中的指定属性  
+    `$unset`删除文档的指定属性  
+    `$push`向数组中添加一个元素
+    `$addToSet`向数组中添加一个不重复的元素
+    默认只会修改一个  
+    添加第三个参数，一个配置对象，可以修改多个  
+```
+db.<集合名>.updata({name:"hehe",
+    {
+        $set:{
+            age:18
+        }
+    },
+    {
+        multi:true
+    }
+})
+```
+db.<集合名>.updataOne()  
+db.<集合名>.updataMany()  
+db.<集合名>.remove()  删除符合条件的一个或所有文档  
+    第二参数选择是否删除一个  
+    remove必须传参  
+    参数为{}，则删除所有数据，性能略差，可以直接删除集合
+```
+db.<集合名>.remove({name:"hehe",true})
+```
+db.<集合名>.deleteOne()  
+db.<集合名>.deleteMany()  
+db.<集合名>.drop()  删除整个集合  
+db.dropDatabase()  删除数据库  
+- 内嵌文档  
+MongoDB的文档属性值也可是是一个文档，当一个文档的属性值是文档时，称之为内嵌文档  
+MongoDB支持直接使用内嵌文档的属性进行查询，如果要查询内嵌文档可以通过 . 来匹配，同时属性名必须使用引号  
+- 插入多条数据  
+减少调用数据库执行语句，缩减执行时间
+```
+let arr = [];
+for(let i=1;i<=20000;i++){
+    arr.push({num:i})
+}
+db.<集合>.insert(arr)
+```
+- 排序  
+查询文档时默认按照_id进行排序（升序） 
+`sort()`可以用来指定文档的排序规则  
+传递一个对象指定排序规则，1表示升序，-1表示降序  
+`sort` `limit` `skip`可以以任意顺序调用  
+`db.<集合>.find({}).sort({total:1,num:-1})`  
+- mongoose  
+mongoose提供了几个新的对象  
+`Schema`模式对象，约束的数据库的文档结构  
+`Model`相当于数据库中的collection  
+`Document`相当于集合中的文档  
+1. 下载安装  
+`npm install mongoose`  
+2. 引入mongoose  
+`const mongoose = require('mongoose')`  
+3. 链接MongoDB数据库  
+`mongoose.connect('mongodb://数据库ip地址:端口号/数据库名',{useMongoClient:true})`  
+4. 监听数据库连接状态,connection对象  
+`mongoose.connection.once("open",function(){})`  
+`mongoose.connection.once("close",function(){})`  
+5. 断开数据库  
+`mongoose.disconnect()`  
+6. 创建Schema  
+```
+let Schema = mongoose.Schema;
+let stuSchema = new Schema({
+    name:String,
+    age:Number,
+    gender:{
+        type:String,
+        default:"female"
+    }
+})
+```
+7. 创建model  
+`let stuModel = mongoose.model("student",stuSchema)`  
+8. CURD  
+- 增加  
+`Model.create(doc(s),[callback])`
+    doc(s) 可以使一个文档对象,也可以是一个文档对象数组  
+    callback 操作完成后的回调  
+```
+stuModel.create(
+ [
+    {
+        name:"hehe",
+        age:18,
+        gender:"man"
+    },
+    {
+        name:"xixi",
+        age:20,
+        gender:"woman"
+    }
+ ],function(err){
+     if(!err) console.log("成功")
+ }
+)
+```
+- 查询  
+`Model.find(conditions,[projection],[options],[callback]);返回一个数组`  
+`Model.findOne(conditions,[projection],[options],[callback]);返回一个对象`  
+`Model.findById(conditions,[projection],[options],[callback])`  
+    condition:查询条件  
+    projection:投影  {name:1,_id:0}/"name -_id"  
+    options:查询选项(skip,limit)  
+    callback:回调函数  
+```
+stuModel.find({name:"hehe"},'name age -gender',{skip:1,limit:2},function(err,docs){
+    if(!err) console.log(docs)
+})
+```
+- 修改  
+`Model.update(conditions,doc,[options],[callback])`  
+`Model.updateOne(conditions,doc,[options],[callback])`  
+`Model.updateMany(conditions,doc,[options],[callback])`  
+`Model.replaceOne(conditions,doc,[options],[callback])`  
+    conditions:查询条件  
+    doc:修改后的对象  
+    options:配置参数  
+    callback:回调  
+```
+stuModel.update({nam:"hehe"},{$set:{age:20}},function(err){
+    if(!err) console.log("成功")
+})
+```
+- 删除  
+`Model.remove(conditions,[callback])`  
+`Model.deleteOne(conditions,[callback])`  
+`Model.deleteMany(conditions,[callback])`  
+- 统计数量  
+`Model.count(conditions,[callback])`  
+9. Document对象的常用方法  
+`get()`  
+`set()`  
+`remove()`  
+`update()`  
+`save()`  
+`toJSON()`  
+`toObject()`    
 
 ## nginx
 
