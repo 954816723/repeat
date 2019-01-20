@@ -95,6 +95,7 @@ Date
     time.getMinutes()  
     time.getMilliseconds()  
     time.getTime() 时间戳  
+    Date.now()当前时间戳  
 String.  
     length  
     charAt()  
@@ -201,7 +202,9 @@ transitionend CSS完成过渡后触发  e.propertyName触发css效果
 - get  
 ```
 let xhr = new XMLHttpRequest();
-xhr.open('get','ajax.php?name='+hehe);
+document.cookie = 'name=hehe';
+xhr.withCredentials = true;//携带凭证.允许携带cookie
+xhr.open('get','ajax.php?name='+hehe,true);
 xhr.onreadystatechange = function(){
     if(xhr.readyState == 4 && xhr.status == 200 ){
         console.log(xhr.responseText);
@@ -512,11 +515,252 @@ function extend(source){
 解决异步编程
 三种状态 Pending Fulfilled Rejected
 
-## 防抖/节流
+## 节流/防抖
+优化高频率事件 onscroll oninput resize onkeyup onkeydown...  
+降低代码执行频率  
+- 节流(throttle)  
+保证一段时间内,核心代码值执行一次  
+
+- 防抖(debounce)  
+一段时间结束后,才能出发一次事件,如果一段时间未结束再次触发事件,就会重新开始计算时间
+
+
+
 
 ## 懒加载/预加载
 
 ## 跨域
+- jsonp  
+只能发送get请求,不支持post put delete  
+不安全 xss攻击  
+```
+function jsonp({url,params,cb}){
+    return new Promise((resolve,reject)=>{
+        let script = document.createElement('script');
+        window[cb] = function(data){
+            resolve(data);
+            document.removeChild(script);
+        }
+        let arrs = [];
+        for(let key in params){
+            arrs.push(`${key}=${params[key]}`);
+        }
+        script.url = `${url}?${arrs.join('&')}`;
+        document.body.appendChild(script);
+    })
+}
+
+jsonp({
+    url:'https://sp0.baidu.com/abcd/su',
+    params:{wd:'a'},
+    cb:'show'
+}).then(data=>{
+    console.log(data);
+})
+```
+- cors  
+设置各种请求头  
+通过express搭建服务器  
+```
+//index.html
+<script>
+    let xhr = new XMLHttpRequest;
+    // xhr.open('GET','http://localhost:4000/getData',true);
+    xhr.open('PUT','http://localhost:4000/getData',true);
+    //设置请求头
+    xhr.setRequestHeader('name','xixi');
+    //设置cookie
+    document.cookie = 'name=lala';
+    xhr.withCredentials = true;
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState === 4){
+            if(xhr.status>=200 && xhr.status<300 || xhr.status===304){
+                console.log(xhr.response);
+                console.log(xhr.getResponseHeader('name'));
+                
+            }
+        }
+    }    
+    xhr.send();
+</script>
+```
+```
+//server1.js
+let express = require('express');
+let app = express();
+//将当前目录作为静态文件目录
+app.use(express.static(__dirname));
+app.listen(3000);
+```
+```
+//server2.js
+let express = require('express');
+let app = express();
+//设置请求白名单
+let whiteList = ['http://localhost:3000'];
+app.use(function(req,res,next){
+    let origin = req.headers.origin;
+    if(whiteList.includes(origin)){
+        // 允许哪个源可以访问我
+        // 如果设置为 * 则不能携带凭证
+        res.setHeader('Access-Control-Allow-Origin',origin);
+        //允许携带哪个头访问我,多个逗号 隔开
+        res.setHeader('Access-Control-Allow-Headers','name');
+        // 允许哪个方法访问我
+        res.setHeader('Access-Control-Allow-Methods','PUT');
+        // 预检的存活时间
+        res.setHeader('Access-Control-Max-Age',6);
+        // 允许携带cookie
+        res.setHeader('Access-Control-Allow-Credentials',true);
+        // 允许返回的头
+        res.setHeader('Access-Control-Expose-Headers','name');
+        if(req.method === 'OPTIONS'){
+            res.end();
+            return;
+        }
+    }
+    next();
+});
+app.put('/getData',(req,res)=>{
+    console.log(req.headers);
+    res.setHeader('name','zeze')
+    res.end('hehe') 
+})
+app.get('/getData',(req,res)=>{
+    console.log(req.headers);
+    res.end('hehe') 
+})
+    
+app.use(express.static(__dirname));
+app.listen(4000); 
+```
+- postMessage  
+```
+//a.html
+<iframe src="http://localhost:4000/b.html" id="frame" onload="load()" frameborder="0">
+<script>
+function load(){
+    let frame = document.getElementById('frame');
+    frame.contentWindow.postMessage("hehe",'http://localhost:4000')
+    window.onmessage = function(e){
+        console.log(e.data);
+    }
+}
+</script>
+```
+```
+//b.html
+<script>
+window.onmessage = function(e){
+    console.log(e.data);
+    e.source.postMessage("xixi",e.origin)
+}
+</script>
+```
+- window.name   
+a和b是同域的http://localhost:3000  
+c是独立的http://localhost:4000  
+a获取c的数据,a先引用c,c将值放在window.name,引入后将a将引用地址改为b  
+此时window.name中的数据依然保存  
+```
+//a.html
+<iframe src="http://localhost:4000/c.html" id="frame" onload="load()" frameborder="0">
+<script>
+let first = true;
+function load(){
+    if(first){
+        let frame = document.getElementById('frame');
+        frame.src = 'http://localhost:3000/b.html';
+        first = false;
+    }else{
+        console.log(frame.contentWindow.name);
+    }
+}
+</script>
+```
+```
+//b.html
+...
+```
+```
+//c.html
+<script>
+window.name = 'hehe';
+</script>
+```
+- location.hash  
+```
+//a.html
+<iframe src="http://localhost:4000/c.html#hehe" id="frame" onload="load()" frameborder="0">
+<script>
+window.onhashchange = function(){
+    console.log(location.hash);
+}
+</script>
+```
+```
+//b.html
+<script>
+window.parent.parent.location.hash = location.hash;
+</script>
+```
+```
+//c.html
+<script>
+let frame = document.createElement('iframe');
+frame.src = 'http://localhost:3000/b.html#xixi';
+document.body.appendChild(frame);
+</script>
+```
+- document.domain  
+使用于一级二级域名  
+```
+//a.html
+<iframe src="http://localhost:4000/c.html" id="frame" onload="load()" frameborder="0">
+<script>
+document.domain = 'biubiubiu.ltd';
+function load(){
+    console.log(frame.contentWindow.a);
+}
+</script>
+```
+```
+//b.html
+<script>
+document.domain = 'biubiubiu.ltd';
+let a = 100;
+</script>
+```
+- websocket  
+```
+<script>
+let socket = new WebSocket('ws://localhost:3000');
+socket.onopen = function(){
+    socket.send('hehe');
+}
+socket.onmessage = function(e){
+    console.log(e.data)
+}
+</script>
+```
+```
+//server.js
+let express= require('express');
+let app = express();
+let WebSocket = require('ws');
+let wss = new WebSocket.Server({port:3000});
+wss.on('connection',function(ws){
+    ws.on('message',function(data){
+        console.log(data);
+        ws.send('xixi')
+    })
+})
+```
+- http-proxy  
+- nginx  
+配置conf/nginx.conf  
+
+## 攻击xss/...    
 
 ## MVC / MVP / MVVM
 
