@@ -111,7 +111,7 @@ Flex Box 由伸缩容器和伸缩项目组成。通过设置元素的 display �
 none block inline inline-block table flex
 
 - 左边定宽，右边自适应方案：float + margin，float + calc
-```
+```css
 /* 方案1 */ 
 .left {
   width: 120px;
@@ -132,7 +132,7 @@ none block inline inline-block table flex
 ```
 
 - 左右两边定宽，中间自适应：float，float + calc, 圣杯布局（设置BFC，margin负值法），flex
-```
+```css
 .wrap {
   width: 100%;
   height: 200px;
@@ -183,7 +183,7 @@ none block inline inline-block table flex
 行内元素: text-align: center
 定宽块状元素: 左右 margin 值为 auto
 不定宽块状元素: table布局，position + transform
-```
+```css
 /* 方案1 */
 .wrap {
   text-align: center
@@ -211,7 +211,7 @@ none block inline inline-block table flex
 - 上下垂直居中：
 定高：margin，position + margin(负值)
 不定高：position + transform，flex，IFC + vertical-align:middle
-```
+```css
 /* 定高方案1 */
 .center {
   height: 100px;
@@ -307,6 +307,47 @@ animation-direction: normal | alternate： 指定元素动画播放的方向，�
 animation-play-state:running | paused ：控制元素动画的播放状态。
 简写为： `animation:[<animation-name> || <animation-duration> || <animation-timing-function> || <animation-delay> || <animation-iteration-count> || <animation-direction>]`
 更多详见W3C
+
+
+- 描述一下渐进增强和优雅降级。
+
+- CSS 中可以让文字垂直和水平方向上重叠的两个属性是什么？
+垂直方向 line-height
+水平方向 letter-spacing
+
+- 如何解决使用 inline-block 引起的空白间隙的问题？
+letter-spacing
+父元素letter-spacing:-6px 子元素letter-spacing:0px
+
+- 使用 CSS 创建一个三角形（一个箭头向右的三角图标）。
+
+- 使用 CSS 实现三个 div 等比排列在一行，两列宽度固定中间自适应。
+
+- 可视化拖拽页面(H5 有个可拖拽属性)
+draggable 
+`<img draggable="true" />`
+ondragstart 
+```js
+function drag(ev)
+{
+  ev.dataTransfer.setData("Text",ev.target.id);
+}
+```
+ondragover  需调用 ondragover 事件的 event.preventDefault() 方法
+ondrop
+```js
+function drop(ev)
+{
+  ev.preventDefault();
+  var data=ev.dataTransfer.getData("Text");
+  ev.target.appendChild(document.getElementById(data));
+}
+```
+
+- postion 定位
+position 定位的话，默认是 static。然后，如果 position: fixed 的时候，就是相对于根元素进行定位。然后，如果是 position: absolute 的时候，根据前面那个进行了 position: relative 的标记，进行相对定位。然后，positon: relative，我常用的就是将它作为 positon: relative 的定位作用。
+
+- 渐变的话，假如有一个长方体，上面一种颜色，下面一种颜色，你会怎么做？
 
 ## JS(概念)
 - let、const、var的区别；如果const定义的是个对象，能够修改对象的属性吗？
@@ -459,7 +500,7 @@ ES6:let const 模板字符串 拓展运算符... 解构赋值 箭头函数 Promi
 ES7:幂运算(** 3**2=9) Array.prototype.includes()
 ES8:async await Object.values/Object.entries String padding(字符串填充) Object.getOwnPropertyDescriptors
 
-- 原型/作用域
+- 原型/作用域/作用域链
 见repeat.md
 
 - 事件循环(Event Loop)
@@ -577,10 +618,10 @@ Performace
 防抖是连续多次点击只执行一次  search搜索联想 窗口resize只触发一次
 节流是连续点击程序在指定间隔时间执行  监听滚动事件等
 
-- 讲讲常用的es6语法，比如let、promise、class async awiat  generator Set/Map等等
+- 讲讲常用的es6语法，比如let、promise、class async awiat  generator Set/Map weakset, weakmap等等
 
 - 使用es5实现es6的class
-
+Object.defineProperty()
 
 -  Ajax 底层实现，readystate 有哪些
 0-（未初始化）还没有调用send()方法
@@ -600,6 +641,8 @@ View作为视图层，主要负责数据的展示；
 Controller定义用户界面对用户输入的响应方式，它连接模型和视图，用于控制应用程序的流程，处理用户的行为和数据上的改变。
 MVC将响应机制封装在controller对象中，当用户和你的应用产生交互时，控制器中的事件触发器就开始工作了。
 MVVM由 Model,View,ViewModel 三部分构成,把View和Model的同步逻辑自动化了。以前Controller负责的View和Model同步不再手动地进行操作，而是交给框架所提供的数据绑定功能进行负责，只需要告诉它View显示的数据对应的是Model哪一部分即可。也就是双向数据绑定，就是View的变化能实时让Model发生变化，而Model的变化也能实时更新到View。
+Model和View并无直接关联，而是通过ViewModel来进行联系的，Model和ViewModel之间有着双向数据绑定的联系。因此当Model中的数据改变时会触发View层的刷新，View中由于用户交互操作而改变的数据也会在Model中同步。
+这种模式实现了Model和View的数据自动同步，因此开发者只需要专注对数据的维护操作即可，而不需要自己操作dom。
 
 - 怎么上传文件
 
@@ -767,7 +810,21 @@ ws.onerror = function () {
 
 - PWA
 
+- 有一个长度为 100 的数组，请求出该数组的前 10 个元素之和。
+
+- 写一个程序打印 1 到 100 这些数字，遇到数字为 3 的倍数，打印 “A” 替代该数字；遇到 5 的倍数，用 “B” 代替；遇到即是 3 的倍数又是 5 的倍数，打印 “AB”。
+
+- 跨域通信有哪些方案，各有什么不同？
+
+- 哪些常见操作会造成内存泄漏？
+
+- 主流前端框架如 Angular/React/Vue 等之间有哪些差异及特点，选取一个描述其组件生命周期。
+
 ## vue
+-  delete和Vue.delete删除数组的区别
+delete只是被删除的元素变成了 empty/undefined 其他的元素的键值还是不变。
+Vue.delete 直接删除了数组 改变了数组的键值。
+
 - vue原理，和react的区别
 
 - 讲vue的响应式原理、依赖收集、监听数组、虚拟dom等等
@@ -792,9 +849,13 @@ ws.onerror = function () {
 
 - 抽取过哪些vue组件
 
+- v-if 与 v-show 的区别
+v-if 的话，是往 DOM 树上添加或者删除元素；v-show 的话，使用 display: none 这些来控制显示元素
+
 - 讲vue-lazyloader的原理，手写伪代码
 
 - vue里面哪儿不会用到双向绑定
+input中不适用v-model,而是使用v-bind/:
 
 - Diff 算法,diff算法是对树的深度优先遍历还是广度优先遍历
 是深度优先遍历
