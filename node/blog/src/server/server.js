@@ -62,13 +62,16 @@ http.createServer((req,res)=>{
             }else if(pathname == '/login'){
                 let username = result.name,
                     password = result.pass;
-                let sql = 'SELECT * FROM user WHERE user_name = ' + username;
+                let sql = 'SELECT * FROM user WHERE user_name ="'+username+'"';
+                console.log(sql);
+                
                 connection.query(sql,(err,data)=>{
                     if (err) {
                         res.write(JSON.stringify({
                             code:'err',
                             msg:"登录失败"
                         }))
+                        res.end()
                     }else{
                         // 返回结果是一个数组
                         // RowDataPacket {
@@ -81,18 +84,19 @@ http.createServer((req,res)=>{
                             res.end('不存在该用户')
                             return
                         }else{
-                            if (data[0].uer_password == password) {
+                            if (data[0].user_password == password) {
                                 res.write(JSON.stringify({
                                     code:'0',
                                     msg:"登陆成功"
                                 }))
+                                res.end()
                             }else{
                                 res.write(JSON.stringify({
                                     code:'err',
                                     msg:"密码错误"
                                 }))
+                                res.end()
                             }
-                            res.end()
                         }
                     }
                 })
