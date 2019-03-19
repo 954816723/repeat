@@ -1,354 +1,3 @@
-## CSS
-- Xhtml和html的区别
-XHTML 元素必须被正确地嵌套。
-XHTML 元素必须被关闭。
-标签名必须用小写字母。
-XHTML 文档必须拥有根元素。
-
-- 遇到过哪些兼容性问题
-https://www.cnblogs.com/zhoudawei/p/7497544.html
-
-- 浏览器内核有哪些，移动端用的是哪个
-Trident内核：IE,MaxThon,TT,The Word,360,搜狗浏览器等。[又称为MSHTML]
-Gecko内核：Netscape6及以上版本，FF,MozillaSuite/SeaMonkey等；
-Presto内核：Opera7及以上。[Opera内核原为：Presto，现为：Blink]
-Webkit内核：Safari,Chrome等。[Chrome的:Blink(Webkit的分支)]
-
-对于Android手机而言，使用率最高的就是Webkit内核。
-
-- display:none与visibility:hidden
-(1) display:none; HTML元素（对象）的宽高，高度等各种属性值都将“丢失”,视为不存在，而且不加载。
-(2) visibility:hidden; HTML元素（对象）仅仅是在视觉上看不见（完全透明），而它所占据的空间位置仍然存在，也即是说它仍然具有高度，宽度等属性值。
-
-- css实现图片自适应宽高
-max-width max-height
-
-- CSS实现背景图片固定宽高比自适应调整
-padding-top:percent;高度/宽度百分比
-
-- 块级元素有哪些，怎么转成行内元素
-div h1-h6 ol ul dl table form p
-display:inline-block 
-
-- 讲flex，手写出flex常用的属性，并且讲出作用
-flex弹性布局,display:flex
-设置flex后,子元素的float,clear,vertical-align都会失效
-flex-direction(排列方向) flex-wrap(换行) flex-flow(前两者简写) justify-content(主轴对齐方式) align-items(交叉轴堆积方式) align-content(多轴对齐方式)
-flex-grow 项目的放大比例，默认为0，即如果存在剩余空间，也不放大
-flex-shrink 项目的缩小比例，默认为1，即如果空间不足，该项目将缩小。
-
-- CSS 重排和重绘之间有什么区别？
-重排
-这个过程就是通过渲染树中渲染对象的信息，计算出每一个渲染对象的位置和尺寸
-将其安置在浏览器窗口的正确位置
-触发：增加、删除、修改、移动、修改css样式
-重绘
-浏览器会根据元素的新属性重新绘制，使元素呈现新的外观
-重绘不会带来重新布局，并不一定伴随重排
-触发：dom改变，css移动，改变visibility、outline、背景色等属性
-position 要引起 重排，translate 重绘
-
-- 100 * 100 的 Canvas 占内存多大？
-
-- 有哪些伪类和伪元素，伪类选择器有哪些
-伪类 :hover :active :link :visited :nth-child() :nth-of-type() :first-child :last-child
-伪元素 ::after ::before ::first-line ::first-letter ::selection
-
-- css哪些属性可以继承
-字体相关：line-height, font-family, font-size, font-style, font-variant, font-weight, font
-文本相关： letter-spacing, text-align, text-indent, text-transform, word-spacing
-列表相关：list-style-image,  list-style-position, list-style-type, list-style
-颜色：color
-
-- defer和async的区别
-defer要等到整个页面在内存中正常渲染结束（DOM结构完全生成，以及其他脚本执行完成），才会执行。多个defer脚本会按照它们在页面出现的顺序加载。==“渲染完再执行”==
-async一旦下载完，渲染引擎就会中断渲染，执行这个脚本以后，再继续渲染。多个async脚本是不能保证加载顺序的。==“下载完就执行”==
-
-- 清除浮动
-1. 使用带有clear:both的空元素
-2. 给浮动元素的容器添加overflow:hidden/auto 属性
-3. 给父容器添加伪元素::after
-```
-.clearfix{
-    zoom:1; //IE6
-}
-.clearfix::after{
-    content:".";
-    height:0;
-    clear:both;
-    display:block;
-    visibility:hidden;
-}
-```
-
-- BFC、IFC、GFC、FFC：FC（Formatting Contexts），格式化上下文
-FC的全称是：Formatting Contexts，是W3C CSS2.1规范中的一个概念。它是页面中的一块渲染区域，并且有一套渲染规则，它决定了其子元素将如何定位，以及和其他元素的关系和相互作用。
-BFC
-BFC(Block Formatting Contexts)直译为"块级格式化上下文"。Block Formatting Contexts就是页面上的一个隔离的渲染区域，容器里面的子元素不会在布局上影响到外面的元素，反之也是如此。如何产生BFC？
-float的值不为none。 
-overflow的值不为visible。 
-position的值不为relative和static。
-display的值为table-cell, table-caption, inline-block中的任何一个。 
-那BFC一般有什么用呢？比如常见的多栏布局，结合块级别元素浮动，里面的元素则是在一个相对隔离的环境里运行。
-IFC
-IFC(Inline Formatting Contexts)直译为"内联格式化上下文"，IFC的line box（线框）高度由其包含行内元素中最高的实际高度计算而来（不受到竖直方向的padding/margin影响)
-IFC中的line box一般左右都贴紧整个IFC，但是会因为float元素而扰乱。float元素会位于IFC与与line box之间，使得line box宽度缩短。 同个ifc下的多个line box高度会不同。 IFC中时不可能有块级元素的，当插入块级元素时（如p中插入div）会产生两个匿名块与div分隔开，即产生两个IFC，每个IFC对外表现为块级元素，与div垂直排列。
-那么IFC一般有什么用呢？
-水平居中：当一个块要在环境中水平居中时，设置其为inline-block则会在外层产生IFC，通过text-align则可以使其水平居中。
-垂直居中：创建一个IFC，用其中一个元素撑开父元素的高度，然后设置其vertical-align:middle，其他行内元素则可以在此父元素下垂直居中。
-GFC
-GFC(GridLayout Formatting Contexts)直译为"网格布局格式化上下文"，当为一个元素设置display值为grid的时候，此元素将会获得一个独立的渲染区域，我们可以通过在网格容器（grid container）上定义网格定义行（grid definition rows）和网格定义列（grid definition columns）属性各在网格项目（grid item）上定义网格行（grid row）和网格列（grid columns）为每一个网格项目（grid item）定义位置和空间。 
-那么GFC有什么用呢，和table又有什么区别呢？首先同样是一个二维的表格，但GridLayout会有更加丰富的属性来控制行列，控制对齐以及更为精细的渲染语义和控制。
-FFC
-FFC(Flex Formatting Contexts)直译为"自适应格式化上下文"，display值为flex或者inline-flex的元素将会生成自适应容器（flex container），可惜这个牛逼的属性只有谷歌和火狐支持，不过在移动端也足够了，至少safari和chrome还是OK的，毕竟这俩在移动端才是王道。
-Flex Box 由伸缩容器和伸缩项目组成。通过设置元素的 display 属性为 flex 或 inline-flex 可以得到一个伸缩容器。设置为 flex 的容器被渲染为一个块级元素，而设置为 inline-flex 的容器则渲染为一个行内元素。
-伸缩容器中的每一个子元素都是一个伸缩项目。伸缩项目可以是任意数量的。伸缩容器外和伸缩项目内的一切元素都不受影响。简单地说，Flexbox 定义了伸缩容器内伸缩项目该如何布局。
-
-- 选择器优先级
-！important>行内样式>id选择器>类选择器>标签选择器>通配符>继承
-
-- display 有哪些属性  
-none block inline inline-block table flex
-
-- 左边定宽，右边自适应方案：float + margin，float + calc
-```css
-/* 方案1 */ 
-.left {
-  width: 120px;
-  float: left;
-}
-.right {
-  margin-left: 120px;
-}
-/* 方案2 */ 
-.left {
-  width: 120px;
-  float: left;
-}
-.right {
-  width: calc(100% - 120px);
-  float: left;
-}
-```
-
-- 左右两边定宽，中间自适应：float，float + calc, 圣杯布局（设置BFC，margin负值法），flex
-```css
-.wrap {
-  width: 100%;
-  height: 200px;
-}
-.wrap > div {
-  height: 100%;
-}
-/* 方案1 */
-.left {
-  width: 120px;
-  float: left;
-}
-.right {
-  float: right;
-  width: 120px;
-}
-.center {
-  margin: 0 120px; 
-}
-/* 方案2 */
-.left {
-  width: 120px;
-  float: left;
-}
-.right {
-  float: right;
-  width: 120px;
-}
-.center {
-  width: calc(100% - 240px);
-  margin-left: 120px;
-}
-/* 方案3 */
-.wrap {
-  display: flex;
-}
-.left {
-  width: 120px;
-}
-.right {
-  width: 120px;
-}
-.center {
-  flex: 1;
-}
-```
-- 左右居中
-行内元素: text-align: center
-定宽块状元素: 左右 margin 值为 auto
-不定宽块状元素: table布局，position + transform
-```css
-/* 方案1 */
-.wrap {
-  text-align: center
-}
-.center {
-  display: inline;
-  /* or */
-  /* display: inline-block; */
-}
-/* 方案2 */
-.center {
-  width: 100px;
-  margin: 0 auto;
-}
-/* 方案2 */
-.wrap {
-  position: relative;
-}
-.center {
-  position: absulote;
-  left: 50%;
-  transform: translateX(-50%);
-}
-```
-- 上下垂直居中：
-定高：margin，position + margin(负值)
-不定高：position + transform，flex，IFC + vertical-align:middle
-```css
-/* 定高方案1 */
-.center {
-  height: 100px;
-  margin: 50px 0;   
-}
-/* 定高方案2 */
-.center {
-  height: 100px;
-  position: absolute;
-  top: 50%;
-  margin-top: -25px;
-}
-/* 不定高方案1 */
-.center {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-}
-/* 不定高方案2 */
-.wrap {
-  display: flex;
-  align-items: center;
-}
-.center {
-  width: 100%;
-}
-/* 不定高方案3 */
-/* 设置 inline-block 则会在外层产生 IFC，高度设为 100% 撑开 wrap 的高度 */
-.wrap::before {
-  content: '';
-  height: 100%;
-  display: inline-block;
-  vertical-align: middle;
-}
-.wrap {
-  text-align: center;
-}
-.center {
-  display: inline-block;  
-  vertical-align: middle;
-}
-```
--  em,rem,px的区别
-px像素,相对于屏幕分辨率
-em 相当对象内文本的font-size,如果当前也是em,则相对于父元素font-szie
-rem 参考根元素<html>的font-size
-
--  IE盒模型和标准盒模型，用哪个属性改变
-盒模型:content padding border margin  
-标准盒模型:宽高是内容content的宽高
-IE和盒模型:宽高是内容content+填充padding+边框border
-box-sizing:content-box(标准模型)/border-box(IE模型)
-
-- meta标签
-见repeat
-
-- css3新属性
-（1）边框：
-border-radius：圆角边框，border-radius:25px;
-box-shadow：边框阴影，box-shadow: 10px 10px 5px #888888;
-border-image：边框图片，border-image:url(border.png) 30 30 round;
-（2）背景：
-background-size：规定背景图片的尺寸，background-size:63px 100px;
-background-origin：规定背景图片的定位区域，背景图片可以放置于 content-box、padding-box 或 border-box 区域。background-origin:content-box;
-CSS3 允许您为元素使用多个背景图像。background-image:url(bg_flower.gif),url(bg_flower_2.gif);
-（3）文本效果：
-text-shadow：向文本应用阴影，可以规定水平阴影、垂直阴影、模糊距离，以及阴影的颜色。text-shadow: 5px 5px 5px #FF0000;
-word-wrap：允许文本进行换行。word-wrap:break-word;
-（4）字体：CSS3 @font-face 规则可以自定义字体。
-（5）2D 转换（transform）
-translate()：元素从其当前位置移动，根据给定的 left（x 坐标） 和 top（y 坐标） 位置参数。 transform: translate(50px,100px);
-rotate()：元素顺时针旋转给定的角度。允许负值，元素将逆时针旋转。transform: rotate(30deg);
-scale()：元素的尺寸会增加或减少，根据给定的宽度（X 轴）和高度（Y 轴）参数。transform: scale(2,4);
-skew()：元素翻转给定的角度，根据给定的水平线（X 轴）和垂直线（Y 轴）参数。transform: skew(30deg,20deg);
-matrix()： 把所有 2D  转换方法组合在一起，需要六个参数，包含数学函数，允许您：旋转、缩放、移动以及倾斜元素。transform:matrix(0.866,0.5,-0.5,0.866,0,0);
-（6）3D 转换
-rotateX()：元素围绕其 X 轴以给定的度数进行旋转。transform: rotateX(120deg);
-rotateY()：元素围绕其 Y 轴以给定的度数进行旋转。transform: rotateY(130deg);
-（7）transition：过渡效果，使页面变化更平滑
-transition-property ：执行动画对应的属性，例如 color，background 等，可以使用 all 来指定所有的属性。
-transition-duration：过渡动画的一个持续时间。
-transition-timing-function：在延续时间段，动画变化的速率，常见的有：ease | linear | ease-in | ease-out | ease-in-out | cubic-bezier 。
-transition-delay：延迟多久后开始动画。
-简写为：transition: `[<transition-property> || <transition-duration> || <transition-timing-function> || <transition-delay>]`;
-（8）animation：动画
-使用CSS3 @keyframes 规则。
-animation-name: 定义动画名称
-animation-duration: 指定元素播放动画所持续的时间长
-animation-timing-function:ease | linear | ease-in | ease-out | ease-in-out | cubic-bezier(<number>, <number>, <number>, <number>)： 指元素根据时间的推进来改变属性值的变换速率，说得简单点就是动画的播放方式。
-animation-delay: 指定元素动画开始时间
-animation-iteration-count:infinite | <number>：指定元素播放动画的循环次
-animation-direction: normal | alternate： 指定元素动画播放的方向，其只有两个值，默认值为normal，如果设置为normal时，动画的每次循环都是向前播放；另一个值是alternate，他的作用是，动画播放在第偶数次向前播放，第奇数次向反方向播放。
-animation-play-state:running | paused ：控制元素动画的播放状态。
-简写为： `animation:[<animation-name> || <animation-duration> || <animation-timing-function> || <animation-delay> || <animation-iteration-count> || <animation-direction>]`
-更多详见W3C
-
-
-- 描述一下渐进增强和优雅降级。
-
-- CSS 中可以让文字垂直和水平方向上重叠的两个属性是什么？
-垂直方向 line-height
-水平方向 letter-spacing
-
-- 如何解决使用 inline-block 引起的空白间隙的问题？
-letter-spacing
-父元素letter-spacing:-6px 子元素letter-spacing:0px
-
-- 使用 CSS 创建一个三角形（一个箭头向右的三角图标）。
-
-- 使用 CSS 实现三个 div 等比排列在一行，两列宽度固定中间自适应。
-
-- 可视化拖拽页面(H5 有个可拖拽属性)
-draggable 
-`<img draggable="true" />`
-ondragstart 
-```js
-function drag(ev)
-{
-  ev.dataTransfer.setData("Text",ev.target.id);
-}
-```
-ondragover  需调用 ondragover 事件的 event.preventDefault() 方法
-ondrop
-```js
-function drop(ev)
-{
-  ev.preventDefault();
-  var data=ev.dataTransfer.getData("Text");
-  ev.target.appendChild(document.getElementById(data));
-}
-```
-
-- postion 定位
-position 定位的话，默认是 static。然后，如果 position: fixed 的时候，就是相对于根元素进行定位。然后，如果是 position: absolute 的时候，根据前面那个进行了 position: relative 的标记，进行相对定位。然后，positon: relative，我常用的就是将它作为 positon: relative 的定位作用。
-
-- 渐变的话，假如有一个长方体，上面一种颜色，下面一种颜色，你会怎么做？
-
 ## JS(概念)
 - let、const、var的区别；如果const定义的是个对象，能够修改对象的属性吗？
 let新增与ES6中,用来取代var,消除var的不合理之处
@@ -359,11 +8,39 @@ let不允许统一作用域内重复声明
 const声明常量,一旦声明,不可修改
 const声明的是对象的话,能修改属性,const保存的是对象的地址,地址不可更改
 
+## 原型链的终点指向什么？
+
+## 说说GET与POST的区别
+
 - window的onload事件和DOMContentLoaded谁先谁后？
 DOMContentLoaded要在onload之前
 当DOM树构建完成的时候就会触发DOMContentLoaded,
 onload是在页面载入完成的时候触发,包括图片等
 jquery中$(document).ready()/$(function(){})都是DOMContentLoaded事件
+
+## 从浏览器输入到页面渲染完成
+浏览器(或其他客户端如微信)向服务器发出一个HTTP请求  
+先把域名解析为IP地址(chrome缓存1分钟(chrome://net-internals/#dns)->搜索操作系统缓存->读取本地host文件->发起DNS系统调用->运营商DNS缓存->找根域->com域)  
+客户端通过随机端口向服务器发起TCP三次握手,建立TCP连接  
+连接建立后浏览器就可以发送HTTP请求了  
+服务器接收到HTTP请求,解析请求的路径和参数,经过后台的一些处理之后生成完整响应页面  
+服务器将生成的页面作为HTTP响应体,根据不同的处理结果生成响应头,发给客户端  
+客户端(浏览器)接收到HTTP响应,从请求中得到的HTTP响应体里是HTML代码,于是对HTML代码开始解析  
+解析HTML并构建DOM树->构建render树->布局render树->绘制render树  
+解析过程中遇到引用的服务器上的资源(额外的css,js代码,图片,音视频,附件等),再向服务器发送请求  
+浏览器解析HTML包含的内容,用得到的css代码进行外观上的进一步渲染,js代码也可能会对外观进行一定的处理  
+当用户与页面交互(点击,悬停等等)时,JS代码对此作出一定的反应,添加特效与动画  
+交互的过程中可能需要向服务器索取或提交额外的数据(局部的刷新),一般不是跳转就是通过JS代码(响应某个动作或者定时)向服务器发送AJAX请求  
+服务器再把客户端需要的资源返回,客户端用得到的资源来实现动态效果或者修改DOM结构  
+
+大致可以分为如下7步：
+输入网址；
+发送到DNS服务器，并获取域名对应的web服务器对应的ip地址；
+与web服务器建立TCP连接；
+浏览器向web服务器发送http请求；
+web服务器响应请求，并返回指定url的数据（或错误信息，或重定向的新的url地址）；
+浏览器下载web服务器返回的数据及解析html源文件；
+生成DOM树，解析css和js，渲染页面，直至显示完成；
 
 - get和post分别进行几次数据交互
 get请求过程：（2次交互）
@@ -396,6 +73,11 @@ WebSocket localstorage SharedWorker
 onstorage和storage都针对非当前页面对localstorage进行修改时才会触发,当前页面修改不会触发
 
 - 怎么从十万个节点中找到想要的节点，怎么快速在某个节点前插入一个节点？
+
+- rem
+```
+
+```
 
 - 怎么实现继承
 原型链继承
@@ -526,7 +208,7 @@ close callbacks: 执行close事件的callback，例如socket.on('close'[,fn])或
 - this/箭头函数
 见repeat.md
 
-- 闭包,什么时候闭包会消除
+- 闭包,什么时候闭包会消除 使用场景有哪些？闭包会引起什么问题？
 因为作用域链，外部不能访问内部的变量和方法，这时我们就需要通过闭包，返回内部的方法和变量给外部，从而就形成了一个闭包。
 JavaScript是一门具有自动垃圾回收机制的编程语言，主要有两种方式：
 标记清除（最常用）
@@ -561,6 +243,10 @@ bind参数逗号传递,但不立即执行,返回一个结果函数
 
 - call和apply的哪个性能更好
 call比apply的性能更好
+
+## lodash和ramda的区别是什么？
+
+## 字符串和new String出来的字符串有啥区别？
 
 - 浅拷贝/深拷贝
 见repeat.md
@@ -702,7 +388,7 @@ Model和View并无直接关联，而是通过ViewModel来进行联系的，Model
 - 跨域以及解决办法
 见repeat.md
 
-- 懒加载怎么实现
+## 懒加载怎么实现,手写
 场景：一个页面中很多图片，但是首屏只出现几张，这时如果一次性把图片都加载出来会影响性能。这时可以使用懒加载，页面滚动到可视区在加载。优化首屏加载。
 实现：img标签src属性为空，给一个data-xx属性，里面存放图片真实地址，当页面滚动直至此图片出现在可视区域时，用js取到该图片的data-xx的值赋给src。
 优点：页面加载速度快，减轻服务器压力、节约流量，用户体验好。
@@ -925,6 +611,10 @@ https://developers.google.cn/web/tools/chrome-devtools/?hl=zh-cn
 - 手写快排，时间复杂度，优化
 
 - 手动实现parseInt
+
+## 实现一个方法，找出一个数组中重复的元素
+
+## 将这段英文this is a pen首字母大写
 
 - 生成指定深度和每层广度的代码
 当clone层级很深的话就会栈溢出，但数据的广度不会造成溢出

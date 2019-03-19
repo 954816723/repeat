@@ -23,28 +23,28 @@
 解析：解析DOM树和CSSDOM树。
 渲染：构建渲染树，将DOM树进行可视化表示，将页面呈现给用户。
 
-- 请描述一下DNS解析的具体过程？
+## 请描述一下DNS解析的具体过程？
 见图片
 
-- 讲tcp/ip网络层、三次握手，为什么不能两次握手
+## 讲tcp/ip网络层、三次握手，为什么不能两次握手
 
-- TCP是如何发起连接和关闭连接的？
+## TCP是如何发起连接和关闭连接的？
 三次握手，四次挥手
 
-- TCP怎么工作的
+## TCP怎么工作的
 三次握手
 
-- TCP三次握手
+## TCP三次握手
 
-- SSL握手过程
+## SSL握手过程
 
-- tcp/ip网络层，http的特点
+## tcp/ip网络层，http的特点
 
-- http强行使用udp能实现吗？
+## http强行使用udp能实现吗？
 
-- http2比http1好的地方
+## http2比http1好的地方
 
-- http状态码
+## http状态码
 2XX 成功
 
 200 OK，表示从客户端发来的请求在服务器端被正确处理
@@ -71,15 +71,15 @@
 500 internal sever error，表示服务器端在执行请求时发生了错误
 503 service unavailable，表明服务器暂时处于超负载或正在停机维护，无法处理请求
 
-- 有哪些优化手段可以优化提高网页响应速度
+## 有哪些优化手段可以优化提高网页响应速度
 https://csspod.com/frontend-performance-best-practices/
 
-- Http请求中的keep-alive
+## Http请求中的keep-alive
 在http早期，每个http请求都要求打开一个tpc socket连接，并且使用一次之后就断开这个tcp连接。
 使用keep-alive可以改善这种状态，即在一次TCP连接中可以持续发送多份数据而不会断开连接。通过使用keep-alive机制，可以减少tcp连接建立次数，也意味着可以减少TIME_WAIT状态连接，以此提高性能和提高httpd服务器的吞吐率(更少的tcp连接意味着更少的系统内核调用,socket的accept()和close()调用)。
 但是，keep-alive并不是免费的午餐,长时间的tcp连接容易导致系统资源无效占用。配置不当的keep-alive，有时比重复利用连接带来的损失还更大。所以，正确地设置keep-alive timeout时间非常重要。
 
-- Http的缓存(http-cache)
+## Http的缓存(http-cache)
 好处:
 减少了冗余的数据传输，减少网费
 减少服务器端的压力
@@ -145,6 +145,12 @@ ETag: "15f0fff99ed5aae4edffdd6496d7131f"``
 Cache-Control=no-cache或者不符合Expires，浏览器向服务器发送请求；
 服务器同时判断ETag和Last-Modified，都一致，返回304，有任何一个不一致，返回200。
 
-- http请求方式有哪些？
+## http请求方式有哪些？
 HTTP1.0定义了三种请求方法： GET, POST 和 HEAD方法。
 HTTP1.1新增了五种请求方法：OPTIONS, PUT, DELETE, TRACE 和 CONNECT 方法。
+
+## http2.0的新特性有哪些
+
+## DNS的作用有哪些
+
+## http状态码有哪些？301和302的区别是什么？304是指什么？
