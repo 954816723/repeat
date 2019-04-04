@@ -1,5 +1,5 @@
 ## JS(概念)
-- let、const、var的区别；如果const定义的是个对象，能够修改对象的属性吗？
+## let、const、var的区别；如果const定义的是个对象，能够修改对象的属性吗？
 let新增与ES6中,用来取代var,消除var的不合理之处
 let,const不存在变量提升
 let声明的变量存在块级作用域
@@ -8,11 +8,17 @@ let不允许统一作用域内重复声明
 const声明常量,一旦声明,不可修改
 const声明的是对象的话,能修改属性,const保存的是对象的地址,地址不可更改
 
+## 类
+
 ## 原型链的终点指向什么？
+
+## 讲讲常用的es6语法，比如let、promise、class async awiat  generator Set/Map weakset, weakmap等等
+
+## 数组的方法
 
 ## 说说GET与POST的区别
 
-- window的onload事件和DOMContentLoaded谁先谁后？
+## window的onload事件和DOMContentLoaded谁先谁后？
 DOMContentLoaded要在onload之前
 当DOM树构建完成的时候就会触发DOMContentLoaded,
 onload是在页面载入完成的时候触发,包括图片等
@@ -42,7 +48,7 @@ web服务器响应请求，并返回指定url的数据（或错误信息，或�
 浏览器下载web服务器返回的数据及解析html源文件；
 生成DOM树，解析css和js，渲染页面，直至显示完成；
 
-- get和post分别进行几次数据交互
+## get和post分别进行几次数据交互
 get请求过程：（2次交互）
 
 浏览器请求tcp连接（第一次握手）   
@@ -59,30 +65,32 @@ post请求过程：（3次交互）
 浏览器开始发送数据   
 服务器返回200 ok响应
 
-- 事件捕获和事件冒泡
+## 事件捕获和事件冒泡
 DOM2级规范统一了事件流的过程,分为三个阶段:事件捕获,在目标元素上,事件冒泡
+事件捕获：和“事件冒泡”相反，从根节点开始执行，一直向子节点传递，直到目标节点。
+事件冒泡：子元素的触发事件会一直向父节点传递，一直到根结点停止。此过程中，可以在每个节点捕捉到相关事件。可以通过stopPropagation方法终止冒泡。
 DOM2级规范在所有HTML元素上都定义了两个方法:`addEventlistener()` 和 `removeEventListener()`
 接受三个参数:事件名称,事件处理器函数,一个布尔值(默认false表示冒泡阶段触发,true则捕获阶段触发)
 事件代理(事件委托):在DOM元素的父元素上添加事件监听,通过事件对象中的target属性获取到事件目标对象
-e.target:是触发事件的子元素 e.currentTarget:是父级元素
+e.target:是触发事件的子元素 e.currentTarget:是绑定事件的元素
 
-- 怎么实现标签页的通信
+## 怎么实现标签页的通信
 WebSocket localstorage SharedWorker
 `window.onstorage = (e)=>{}`
 `window.addEventListener('storage',(e)=>{console.log(e)})`
 onstorage和storage都针对非当前页面对localstorage进行修改时才会触发,当前页面修改不会触发
 
-- 怎么从十万个节点中找到想要的节点，怎么快速在某个节点前插入一个节点？
+## 怎么从十万个节点中找到想要的节点，怎么快速在某个节点前插入一个节点？
 
-- rem
+## rem
 ```
 
 ```
 
-- 怎么实现继承
+## 怎么实现继承
 原型链继承
 简单易于实现,但是要想为子类新增属性和方法，必须要在new Animal()这样的语句之后执行,无法实现多继承
-```
+```js
 // 定义一个动物类
 function Animal (name) {
   // 属性
@@ -107,7 +115,7 @@ console.log(cat.name);//cat
 ```
 构造继承
 可以实现多继承,不能继承原型属性/方法
-```
+```js
 function Cat(name){
   Animal.call(this);
   this.name = name || 'Tom';
@@ -115,7 +123,7 @@ function Cat(name){
 ```
 实例继承
 不限制调用方式,但不能实现多继承
-```
+```js
 function Cat(name){
   var instance = new Animal();
   instance.name = name || 'Tom';
@@ -124,7 +132,7 @@ function Cat(name){
 ```
 拷贝继承
 支持多继承,但是效率低占用内存
-```
+```js
 function Cat(name){
   var animal = new Animal();
   for(var p in animal){
@@ -134,7 +142,7 @@ function Cat(name){
 }
 ```
 组合继承
-```
+```js
 function Cat(name){
   Animal.call(this);
   this.name = name || 'Tom';
@@ -143,7 +151,7 @@ Cat.prototype = new Animal();
 Cat.prototype.constructor = Cat;
 ```
 寄生组合继承
-```
+```js
 function Cat(name){
   Animal.call(this);
   this.name = name || 'Tom';
@@ -157,7 +165,7 @@ function Cat(name){
 })();
 ```
 ES6的extends继承
-```
+```js
 class ColorPoint extends Point {
   constructor(x, y, color) {
     super(x, y); // 调用父类的constructor(x, y)
@@ -170,22 +178,22 @@ class ColorPoint extends Point {
 }   
 ```
 
-- requestAnimationFrame 原理？是同步还是异步？
+## requestAnimationFrame 原理？是同步还是异步？
 异步，传入的函数在重绘之前调用 详细参考：
 http://web.jobbole.com/91578/
 https://my.oschina.net/bghead/blog/850692
 http://www.zhangxinxu.com/wordpress/2013/09/css3-animation-requestanimationframe-tween-%E5%8A%A8%E7%94%BB%E7%AE%97%E6%B3%95/
 
 
-- Es6,es7有哪些特性
+## Es6,es7有哪些特性
 ES6:let const 模板字符串 拓展运算符... 解构赋值 箭头函数 Promise Set Map Class
 ES7:幂运算(** 3**2=9) Array.prototype.includes()
 ES8:async await Object.values/Object.entries String padding(字符串填充) Object.getOwnPropertyDescriptors
 
-- 原型/作用域/作用域链
+## 原型/作用域/作用域链
 见repeat.md
 
-- 事件循环(Event Loop)
+## 事件循环(Event Loop)
 JS是一门单线程语言,事件循环是JS实现异步的方法,也是JS的执行机制
 JS有一个主线程和一个调用栈,所有的任务都会被放到调用栈等待主线程执行
 JS调用栈采用后进先出,函数执行会被添加到栈的顶部,当执行栈执行完成后,从顶部移出,知道栈内被清空
@@ -195,7 +203,7 @@ JS中任务分为同步任务和异步任务,同步任务会按照顺序等待�
 JS代码执行时,进入整体代码后,执行所有同步任务(宏任务),开始第一次循环,接着执行所有的微任务,然后再从宏任务开始,找到其中一个任务队列执行完毕,在执行所有微任务,以此循环
 执行完一个宏任务后,就会看是否有微任务,有就执行微任务中的所有任务,没有就继续读取宏任务中排在前面的任务,以此类推
 
-- Node中的事件循环
+## Node中的事件循环
 timers: 执行setTimeout和setInterval中到期的callback。
 pending callback: 上一轮循环中少数的callback会放在这一阶段执行。
 idle, prepare: 仅在内部使用。
@@ -203,12 +211,12 @@ poll: 最重要的阶段，执行pending callback，在适当的情况下回阻�
 check: 执行setImmediate(setImmediate()是将事件插入到事件队列尾部，主线程和事件队列的函数执行完成之后立即执行setImmediate指定的回调函数)的callback。
 close callbacks: 执行close事件的callback，例如socket.on('close'[,fn])或者http.server.on('close, fn)。
 
-- 浏览器的事件循环和nodejs事件循环的区别
+## 浏览器的事件循环和nodejs事件循环的区别
 
-- this/箭头函数
+## this/箭头函数
 见repeat.md
 
-- 闭包,什么时候闭包会消除 使用场景有哪些？闭包会引起什么问题？
+## 闭包,什么时候闭包会消除 使用场景有哪些？闭包会引起什么问题？
 因为作用域链，外部不能访问内部的变量和方法，这时我们就需要通过闭包，返回内部的方法和变量给外部，从而就形成了一个闭包。
 JavaScript是一门具有自动垃圾回收机制的编程语言，主要有两种方式：
 标记清除（最常用）
@@ -219,61 +227,61 @@ JavaScript是一门具有自动垃圾回收机制的编程语言，主要有两�
 导致问题：会导致循环引用的变量和函数无法回收。
 解决：将用完的函数或者变量置为null。
 
-- 怎么理解js是单线程的
+## 怎么理解js是单线程的
 主要说一下异步以及事件循环机制，还有事件队列中的宏任务、微任务。
 
 macrotask：主代码块，setTimeout，setInterval、setImmediate等。
 microtask：process.nextTick（相当于node.js版的setTimeout），Promise 。process.nextTick的优先级高于Promise。
 
-- for...in迭代和for...of有什么区别
+## for...in迭代和for...of有什么区别
 for...in一般用来遍历对象,但是会遍历到原型上的方法,使用hasOwnProperty(key)来判断
 for...in如果用来遍历数组,索引是字符串,不能用于运算,遍历顺序可能不是按照数组内部顺序,同时会遍历数组以及原型上的可枚举属性
 for...of一般用来遍历数组/map/set/字符串等拥有迭代器对象的集合,不能遍历对象
 for...of与forEach不同的是能响应break,continue和return语句
 
-- 0.1+0.2!=0.3
+## 0.1+0.2!=0.3
 因为 JS 采用 IEEE 754 双精度版本（64位），并且只要采用 IEEE 754 的语言都有该问题
 parseFloat((0.1 + 0.2).toFixed(10))
 
-- call，apply，bind 三者用法和区别
+## call，apply，bind 三者用法和区别
 改变this执行,并让函数执行
 call第二个参数及以后是一个一个传递,逗号隔开
 apply第二参数是数组传递
 bind参数逗号传递,但不立即执行,返回一个结果函数
 
-- call和apply的哪个性能更好
+## call和apply的哪个性能更好
 call比apply的性能更好
 
 ## lodash和ramda的区别是什么？
 
 ## 字符串和new String出来的字符串有啥区别？
 
-- 浅拷贝/深拷贝
+## 浅拷贝/深拷贝
 见repeat.md
 
-- 高阶函数是什么，怎么去写一个高阶函数
+## 高阶函数是什么，怎么去写一个高阶函数
 高阶函数：参数值为函数或者返回值为函数。例如map，reduce，filter，sort方法就是高阶函数。
 编写高阶函数，就是让函数的参数能够接收别的函数。
 
-- 怎么把es6转成es5，babel怎么工作的
+## 怎么把es6转成es5，babel怎么工作的
 解析：将代码字符串解析成抽象语法树
 变换：对抽象语法树进行变换操作
 再建：根据变换后的抽象语法树再生成代码字符串
 
-- typeof，instanceof和Object.prototype.toString
+## typeof，instanceof和Object.prototype.toString
 typeof只能检测基本数据类型,`typeof null`也返回object,无法分辨数组还是正则
 instanceof通过原型两查找,不能检测字面量方式创建出来的基本数据类型值,还有,只要在当前原型链上,结果都是true
 toString:返回当前实例所属类信息
 
-- JavaScript 中有哪些不同的函数调用模式？
+## JavaScript 中有哪些不同的函数调用模式？
 函数调用  方法调用(对象中方法)  构造器调用(new)  间接调用(call/apply)
 
-- "new"关键字在 JavaScript 中有什么作用？
+## "new"关键字在 JavaScript 中有什么作用？
 1.创了一个新对象;
 2.this指向构造函数;
 3.构造函数有返回,会替换new出来的对象,如果没有就是new出来的对象
 4.手动封装一个new运算符
-```
+```js
 var new2 = function (func) {
     var o = Object.create(func.prototype);   //创建对象
     var k = func.call(o); //改变this指向，把结果付给k
@@ -284,44 +292,43 @@ var new2 = function (func) {
     }
 } 
 ```
-- 判断是否是一个对象
+## 判断是否是一个对象
 `Object.prototype.toString.call(obj) === '[object Object]'`
 
-- instanceof的内部机制
+## instanceof的内部机制
 判断左边的`__proto__`是否等于右边的`prototype`原型
 
-- 原生js实现轮播图,以及滚动滑动
+## 原生js实现轮播图,以及滚动滑动
 
-- postMessage
+## postMessage
 
-- 前端监控（数据、性能、异常监控，埋点和上报）
+## 前端监控（数据、性能、异常监控，埋点和上报）
 Performace
 
-- 项目里面的前端鉴权是怎么实现的？
+## 项目里面的前端鉴权是怎么实现的？
 
 
-- 手写函数防抖和函数节流(应用场景)
+## 手写函数防抖和函数节流(应用场景)
 防抖是连续多次点击只执行一次  search搜索联想 窗口resize只触发一次
 节流是连续点击程序在指定间隔时间执行  监听滚动事件等
 
-- 讲讲常用的es6语法，比如let、promise、class async awiat  generator Set/Map weakset, weakmap等等
 
-- 使用es5实现es6的class
+## 使用es5实现es6的class
 Object.defineProperty()
 
--  Ajax 底层实现，readystate 有哪些
+##  Ajax 底层实现，readystate 有哪些
 0-（未初始化）还没有调用send()方法
 1-（载入）已调用send()方法，正在发送请求
 2-（载入完成）send()方法执行完成，已经接收到全部响应内容
 3-（交互）正在解析响应内容
 4-（完成）响应内容解析完成，可以在客户端调用了
 
-- Object.freeze和Object.seal的区别
+## Object.freeze和Object.seal的区别
 Object.preventExtension：禁止对象添加新属性并保留已有属性;
 Object.seal：在一个现有对象上调用 Object.preventExtensions(..) 并把所有现有属性标记为 configurable:false;
 Object.freeze：在一个现有对象上调用 Object.seal(..) 并把所有“数据访问”属性标记为 writable:false。
 
-- MVC和MVVM的区别
+## MVC和MVVM的区别
 Model用于封装和应用程序的业务逻辑相关的数据以及对数据的处理方法；
 View作为视图层，主要负责数据的展示；
 Controller定义用户界面对用户输入的响应方式，它连接模型和视图，用于控制应用程序的流程，处理用户的行为和数据上的改变。
@@ -330,18 +337,18 @@ MVVM由 Model,View,ViewModel 三部分构成,把View和Model的同步逻辑自�
 Model和View并无直接关联，而是通过ViewModel来进行联系的，Model和ViewModel之间有着双向数据绑定的联系。因此当Model中的数据改变时会触发View层的刷新，View中由于用户交互操作而改变的数据也会在Model中同步。
 这种模式实现了Model和View的数据自动同步，因此开发者只需要专注对数据的维护操作即可，而不需要自己操作dom。
 
-- 怎么上传文件
+## 怎么上传文件
 
-- 用JavaScript的异步实现sleep函数
+## 用JavaScript的异步实现sleep函数
 
-- 手写实现处理跨域的jsonp
+## 手写实现处理跨域的jsonp
 
-- 正则用过吗？exec, 匹配一个手机号
+## 正则用过吗？exec, 匹配一个手机号
 
-- sort的底层实现机制
+## sort的底层实现机制
 数组长度<=22时采用插入排序，大于22用快排。
 
-- JS设计模式
+## JS设计模式
 （1）单例模式
 定义：保证一个类仅有一个实例，并提供一个访问它的全局访问点。
 实现方法：先判断实例存在与否，如果存在则直接返回，如果不存在就创建了再返回，这就确保了一个类只有一个实例对象。
@@ -370,7 +377,7 @@ Model和View并无直接关联，而是通过ViewModel来进行联系的，Model
 
 - 线上日志是如何处理的
 
-- websocket
+## websocket
 由于 http 存在一个明显的弊端（消息只能有客户端推送到服务器端，而服务器端不能主动推送到客户端），导致如果服务器如果有连续的变化，这时只能使用轮询，而轮询效率过低，并不适合。于是 WebSocket 被发明出来。
 相比与 http 具有以下有点：
 支持双向通信，实时性更强；
@@ -382,10 +389,10 @@ Model和View并无直接关联，而是通过ViewModel来进行联系的，Model
 
 实现比较简单，服务端库如 socket.io、ws ，可以很好的帮助我们入门。而客户端也只需要参照 api 实现即可。
 
-- websocket握手过程
+## websocket握手过程
 
 
-- 跨域以及解决办法
+## 跨域以及解决办法
 见repeat.md
 
 ## 懒加载怎么实现,手写
@@ -393,49 +400,49 @@ Model和View并无直接关联，而是通过ViewModel来进行联系的，Model
 实现：img标签src属性为空，给一个data-xx属性，里面存放图片真实地址，当页面滚动直至此图片出现在可视区域时，用js取到该图片的data-xx的值赋给src。
 优点：页面加载速度快，减轻服务器压力、节约流量，用户体验好。
 
-- JavaScript的sort方法内部使用的什么排序？
+## JavaScript的sort方法内部使用的什么排序？
 
-- 函数式编程
+## 函数式编程
 
-- 手写实现promise,实现 Promise.finally
+## 手写实现promise,实现 Promise.finally
 
-- 怎么判断一个点是否在圆形内、正方形内    
+## 怎么判断一个点是否在圆形内、正方形内    
 
-- 实现一个事件发布订阅类，其实就是eventEmitter
+## 实现一个事件发布订阅类，其实就是eventEmitter
 
-- 回调函数的坏处
+## 回调函数的坏处
 
-- 如何抽取公共组件的
+## 如何抽取公共组件的
 
-- 如何实现一个可设置过期时间的localStorage
+## 如何实现一个可设置过期时间的localStorage
 
-- 实现一个发布订阅系统，包括on、emit、off等等
+## 实现一个发布订阅系统，包括on、emit、off等等
 
-- 用docker做了什么
+## 用docker做了什么
 
-- 优化项目
+## 优化项目
 https://mp.weixin.qq.com/s?__biz=MzUxMTcwOTM4Mg==&mid=2247483962&idx=1&sn=f9337ad983c6303811eb43d07d9f23d5&chksm=f96edb93ce195285943211e645cc683989826abdaaa8ab0b073a20761369ed04843c835c50b7#rd
 https://aotu.io/notes/2016/03/16/optimization/
 
-- 项目部署，线上问题等等
+## 项目部署，线上问题等等
 
-- 设计一个单点登录的系统，类似阿里系那种
+## 设计一个单点登录的系统，类似阿里系那种
 
-- 实现一个联想搜索组件
+## 实现一个联想搜索组件
 
-- 一个搜索框的输入联想，会遇到什么问题？如果第一个请求延迟，第二个请求先到，请问怎么处理？
+## 一个搜索框的输入联想，会遇到什么问题？如果第一个请求延迟，第二个请求先到，请问怎么处理？
 键盘输入太快，每次输入都去联想，需要多次发送请求，会导致用户体验太差，可以使用防抖优化。
 在前端做判断，判断此时的值是否与返回的值相同，不同就丢弃，相同就显示在页面。
 
-- webpack热更新原理，使用过的插件
+## webpack热更新原理，使用过的插件
 
-- AMD，CMD，CommonJs，ES6 Module
+## AMD，CMD，CommonJs，ES6 Module
 AMD：requirejs 在推广过程中对模块定义的规范化产出，提前执行，推崇依赖前置
 CMD：seajs 在推广过程中对模块定义的规范化产出，延迟执行，推崇依赖就近
 CommonJs：模块输出的是一个值的 copy，运行时加载，加载的是一个对象（module.exports 属性），该对象只有在脚本运行完才会生成
 ES6 Module：模块输出的是一个值的引用，编译时输出接口，ES6 模块不是对象，它对外接口只是一种静态定义，在代码静态解析阶段就会生成。
 
-- XSS 和 CSRF SQL注入
+## XSS 和 CSRF SQL注入
 XSS：跨站脚本攻击，是一种网站应用程序的安全漏洞攻击，是代码注入的一种。常见方式是将恶意代码注入合法代码里隐藏起来，再诱发恶意代码，从而进行各种各样的非法活动。
 防范：记住一点 “所有用户输入都是不可信的”，所以得做输入过滤和转义
 CSRF：跨站请求伪造，也称 XSRF，是一种挟制用户在当前已登录的Web应用程序上执行非本意的操作的攻击方法。与 XSS 相比，XSS利用的是用户对指定网站的信任，CSRF利用的是网站对用户网页浏览器的信任。
@@ -443,22 +450,22 @@ CSRF：跨站请求伪造，也称 XSRF，是一种挟制用户在当前已登�
 sql注入:在未授权情况下，非法访问数据库信息
 防范:在web输入参数处，对所有的参数做sql转义 杜绝用户提交的参数入库并且执行
 
-- OSI七层模型
+## OSI七层模型
 
-- OSI七层模型，路由器工作在哪一层？
+## OSI七层模型，路由器工作在哪一层？
 网络层
 
-- 怎么计算在一个页面上的停留时间
+## 怎么计算在一个页面上的停留时间
 方案1：websocket，前端开个长连接，后台统计长连接时间。
 方案2：ajax轮询，隔几秒发一个查询，后台记录第一与最后一个查询间隔时间。
 方案3： 关闭窗口或者跳转的时候会触发window.onbeforeunload函数，可以在该函数中做处理（有兼容性问题）；统计完数据记录到本地cookies中，一段时间后统一发送。
 
-- 怎么做一个实时的聊天系统
+## 怎么做一个实时的聊天系统
 使用WebSocket和nodejs，《nodejs实战》这本书详细介绍了这个项目。
 
-- websocket有时会出现掉线的问题，怎么解决？
+## websocket有时会出现掉线的问题，怎么解决？
 加入心跳机制
-```
+```js
 var heartCheck = {
     timeout: 60000,//60ms
     timeoutObj: null,
@@ -494,131 +501,29 @@ ws.onerror = function () {
 };
 ```
 
-- PWA
+## PWA
 
-- 有一个长度为 100 的数组，请求出该数组的前 10 个元素之和。
+## 写一个程序打印 1 到 100 这些数字，遇到数字为 3 的倍数，打印 “A” 替代该数字；遇到 5 的倍数，用 “B” 代替；遇到即是 3 的倍数又是 5 的倍数，打印 “AB”。
 
-- 写一个程序打印 1 到 100 这些数字，遇到数字为 3 的倍数，打印 “A” 替代该数字；遇到 5 的倍数，用 “B” 代替；遇到即是 3 的倍数又是 5 的倍数，打印 “AB”。
+## 跨域通信有哪些方案，各有什么不同？
 
-- 跨域通信有哪些方案，各有什么不同？
+## 哪些常见操作会造成内存泄漏？
 
-- 哪些常见操作会造成内存泄漏？
+## 主流前端框架如 Angular/React/Vue 等之间有哪些差异及特点，选取一个描述其组件生命周期。
 
-- 主流前端框架如 Angular/React/Vue 等之间有哪些差异及特点，选取一个描述其组件生命周期。
-
-## vue
--  delete和Vue.delete删除数组的区别
-delete只是被删除的元素变成了 empty/undefined 其他的元素的键值还是不变。
-Vue.delete 直接删除了数组 改变了数组的键值。
-
-- vue原理，和react的区别
-
-- 讲vue的响应式原理、依赖收集、监听数组、虚拟dom等等
-
-- vue响应式原理，什么是mvvm
-
-- 前端持久化的方式、区别
-
-- vue双向绑定讲一讲
-
-- 手写vue双向绑定
-
-- 使用 JavaScript Proxy实现简单的数据绑定
-
-- vue-router的原理
-
-- 手写vue的mixin方法
-
-- vue原理，包括计算属性、依赖收集等等
-
-- 对vuex的理解，单向数据流
-
-- 抽取过哪些vue组件
-
-- v-if 与 v-show 的区别
-v-if 的话，是往 DOM 树上添加或者删除元素；v-show 的话，使用 display: none 这些来控制显示元素
-
-- 讲vue-lazyloader的原理，手写伪代码
-
-- vue里面哪儿不会用到双向绑定
-input中不适用v-model,而是使用v-bind/:
-
-- Diff 算法,diff算法是对树的深度优先遍历还是广度优先遍历
-是深度优先遍历
-
-- vue和react区别
-相同点：都支持 ssr，都有 vdom，组件化开发，实现 webComponents 规范，数据驱动等
-不同点：vue 是双向数据流（当然为了实现单数据流方便管理组件状态，vuex 便出现了），react 是单向数据流。vue 的 vdom 是追踪每个组件的依赖关系，不会渲染整个组件树，react 每当应该状态被改变时，全部子组件都会 re-render。
-
-- vue里面的虚拟dom是怎么回事,优点？
-创建真实DOM的代价高：真实的 DOM 节点 node 实现的属性很多，而 vnode 仅仅实现一些必要的属性，相比起来，创建一个 vnode 的成本比较低。
-触发多次浏览器重绘及回流：使用 vnode ，相当于加了一个缓冲，让一次数据变动所带来的所有 node 变化，先在 vnode 中进行修改，然后 diff 之后对所有产生差异的节点集中一次对 DOM tree 进行修改，以减少浏览器的重绘及回流。
-
-- Vue 组件 data 为什么必须是函数
-每个组件都是 Vue 的实例。
-组件共享 data 属性，当 data 的值是同一个引用类型的值时，改变其中一个会影响其他。
-
-- Vue computed 实现
-从两个问题出发：
-建立与其他属性（如：data、 Store）的联系；
-属性改变后，通知计算属性重新计算。
-实现时，主要如下
-初始化 data， 使用 Object.defineProperty 把这些属性全部转为 getter/setter。
-初始化 computed, 遍历 computed 里的每个属性，每个 computed 属性都是一个 watch 实例。每个属性提供的函数作为属性的 getter，使用 Object.defineProperty 转化。
-Object.defineProperty getter 依赖收集。用于依赖发生变化时，触发属性重新计算。
-若出现当前 computed 计算属性嵌套其他 computed 计算属性时，先进行其他的依赖收集
-
-- 怎么快速定位哪个组件出现性能问题
-通过 timeline 来查看每个函数的调用时常，定位出哪个函数的问题，从而能判断哪个组件出了问题。
-https://juejin.im/post/5a6e78abf265da3e3f4cf085
-https://developers.google.cn/web/tools/chrome-devtools/?hl=zh-cn
-
-- 讲vue-lazyloader源码以及设计
-
-## node/express
-- express设计原理，面试官对动态路由匹配一直追问下去
-
-- 讲express的设计原理
-
-- 讲express框架的设计思想
-
-- 讲nodejs的eventEmitter的实现
-
-- 讲express的中间件系统是如何设计的
-
-## webpack
-- 项目中怎么用的webpack，怎么优化
-
-- 模块化介绍一下，什么是编译时优化
-
-- 用webpack做了什么
 
 ## JS(代码/算法)
-- 有哪些排序算法，时间复杂度是多少？什么时候快排的效率最低？
-|排序算法|最坏事件复杂度|平均时间复杂度|稳定度|空间复杂度|
-|-|-|-|-|-|
-|冒泡排序|O(n^2)|O(n^2)|稳定|O(1)|
-|插入排序|O(n^2)|O(n^2)|稳定|O(1)|
-|选择排序|O(n^2)|O(n^2)|稳定|O(1)|
-|快速排序|O(n^2)|O(n*log2n)|不稳定|O(log2n)~O(n)|
-|二叉树排序|O(n^2)|O(n*log2n)|不一定|O(n)|
-|堆排序|O(n*log2n)|O(n*log2n)|不稳定|O(1)|
+## 手动实现parseInt
 
-整个序列已经有序或完全倒序时，快排的效率最低。
+## reduce实现map
 
-- 冒泡排序和快速排序的区别
-
-- 手写快排，时间复杂度，优化
-
-- 手动实现parseInt
-
-## 实现一个方法，找出一个数组中重复的元素
+## 有一个长度为 100 的数组，请求出该数组的前 10 个元素之和。
 
 ## 将这段英文this is a pen首字母大写
 
-- 生成指定深度和每层广度的代码
+## 生成指定深度和每层广度的代码
 当clone层级很深的话就会栈溢出，但数据的广度不会造成溢出
-```
+```js
 function createData(deep, breadth) {
     var data = {};
     var temp = data;
@@ -635,19 +540,19 @@ createData(1, 3); // 1层深度，每层有3个数据 {data: {0: 0, 1: 1, 2: 2}}
 createData(3, 0); // 3层深度，每层有0个数据 {data: {data: {data: {}}}}
 ```
 
-- 给你一亿个数，是连续的，怎么找出两个不存在的数
+## 给你一亿个数，是连续的，怎么找出两个不存在的数
 用bitmap就能搞定了，存在为1，不存在为0。
 
-- 数组的filter，以下输出结果是什么(2018拼多多)
-```
+## 数组的filter，以下输出结果是什么(2018拼多多)
+```js
 var arr = [1,2,3];
 arr[10] = 9;
 arr.filter((item)=> {
     return item === undefined?
 })
 ```
-- 输出结果(2017年「今日头条」)  
-```
+## 输出结果(2017年「今日头条」)  
+```js
 async function async1 () {
     console.log('async1 start');
     await async2();
@@ -675,8 +580,8 @@ new Promise(function (resolve) {
 
 console.log('script end');
 ```
-- 使用递归的方法，将obj变为obj2的格式(拼多多2018)
-```
+## 使用递归的方法，将obj变为obj2的格式(拼多多2018)
+```js
 obj = [
     {id:1,parent:null},
     {id:2,parent:1},
@@ -698,8 +603,8 @@ obj2 = {
     }
 }
 ```
-- 写一个sum方法，可以实现以下两种调用方式
-```
+## 写一个sum方法，可以实现以下两种调用方式
+```js
 console.log(sum(2,3)) //5
 console.log(sum(2)(3)) //5
 
@@ -726,9 +631,9 @@ var sum = function(x){
     }
 }
 ```
-- 实现判断变量是否是整数的函数isInter(x)的实现
+## 实现判断变量是否是整数的函数isInter(x)的实现
  在ES6中，是有现成的方法Number.isInteger
-```
+```js
 //1 异或运算
 function isInter(x) {
     return x ^ 0 === x
@@ -741,17 +646,16 @@ return Math.round(x) === x  //同样可以用floor ceil
 return (typeof x === 'number')&&(x % 1 === 0)
 
 ```
-- 使下面代码正常运行
-```
+## 使下面代码正常运行
+```js
 const a = [1,2,3,4,5];
 a.multiply();
 console.log(a);//[1,2,3,4,5,1,4,9,16,25]
 ```
 
-- 给定一个数组排序，使得奇数位的值不大于相邻偶数位的值
 
-- 如何每隔三个数加一个逗号，还要考虑小数点的情况
-```
+## 如何每隔三个数加一个逗号，还要考虑小数点的情况
+```js
 function transform(number){
     var num = number.toString() 
     var numArr = num.split('.')
@@ -777,8 +681,8 @@ function transform(number){
 }
 ```
 
-- 手写indexOf
-```
+## 手写indexOf
+```js
 function indexOf(str, val){
     var strLen = str.length, valLen = val.length
     for(var i = 0; i < strLen; i++){
@@ -795,8 +699,8 @@ function indexOf(str, val){
 }
 ```
 
-- 实现call
-```
+## 实现call
+```js
 Function.prototype.call2 = function (context) {
     var context = Object(context) || window
     context.fn = this
@@ -812,8 +716,8 @@ Function.prototype.call2 = function (context) {
 }
 ```
 
-- 实现Object.assign
-```
+## 实现Object.assign
+```js
 if (typeof Object.assign2 != 'function') {
  //使用Object.defineProperty定义assign2方法
  //原生Object上的方法不可枚举,所以需要设置可枚举为false,不写默认false
@@ -846,8 +750,8 @@ if (typeof Object.assign2 != 'function') {
 }
 ```
 
-- 数组扁平化处理
-```
+## 数组扁平化处理
+```js
 let givenArr = [[1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14]]]], 10];
 let outputArr = [1,2,2,3,4,5,5,6,7,8,9,11,12,12,13,14,10]
 
@@ -877,12 +781,12 @@ function flatten(arr){
 }
 ```
 
-- 实现一个div滑动的动画，由快至慢5s结束（不准用css3)。
+## 实现一个div滑动的动画，由快至慢5s结束（不准用css3)。
 
-- 页面内有一个input输入框，实现在数组arr查询命中词并要求autocomplete效果。
+## 页面内有一个input输入框，实现在数组arr查询命中词并要求autocomplete效果。
 
-- 实现超出整数存储范围的两个大整数相加function add(a,b)。注意a和b以及函数的返回值都是字符串
-```
+## 实现超出整数存储范围的两个大整数相加function add(a,b)。注意a和b以及函数的返回值都是字符串
+```js
 function add (a, b) {
     let lenA = a.length,
         lenB = b.length,
@@ -918,18 +822,19 @@ function add (a, b) {
     
 }
 ```
+## 对象里按照英文字母排序
+```js
+sortGroup(){
+            let sortCity = {};
+            for (let i = 65; i <= 90; i++) {
+                if (this.groupCity[String.fromCharCode(i)]) {
+                    sortCity[String.fromCharCode(i)] = this.groupCity[String.fromCharCode(i)]
+                }
+            }
+            return sortCity;
+        }
+```
 
-- 能写一个二叉树么，怎么去遍历
+## 10 个 Ajax 同时发起请求，全部返回展示结果，并且至多允许三次失败，说出设计思路
 
-- 描述一下归并排序是怎么实现的？
-
-- 快速排序算法说下，基点怎么选？如果一个数组是已经排序好的怎么选基点？
-数组元素随机，取固定基准；
-数组元素已排序或逆序，取随机基准；
-更好的方法：三数取中，选取数组开头，中间和结尾的元素，通过比较，选择中间的值作为快排的基准。
-
-- 10 个 Ajax 同时发起请求，全部返回展示结果，并且至多允许三次失败，说出设计思路
-
-- 基于 Localstorage 设计一个 1M 的缓存系统，需要实现缓存淘汰机制
-
-- 
+## 基于 Localstorage 设计一个 1M 的缓存系统，需要实现缓存淘汰机制

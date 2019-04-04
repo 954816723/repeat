@@ -527,7 +527,7 @@ git config --global alias.st status
 ## 性能优化
 
 ## 浅拷贝/深拷贝
-- 浅拷贝  
+###### 浅拷贝  
 直接赋值  
 Object.assign()  
 拓展运算符...  
@@ -556,12 +556,12 @@ function cloneShallow(source) {
 }
 ```
 
-- 深拷贝  
+###### 深拷贝  
 JSON.parse(JSON.stringify(arr))  
 但是不能处理函数,会忽略undefined,忽略Symbol,不能解决循环引用的对象  
 jQuery.extend()  
 lodash.cloneDeep()  
-```
+```js
 function extend(source){
     let target;
     if(typeof source === 'object'){
@@ -710,7 +710,7 @@ function find(arr, item) {
 ## 懒加载/预加载
 
 ## fetch
-```
+```js
 async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 	type = type.toUpperCase();
 	url = baseUrl + url;
@@ -792,7 +792,7 @@ async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 - jsonp  
 只能发送get请求,不支持post put delete  
 不安全 xss攻击  
-```
+```js
 function jsonp({url,params,cb}){
     return new Promise((resolve,reject)=>{
         let script = document.createElement('script');
@@ -820,7 +820,7 @@ jsonp({
 - cors  
 设置各种请求头  
 通过express搭建服务器  
-```
+```js
 //index.html
 <script>
     let xhr = new XMLHttpRequest;
@@ -843,7 +843,7 @@ jsonp({
     xhr.send();
 </script>
 ```
-```
+```js
 //server1.js
 let express = require('express');
 let app = express();
@@ -851,7 +851,7 @@ let app = express();
 app.use(express.static(__dirname));
 app.listen(3000);
 ```
-```
+```js
 //server2.js
 let express = require('express');
 let app = express();
@@ -893,8 +893,8 @@ app.get('/getData',(req,res)=>{
 app.use(express.static(__dirname));
 app.listen(4000); 
 ```
-- postMessage  
-```
+###### postMessage  
+```js
 //a.html
 <iframe src="http://localhost:4000/b.html" id="frame" onload="load()" frameborder="0">
 <script>
@@ -907,7 +907,7 @@ function load(){
 }
 </script>
 ```
-```
+```js
 //b.html
 <script>
 window.onmessage = function(e){
@@ -916,12 +916,12 @@ window.onmessage = function(e){
 }
 </script>
 ```
-- window.name   
+###### window.name   
 a和b是同域的http://localhost:3000  
 c是独立的http://localhost:4000  
 a获取c的数据,a先引用c,c将值放在window.name,引入后将a将引用地址改为b  
 此时window.name中的数据依然保存  
-```
+```js
 //a.html
 <iframe src="http://localhost:4000/c.html" id="frame" onload="load()" frameborder="0">
 <script>
@@ -941,14 +941,14 @@ function load(){
 //b.html
 ...
 ```
-```
+```js
 //c.html
 <script>
 window.name = 'hehe';
 </script>
 ```
-- location.hash  
-```
+###### location.hash  
+```js
 //a.html
 <iframe src="http://localhost:4000/c.html#hehe" id="frame" onload="load()" frameborder="0">
 <script>
@@ -957,13 +957,13 @@ window.onhashchange = function(){
 }
 </script>
 ```
-```
+```js
 //b.html
 <script>
 window.parent.parent.location.hash = location.hash;
 </script>
 ```
-```
+```js
 //c.html
 <script>
 let frame = document.createElement('iframe');
@@ -971,9 +971,9 @@ frame.src = 'http://localhost:3000/b.html#xixi';
 document.body.appendChild(frame);
 </script>
 ```
-- document.domain  
+###### document.domain  
 使用于一级二级域名  
-```
+```js
 //a.html
 <iframe src="http://localhost:4000/c.html" id="frame" onload="load()" frameborder="0">
 <script>
@@ -983,15 +983,15 @@ function load(){
 }
 </script>
 ```
-```
+```js
 //b.html
 <script>
 document.domain = 'biubiubiu.ltd';
 let a = 100;
 </script>
 ```
-- websocket  
-```
+###### websocket  
+```js
 <script>
 let socket = new WebSocket('ws://localhost:3000');
 socket.onopen = function(){
@@ -1002,7 +1002,7 @@ socket.onmessage = function(e){
 }
 </script>
 ```
-```
+```js
 //server.js
 let express= require('express');
 let app = express();
@@ -1015,8 +1015,8 @@ wss.on('connection',function(ws){
     })
 })
 ```
-- http-proxy  
-- nginx  
+###### http-proxy  
+###### nginx  
 配置conf/nginx.conf  
 
 ## MVC / MVP / MVVM
@@ -1069,7 +1069,7 @@ ES6是编译时加载,模块不是对象,是通过export输出的代码,通过im
 
 ## 数组扁平化
 讲一个多维数组转为一维数组  
-```
+```js
 Array.prototype.flat = function() {
     var arr = [];
     this.forEach((item,idx) => {
@@ -1082,49 +1082,19 @@ Array.prototype.flat = function() {
     return arr;   //递归出口
 }
 ```
-```
+```js
 arr.prototype.flat = function() {
     this.toString().split(',').map(item=> +item )
 }
 ```
-## 算法  
-非线性时间比较类排序  
-- 冒泡排序  
 
-- 快速排序  
-
-- 插入排序  
-
-- 希尔排序 
-
-- 选择排序  
-
-- 堆排序
-
-- 二路归并排序  
-
-- 多路归并排序  
-
-线性时间非比较类排序  
-- 计数排序  
-
-- 桶排序  
-
-- 基数排序  
-
-----------------------------
-- 洗牌算法  
-
-## Diff
-
-## AST
 
 ## 设计模式
 - 单例模式  
 定义：保证一个类仅有一个实例，并提供一个访问它的全局访问点。  
 实现方法：先判断实例存在与否，如果存在则直接返回，如果不存在就创建了再返回，这就确保了一个类只有一个实例对象。  
 适用场景：一个单一对象。比如：弹窗，无论点击多少次，弹窗只应该被创建一次。  
-```
+```js
 let getSingle = function(fn){
     let instance;
     return function(){
@@ -1142,7 +1112,7 @@ btn.addEventListener('click',function(){
 - 发布/订阅模式  
 定义：又叫观察者模式,它定义对象间的一种一对多的依赖关系,当一个对象的状态发生改变时,所有依赖于它的对象都将得到通知。  
 场景：订阅感兴趣的专栏和公众号。  
-```
+```js
 let Event = (function(){
     let clientList = {},
         listen,
@@ -1196,7 +1166,7 @@ Event.trigger('hehe','xixi');
 策略模式在程序中或多或少的增加了策略类。但比堆砌在业务逻辑中要清晰明了。  
 违反最少知识原则，必须要了解各种策略类，才能更好的在业务中应用。  
 应用场景：根据不同的员工绩效计算不同的奖金；表单验证中的多种校验规则。  
-```
+```js
 let strategies = {
     "S":function(value){
         return value * 4;
@@ -1217,7 +1187,7 @@ console.log(calc('S',5000))
 定义：为一个对象提供一个代用品或占位符，以便控制对它的访问。  
 应用场景：图片懒加载（先通过一张loading图占位，然后通过异步的方式加载图片，等图片加载好了再把完成的图片加载到img标签里面。）  
 点击请求ajax的延时处理,计算数据的缓存
-```
+```js
 //不使用代理模式实现图片懒加载
 let myImage = (function(){
     let node = document.createElement('img');
@@ -1280,16 +1250,6 @@ proxyImg.setSrc('http://大图.png');
 
 ## websocket/socket.io
 
-## vue
-
-## vuex
-
-## vueRouter
-
-## node
-
-## express
-
 ## GraphQL
 
 ## weex/element-ui
@@ -1323,20 +1283,20 @@ let connection = mysql.createConnection({
 - 连接数据库  
 `connection.connect()`
 - 增  
-```
+```js
 let sql = 'insert into user(user_name,user_pass) value(?,?)';
 let sqlParams = [name,pass];
 connection.query(sql,sqlParams,(err,data)=>{});
 //成功返回新增ID
 ```
 - 删  
-```
+```js
 let sql = 'DELETE FROM user WHERE id = 6';
 connection.query(sql,(err,result)=>{})
 //成功返回影响行数result.affectedRows
 ```
 - 改  
-```
+```js
 let sql = 'UPDATE user SET user_name=?,user_pass=? WHERE id = ?'
 let sqlParams = [name.pass,1];
 connection.query(sql,sqlParams,(err,data)=>{})
@@ -1344,7 +1304,7 @@ connection.query(sql,sqlParams,(err,data)=>{})
 ```
 
 - 查  
-```
+```js
 let sql = 'select * from user where username = "'+name+'" ' ;
 connection.query(sql,(err,data)=>{});
 //成功返回数组[RowDataPacket{},RowDataPacket{}]
