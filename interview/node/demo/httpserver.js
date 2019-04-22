@@ -21,7 +21,7 @@ server.on('request',function(req,res){
     console.log(req.protocal);
     // 请求头对象
     console.log(req.headers);
-    req.on('data',fucntion(){
+    req.on('data',function(){
 
     })
     req.on('end',function(){

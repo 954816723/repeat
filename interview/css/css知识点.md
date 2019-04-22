@@ -152,7 +152,6 @@ position 定位的话，默认是 static。然后，如果 position: fixed 的�
 
 ## fixed是相对于谁定位的？如果加上transform会出现问题吗？
 
-## 什么是XSS攻击？怎么解决？
 
 ## 写出5种css隐藏元素的办法
 ```
@@ -170,4 +169,4 @@ left: -9999px;
 
 ```
 
-## cookies与session有什么区别？
+## 谈谈css预处理器机制

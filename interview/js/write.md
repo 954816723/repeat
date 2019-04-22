@@ -568,6 +568,12 @@ function flatten(arr){
 }
 
 function flatten(arr){
+    return [].concat(...arr.map(x=>{
+        Array.isArray(x) ? flatten(x) : x;
+    }))
+}
+
+function flatten(arr){
     return arr.reduce(function(prev,item){
         return prev.concat(Array.isArray(item)?flatten(item):item);
     },[]);
@@ -614,3 +620,32 @@ if (typeof Object.assign2 != 'function') {
   });
 }
 ```
+
+## 实现sleep
+
+## ES6的Set内部实现
+
+## 手写indexOf
+```js
+function indexOf(str, val){
+    var strLen = str.length, valLen = val.length
+    for(var i = 0; i < strLen; i++){
+        var matchLen = i + valLen
+        var matchStr = str.slice(i, matchLen)
+        if(matchLen > strLen){
+            return -1
+        }
+        if(matchStr === val){
+            return i
+        }
+    }
+    return -1
+}
+```
+## 手动实现parseInt
+
+## reduce实现map
+
+## vue双向数据绑定
+
+

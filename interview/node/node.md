@@ -1,3 +1,10 @@
+## 常用模块  
+- mime  
+- chalk  
+- debug   
+- supervisor/pm2 node进程  
+- handlebars js模板渲染引擎  
+- yargs 处理命令行参数  
 ## console(基础调试/控制台)  
 1. 标准输出  
 标识符:1  
@@ -475,10 +482,6 @@ rs.on('end',function(){
     - Expires 实体过期时间  
 ###### HTTP服务器
 
-
-
-
-
 ## https
 
 ## url(网络地址解析)  
@@ -502,6 +505,21 @@ rs.on('end',function(){
 ## dgram(网络UDP)  
 
 ## zlib(资源压缩)  
+```js
+let fs = require('fs');
+let path = require('path');
+let zlib = require('zlib');
+function gzip(src){
+    fs.createReadStream(src).pipe(zlib.createZip()).pipe(fs.createWriteStream(src+'.gz'));
+}
+gzip(path.join(__dirname,'msg.txt'));
+function xzip(src){
+    fs.createReadStream('src')
+        .pipe(zlib.createGunzip())
+        .pipe(fs.createWriteStream(path.join(__diranme,path.basename(src,'.gz'))));
+}
+xzip(path.join(__dirname,'msg.txt.gz'));
+```
 
 ## debugger(进阶调试)  
 
