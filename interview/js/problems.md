@@ -1,4 +1,5 @@
 ## JS(概念)
+## 浏览器内核
 
 ## 讲讲常用的es6语法，比如let、promise、class async awiat  generator Set/Map weakset, weakmap等等
 ###### let、const、var的区别；如果const定义的是个对象，能够修改对象的属性吗？
@@ -26,11 +27,21 @@ async是Generator函数的语法糖,函数内部使用await来表示异步
 
 ###### class
 
+###### Iterator
+
+###### 箭头函数
+
+###### 解构赋值
+
+###### 扩展运算符...
+
 ###### Generator
 
 ######Set/Map
 
 ###### weakset/weakmap  
+
+###### 装饰器
 
 ## 原型/作用域/作用域链
 见repeat.md
@@ -119,6 +130,13 @@ Object.prototype
 ## this/箭头函数
 见repeat.md
 
+## 闭包
+闭包就是能够读取其他函数内部变量的函数  
+闭包的作用： 
+1. 读取其他函数内部的变量  
+2. 变量保存在内存中  
+使用过多的闭包会消耗大量内存，造成网页的性能问题，可以在函数执行完成之前把不需要的局部变量删除  
+
 ## 闭包,什么时候闭包会消除 使用场景有哪些？闭包会引起什么问题？
 因为作用域链，外部不能访问内部的变量和方法，这时我们就需要通过闭包，返回内部的方法和变量给外部，从而就形成了一个闭包。
 JavaScript是一门具有自动垃圾回收机制的编程语言，主要有两种方式：
@@ -134,6 +152,8 @@ JavaScript是一门具有自动垃圾回收机制的编程语言，主要有两�
 主要说一下异步以及事件循环机制，还有事件队列中的宏任务、微任务。
 macrotask：主代码块，setTimeout，setInterval、setImmediate等。
 microtask：process.nextTick（相当于node.js版的setTimeout），Promise 。process.nextTick的优先级高于Promise。
+
+## 跨域
 
 ## ssr性能优化，node中间层细节处理
 
@@ -187,9 +207,34 @@ onstorage和storage都针对非当前页面对localstorage进行修改时才会�
 ## 怎么从十万个节点中找到想要的节点，怎么快速在某个节点前插入一个节点？
 
 ## 性能优化
+一般我会分为以下几个方面来回答，一般会引申到网络、缓存方面的问题：
+- server：
+使用 cdn
+减少不必要的数据返回
+使用 gzip
+缓存 （etag / expires ...）
+- content：
+减少 http 请求 (css sprites / inline image)
+不同资源放在不同域下 (http1.1)
+延迟加载 / 延迟执行(立即下载，延迟执行[before DOMContentLoaded]defer) / 预加载(preload)
+async，该布尔属性指示浏览器是否在允许的情况下异步执行该脚本。该属性对于内联脚本无作用 (即没有 src 属性的脚本）。
+defer，这个布尔属性被设定用来通知浏览器该脚本将在文档完成解析后，触发DOMContentLoaded事件前执行。
+精简 HTML 结构
+压缩资源
+- css:
+in head
+较少的层级（之前被问到过是否有统计过层级多与少对性能的实质影响，实际上我是没有做过此类研究，所以知道结论而不懂过程还是欠缺的）
+- js:
+before 
+减少 dom 访问（在 body 内放置的 JS 代码是否可以访问到 body 标签）
+- webpack:
+tree shaking 去除没有使用的代码
+提取公共包，有被问到
+拆分模块，按需加载
+优化图片，使用 base64 代替小图
+file name with hash (etag)
 
 ## cookies与session有什么区别？
-
 
 ## rem
 ```
@@ -373,6 +418,7 @@ Performace
 
 ## 项目里面的前端鉴权是怎么实现的？
 
+## mobx
 
 ## 手写函数防抖和函数节流(应用场景)
 防抖是连续多次点击只执行一次  search搜索联想 窗口resize只触发一次
@@ -404,6 +450,8 @@ Model和View并无直接关联，而是通过ViewModel来进行联系的，Model
 这种模式实现了Model和View的数据自动同步，因此开发者只需要专注对数据的维护操作即可，而不需要自己操作dom。
 
 ## 怎么上传文件
+
+## 前后端分离
 
 ## 用JavaScript的异步实现sleep函数
 
@@ -455,8 +503,11 @@ Model和View并无直接关联，而是通过ViewModel来进行联系的，Model
 
 实现比较简单，服务端库如 socket.io、ws ，可以很好的帮助我们入门。而客户端也只需要参照 api 实现即可。
 
+## socket.io
+
 ## websocket握手过程
 
+## 把arguments变成数组？兼容？
 
 ## 跨域以及解决办法
 见repeat.md
@@ -465,6 +516,8 @@ Model和View并无直接关联，而是通过ViewModel来进行联系的，Model
 场景：一个页面中很多图片，但是首屏只出现几张，这时如果一次性把图片都加载出来会影响性能。这时可以使用懒加载，页面滚动到可视区在加载。优化首屏加载。
 实现：img标签src属性为空，给一个data-xx属性，里面存放图片真实地址，当页面滚动直至此图片出现在可视区域时，用js取到该图片的data-xx的值赋给src。
 优点：页面加载速度快，减轻服务器压力、节约流量，用户体验好。
+
+## 图片预加载
 
 ## JavaScript的sort方法内部使用的什么排序？
 
@@ -581,10 +634,22 @@ ws.onerror = function () {
 
 ## 主流前端框架如 Angular/React/Vue 等之间有哪些差异及特点，选取一个描述其组件生命周期。
 
-## 
-- 一个气球从右上角移动到中间，然后抖动，如何实现
+## 一个气球从右上角移动到中间，然后抖动，如何实现
+
+## 监听一段时间内用户对我方网页的操作
+
+## 如何定位（检查）内存泄漏？
+
+## GC(垃圾回收)
+https://blog.csdn.net/qq_17550381/article/details/81126809
+
+## dva/dva解决了什么？如何解决？为什么使用？
 
 ## JS(代码/算法)
+## 实现一个函数，每隔wait秒执行func，一共执行times次
+
+## 实现一个函数,该函数接收一个obj, 一个path, 一个value，实现obj[path] = value，obj类似json格式
+
 ## 手动实现parseInt
 
 ## reduce实现map

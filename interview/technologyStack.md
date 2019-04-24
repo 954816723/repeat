@@ -29,6 +29,12 @@
     - Redux
     - DavJS(基于 redux 和 redux-saga 的数据流方案)
 
+## 算法
+
+## ElementUI/ant.design
+
+## dva/mobx
+
 ## Node
     - express
     - koa
@@ -36,12 +42,18 @@
 
 ## Echarts/d3
 
-## ElementUI/ant.design
+## nginx
+    - 反向代理 
+    - 负载均衡
+
+## 正则
 
 ## canvas
 
 ## 小程序
 
 ## flutter/Electron/weex/react-native
+
+## tree.js
 
 ## wiresshark/科来

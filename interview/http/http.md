@@ -47,6 +47,38 @@ web服务器响应请求，并返回指定url的数据（或错误信息，或�
 浏览器下载web服务器返回的数据及解析html源文件；
 生成DOM树，解析css和js，渲染页面，直至显示完成；
 
+## 请求头/响应头
+1. 请求(客户端->服务端[request])  
+    GET(请求的方式) /newcoder/hello.html(请求的目标资源) HTTP/1.1(请求采用的协议和版本号)  
+    Accept: */*(客户端能接收的资源类型)  
+    Accept-Language: en-us(客户端接收的语言类型)  
+    Connection: Keep-Alive(维护客户端和服务端的连接关系)  
+    Host: localhost:8080(连接的目标主机和端口号)  
+    Referer: http://localhost/links.asp(告诉服务器我来自于哪里)  
+    User-Agent: Mozilla/4.0(客户端版本号的名字)  
+    Accept-Encoding: gzip, deflate(客户端能接收的压缩数据的类型)   
+    If-Modified-Since: Tue, 11 Jul 2000 18:23:51 GMT(缓存时间)  
+    Cookie(客户端暂存服务端的信息)  
+    Date: Tue, 11 Jul 2000 18:23:51 GMT(客户端请求服务端的时间)  
+
+2. 响应(服务端->客户端[response])  
+    HTTP/1.1(响应采用的协议和版本号) 200(状态码) OK(描述信息)  
+    Location: http://www.baidu.com(服务端需要客户端访问的页面路径)  
+    Server:apache tomcat(服务端的Web服务端名)  
+    Content-Encoding: gzip(服务端能够发送压缩编码类型)   
+    Content-Length: 80(服务端发送的压缩数据的长度)  
+    Content-Language: zh-cn(服务端发送的语言类型)  
+    Content-Type: text/html; charset=GB2312(服务端发送的类型及采用的编码方式)  
+    Last-Modified: Tue, 11 Jul 2000 18:23:51 GMT(服务端对该资源最后修改的时间)  
+    Refresh: 1;url=http://www.it315.org(服务端要求客户端1秒钟后，刷新，然后访问指定的页面路径)  
+    Content-Disposition: attachment; filename=aaa.zip(服务端要求客户端以下载文件的方式打开该文件)  
+    Transfer-Encoding: chunked(分块传递数据到客户端）  
+    Set-Cookie:SS=Q0=5Lb_nQ; path=/search(服务端发送到客户端的暂存数据)  
+    Expires: -1//3种(服务端禁止客户端缓存页面数据)  
+    Cache-Control: no-cache(服务端禁止客户端缓存页面数据)    
+    Pragma: no-cache(服务端禁止客户端缓存页面数据)   
+    Connection: close(1.0)/(1.1)Keep-Alive(维护客户端和服务端的连接关系)    
+    Date: Tue, 11 Jul 2000 18:23:51 GMT(服务端响应客户端的时间)  
 
 ## 三次握手和四次挥手详细介绍
 
@@ -234,3 +266,38 @@ HTTP1.1新增了五种请求方法：OPTIONS, PUT, DELETE, TRACE 和 CONNECT 方
 ## 谈谈XSS防御，以及Content-Security-Policy细节
 
 ## DNS解析会出错吗，为什么
+
+## cors预请求
+
+## cookie，session，token，withcredintrals httponly?
+
+## HTTP vs HTTPS
+
+## http1.0/1.1/2.0
+
+## SSL/TLS握手, 保密性？ 完整性？证书？浏览器如何验证CA是否正确？
+
+## 中间人攻击？
+
+## 浏览器向服务器发送请求，相应数据包被拦截怎么办?
+
+## http 2.0 新特性？ 头部压缩详细讲讲？
+
+## XSS, CSRF？区别？举个例子？
+https://segmentfault.com/a/1190000018004657
+
+## token为什么能抵抗csrf？
+
+## cdn
+
+## 协议
+
+## CA证书，验证？
+
+## ssl
+
+## https缺点？如何防范?如何解决？
+
+## 前端安全
+
+## MD5/RSA

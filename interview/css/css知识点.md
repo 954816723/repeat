@@ -140,6 +140,8 @@ box-sizing:content-box(标准模型)/border-box(IE模型)
 letter-spacing
 父元素letter-spacing:-6px 子元素letter-spacing:0px
 
+## 行内元素是否可以用 margin、padding
+
 ## postion 定位
 position 定位的话，默认是 static。然后，如果 position: fixed 的时候，就是相对于根元素进行定位。然后，如果是 position: absolute 的时候，根据前面那个进行了 position: relative 的标记，进行相对定位。然后，positon: relative，我常用的就是将它作为 positon: relative 的定位作用。
 

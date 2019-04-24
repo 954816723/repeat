@@ -1,0 +1,8 @@
+@import './a.css';
+body div {
+  border: 1px solid red;
+  transform: rotate(45deg);
+  width:600px;
+  height:400px;
+  background:url('./crossroad.jpg')
+}

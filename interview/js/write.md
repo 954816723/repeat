@@ -135,6 +135,7 @@ Function.prototype.apply2 = function(context = window) {
     return result
 }
 // bind实现需要考虑实例化后对原型链的影响。
+// call实现?
 Function.prototype.bind2 = function(content) {
     if(typeof this != "function") {
         throw Error("not a function")
@@ -647,5 +648,10 @@ function indexOf(str, val){
 ## reduce实现map
 
 ## vue双向数据绑定
+
+## 手写 Proxy / Object.defineProperty
+
+## es5 实现 class
+
 
 
