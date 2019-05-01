@@ -16,6 +16,7 @@ module.exports = {
         compress:true,//gzip压缩
         open:true,
         hot:true,//热更新
+        exclude:/node_modules/,
         // proxy:{ //解决跨域问题
         //     '/api':{
         //         target:'htttp://localhost:8080',

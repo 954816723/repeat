@@ -15,9 +15,102 @@ Webkit内核：Safari,Chrome等。[Chrome的:Blink(Webkit的分支)]
 
 对于Android手机而言，使用率最高的就是Webkit内核。
 
+## HTML标签中class内的顺序并不重要，主要是看css中class的顺序，后面的会覆盖前面的
+
 ## display:none与visibility:hidden
 (1) display:none; HTML元素（对象）的宽高，高度等各种属性值都将“丢失”,视为不存在，而且不加载。
 (2) visibility:hidden; HTML元素（对象）仅仅是在视觉上看不见（完全透明），而它所占据的空间位置仍然存在，也即是说它仍然具有高度，宽度等属性值。
+
+
+## CSS盒模型，在不同浏览器的差异
+盒模型由content padding border margin组成
+盒模型分为标准模型和IE模型
+标准模型的宽高就是content的宽高
+IE模型的宽高由content padding border组成
+通过box-sizing属性更改,content-box(标准) border-box(IE)
+
+## JS获取宽高
+1. dom.style.width/height  只能获取内联
+2. dom.currentStyle.width/height  IE
+3. window.getComputedStyle(dom).width/height  兼容其他浏览器
+4. dom.getBoundingClientRect().width/height 根据元素在视窗中的绝对位置来获取宽高的
+4. dom.offsetWidth/offsetHeight
+
+## BFC实现原理，可以解决的问题，如何创建BFC
+块级格式化上下文
+- BFC 的原理
+其实也就是 BFC 的渲染规则（能说出以下四点就够了）。包括：
+1. BFC 内部的子元素，在垂直方向，边距会发生重叠。
+2. BFC在页面中是独立的容器，外面的元素不会影响里面的元素，反之亦然。
+3. BFC区域不与旁边的float box区域重叠。（可以用来清除浮动带来的影响）。
+4. 计算BFC的高度时，浮动的子元素也参与计算。
+- 如何生成BFC
+1. 方法1：overflow: 不为visible，可以让属性是 hidden、auto。【最常用】
+2. 方法2：浮动中：float的属性值不为none。意思是，只要设置了浮动，当前元素就创建了BFC。
+3. 方法3：定位中：只要posiiton的值不是 static或者是relative即可，可以是absolute或fixed，也就生成了一个BFC。
+4. 方法4：display为inline-block, table-cell, table-caption, flex, inline-flex
+5. 根元素
+- BFC应用
+1. 阻止margin重叠
+2. 可以包含浮动元素 —— 清除内部浮动(清除浮动的原理是两个div都位于同一个 BFC 区域之中)
+3. 自适应两栏布局
+4. 可以阻止元素被浮动元素覆盖
+
+## CSS所有选择器及其优先级、使用场景，哪些可以继承，如何运用at规则
+- 优先级  
+！important>行内样式>id选择器>类选择器>标签选择器>通配符>继承  
+
+css中子元素会继承父元素的字体属性
+但是a标签不会继承颜色属性和文字装饰属性
+h标签不会继承文字大小和粗细属性
+
+- @规则  
+    - `@charset "utf-8"`
+    - `@import "./style.css"`
+    - `@media only screen and (max-width:1200px){}`
+    - `@font-face{font-family:ziti;src:url('http://....')}`
+    - `@keyframes name{}`
+
+## CSS伪类和伪元素有哪些，它们的区别和实际应用
+css引入伪类和伪元素为了描述现有css无法描述的东西  
+css3中规定使用双冒号表示伪元素  
+但是IE8以下一些浏览器不兼容:: 所以大部分伪元素既可以单冒号,也可以双冒号  
+伪类操作的是文档树中已有的元素,而伪元素则创建了一个文档以外的元素  
+伪类 :hover :active :link :visited :nth-child :nth-of-type :first-child :last-child  
+伪元素 ::after ::before ::first-line(某个元素的第一行) ::first-letter(元素的首字母) ::selection(匹配被用户选中或高亮的部分) ::palceholder(改变全屏下背景颜色,默认黑色,只支持双冒号)  
+
+## HTML文档流的排版规则，CSS几种定位的规则、定位参照物、对文档流的影响，如何选择最好的定位方式，
+将窗体自上而下分成一行一行,并且在每行中按从左至右一次排放元素
+内联元素不会独占一行,块级元素都独有一行,浮动元素按规则浮动在行的一端,若当前容不下则再起一行
+使用float脱离文档流时,其他盒子会无视这个元素,但其他盒子的文本依然会给这个元素让出位置,而使用position脱离文档流后会直接无视
+position:static    元素框正常形成,块级元素形成一个矩形框,作为文档流一部分,行内元素则会创建一个或多个行框,置于其父元素中
+         relative  相对定位,保留原本位置
+         absolute  绝对定位,完全离开文档流,根据最近的且position不为static的父对象的位置进行定位
+         fixed     固定定位,脱离文档流,相对于根元素进行定位
+         inherit   继承
+
+## 雪碧图实现原理
+将小图标合并到一张图片上,利用css的背景定位来显示需要的部分
+减少加载网页图片对服务器请求次数
+提高页面的加载速度
+
+## 可使用CSS函数复用代码，实现特殊效果
+- attr()    返回选择元素的属性值
+- calc()    允许计算 CSS 的属性值，比如动态计算长度值
+- linear-gradient()     创建一个线性渐变的图像
+- radial-gradient()     用径向渐变创建图像
+- repeating-linear-gradient()	用重复的线性渐变创建图像   
+- repeating-radial-gradient()   类似 radial-gradient()，用重复的径向渐变创建图像
+
+## CSS模块化方案、如何配置按需加载、如何防止CSS阻塞渲染
+
+## 熟练使用CSS实现常见动画，如渐变、移动、旋转、缩放等等
+
+## CSS浏览器兼容性写法，了解不同API在不同浏览器下的兼容性情况
+- -webkit- 针对safari，chrome浏览器的内核CSS写法
+- -moz- 针对firefox浏览器的内核CSS写法
+- -ms- 针对ie内核的CSS写法
+- -o- 针对Opera内核的CSS写法
 
 ## css实现图片自适应宽高
 max-width max-height
@@ -46,11 +139,6 @@ flex-shrink 项目的缩小比例，默认为1，即如果空间不足，该项�
 重绘不会带来重新布局，并不一定伴随重排
 触发：dom改变，css移动，改变visibility、outline、背景色等属性
 position 要引起 重排，translate 重绘
-
-
-## 有哪些伪类和伪元素，伪类选择器有哪些
-伪类 :hover :active :link :visited :nth-child() :nth-of-type() :first-child :last-child
-伪元素 ::after ::before ::first-line ::first-letter ::selection
 
 ## css哪些属性可以继承
 字体相关：line-height, font-family, font-size, font-style, font-variant, font-weight, font
@@ -85,43 +173,37 @@ FFC(Flex Formatting Contexts)直译为"自适应格式化上下文"，display值
 Flex Box 由伸缩容器和伸缩项目组成。通过设置元素的 display 属性为 flex 或 inline-flex 可以得到一个伸缩容器。设置为 flex 的容器被渲染为一个块级元素，而设置为 inline-flex 的容器则渲染为一个行内元素。
 伸缩容器中的每一个子元素都是一个伸缩项目。伸缩项目可以是任意数量的。伸缩容器外和伸缩项目内的一切元素都不受影响。简单地说，Flexbox 定义了伸缩容器内伸缩项目该如何布局。
 
-## 什么是BFC？垂直margin重叠是为什么？怎么解决这个问题？
-- BFC 的原理
-其实也就是 BFC 的渲染规则（能说出以下四点就够了）。包括：
-1. BFC 内部的子元素，在垂直方向，边距会发生重叠。
-2. BFC在页面中是独立的容器，外面的元素不会影响里面的元素，反之亦然。
-3. BFC区域不与旁边的float box区域重叠。（可以用来清除浮动带来的影响）。
-4. 计算BFC的高度时，浮动的子元素也参与计算。
-- 如何生成BFC
-1. 方法1：overflow: 不为visible，可以让属性是 hidden、auto。【最常用】
-2. 方法2：浮动中：float的属性值不为none。意思是，只要设置了浮动，当前元素就创建了BFC。
-3. 方法3：定位中：只要posiiton的值不是 static或者是relative即可，可以是absolute或fixed，也就生成了一个BFC。
-4. 方法4：display为inline-block, table-cell, table-caption, flex, inline-flex
-- BFC应用
-1. 阻止margin重叠
-2. 可以包含浮动元素 —— 清除内部浮动(清除浮动的原理是两个div都位于同一个 BFC 区域之中)
-3. 自适应两栏布局
-4. 可以阻止元素被浮动元素覆盖
-
 ## CSS里面有哪些相对单位？都是相对什么的？
+绝对单位：不依赖其他元素的大小值
+    px像素 in英寸 mm毫米
+相对单位：依赖其他元素的值
+    em：相对于父元素
+    rem：相对于html的font-size值
 
 ## innerHTML有什么问题？有什么简单的办法可以避免插入文本被XSS攻击吗？
+innerHTML会执行js代码,如果有不安全的js代码会导致问题
 
 ## 为什么不推荐用style内联元素？内联元素有什么缺点？（css文件可以缓存）
+内联之后的CSS不会进行缓存，每次都会重新下载
 
 ## HTML中attribute和property的区别是什么？
+attribute是HTML标签上的某个属性，如id、class、value等以及自定义属性，它的值只能是字符串,直接在html标签上添加的和使用setAttribute添加的情况一致，即html标签添加的都是attribute属性
+    getAttribute() setAttribute() removeAttribute()
+property是js获取的DOM对象上的属性值,可以使用xx.属性进行更改，通常来讲，更改互相影响（value除外）
 
 ## css会阻塞页面渲染吗？会的话该怎么解决呢？怎么做到只加载首页的css？
-
-## 选择器优先级
-！important>行内样式>id选择器>类选择器>标签选择器>通配符>继承
+1. css加载不会阻塞DOM树的解析
+2. css加载会阻塞DOM树的渲染
+3. css加载会阻塞后面js语句的执行、
+4. 如果页面中同时存在css和js，并且存在js在css后面，则DOMContentLoaded事件会在css加载完后才执行。
+5. 其他情况下，DOMContentLoaded都不会等待css加载，并且DOMContentLoaded事件也不会等待图片、视频等其他资源加载。
 
 ## display 有哪些属性  
-none block inline inline-block table flex
+none block inline inline-block table flex table-cell
 
 ## em,rem,px的区别
 px像素,相对于屏幕分辨率
-em 相当对象内文本的font-size,如果当前也是em,则相对于父元素font-szie
+em 相当对象内文本的font-size,如果当前也是em,则相对于父元素font-size
 rem 参考根元素<html>的font-size
 
 ## IE盒模型和标准盒模型，用哪个属性改变
@@ -131,6 +213,8 @@ IE和盒模型:宽高是内容content+填充padding+边框border
 box-sizing:content-box(标准模型)/border-box(IE模型)
 
 ## 描述一下渐进增强和优雅降级。
+渐进增强（Progressive Enhancement）：一开始就针对低版本浏览器进行构建页面，完成基本的功能，然后再针对高级浏览器进行效果、交互、追加功能达到更好的体验。
+优雅降级（Graceful Degradation）：一开始就构建站点的完整功能，然后针对浏览器测试和修复。比如一开始使用 CSS3 的特性构建了一个应用，然后逐步针对各大浏览器进行 hack 使其可以在低版本浏览器上正常浏览。
 
 ## CSS 中可以让文字垂直和水平方向上重叠的两个属性是什么？
 垂直方向 line-height
@@ -141,34 +225,25 @@ letter-spacing
 父元素letter-spacing:-6px 子元素letter-spacing:0px
 
 ## 行内元素是否可以用 margin、padding
-
-## postion 定位
-position 定位的话，默认是 static。然后，如果 position: fixed 的时候，就是相对于根元素进行定位。然后，如果是 position: absolute 的时候，根据前面那个进行了 position: relative 的标记，进行相对定位。然后，positon: relative，我常用的就是将它作为 positon: relative 的定位作用。
+行内元素不能设置宽高，竖直方向的margin、padding
 
 ## fixed是相对于谁定位的？如果加上transform会出现问题吗？
+fixed相对于浏览器窗口定位
+如果fixed元素的父层添加了transform属性就会失效,变成absolute表现
 
 ## meta标签
 见repeat
 
-## 100 * 100 的 Canvas 占内存多大？
-
-## fixed是相对于谁定位的？如果加上transform会出现问题吗？
-
-
 ## 写出5种css隐藏元素的办法
+1. `opacity: 0;`
+2. `visibility: hidden;`
+3. `display: none;`
+4. 
 ```
-1.opacity: 0;
-
-2.visibility: hidden;
-
-3.display: none;
-
-4.position: absolute;
+position: absolute;
 top: -9999px;
 left: -9999px;
-
-5.clip-path: polygon(0px 0px,0px 0px,0px 0px,0px 0px);
-
 ```
+5. `clip-path: polygon(0px 0px,0px 0px,0px 0px,0px 0px);`
 
 ## 谈谈css预处理器机制

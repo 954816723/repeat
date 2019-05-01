@@ -25,7 +25,45 @@
 `require`不支持
 es6模块会将结果放到default上
 
-
+## 识别.vue
+```js
+npm install vue-loader vue-template-compiler cache-loader thread-loader -D
+npm install vue -S
+```
+`vue-loader` 用于解析.vue文件
+`vue-template-compiler` 用于编译模板
+`cache-loader` 用于缓存loader编译的结果
+`thread-loader` 使用 worker 池来运行loader，每个 worker 都是一个 node.js 进程。
+```js
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+module:{
+    rules: [
+        {
+        test: /\.vue$/,
+        use: [
+                {
+                    loader: 'cache-loader'
+                },
+                {
+                    loader: 'thread-loader'
+                },
+                {
+                    loader: 'vue-loader',
+                    options: {
+                        compilerOptions: {
+                        preserveWhitespace: false
+                        },
+                    }
+                }
+            ]
+        },
+    ]
+}
+plugins: [
+// ...
+new VueLoaderPlugin()
+]
+```
 
 `webpack`
 `webpack-cli`
@@ -39,6 +77,17 @@ es6模块会将结果放到default上
 `webpack.DllReferencePlugin` 获取动态链接
 `webpack.IgnorePlugin` 忽略特定模块
 `happypack` 多线程打包
+
+`purifycss-webpack` 消除冗余css
+`purify-css`
+`glob`
+```js
+const PurifyCssWebpack = require('purifycss-webpack');
+new PurifyCssWebpack({
+    paths: glob.sync(path.join(__dirname, '/src/*.html'))
+}),
+```
+
 ###### loader
 `css-loader`
 `style-loader`

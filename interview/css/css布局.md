@@ -14,9 +14,125 @@
     visibility:hidden;
 }
 ```
-## 居中
 
 ## 页面布局
+
+###### 水平垂直居中
+居中元素定宽高适用
+1. absolute + 负margin
+```less
+.wp {
+    position: relative;
+}
+.box {
+    position: absolute;;
+    top: 50%;
+    left: 50%;
+    margin-left: -50px;
+    margin-top: -50px;
+}
+```
+2. absolute + margin auto
+```less
+.wp {
+    position: relative;
+}
+.box {
+    position: absolute;;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+```
+3. absolute + calc
+```less
+.wp {
+    position: relative;
+}
+.box {
+    position: absolute;;
+    top: calc(50% - 50px);
+    left: calc(50% - 50px);
+}
+```
+居中元素不定宽高
+1. absolute + transform
+```less
+.wp {
+    position: relative;
+}
+.box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+```
+2. lineheight
+```less
+.wp {
+    line-height: 300px;
+    text-align: center;
+    font-size: 0px;
+}
+.box {
+    font-size: 16px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: initial;
+    text-align: left; /* 修正文字 */
+}
+```
+3. writing-mode
+```less
+.wp {
+    writing-mode: vertical-lr;
+    text-align: center;
+}
+.wp-inner {
+    writing-mode: horizontal-tb;
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+}
+.box {
+    display: inline-block;
+    margin: auto;
+    text-align: left;
+}
+```
+4. css-table
+```less
+.wp {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+.box {
+    display: inline-block;
+}
+```
+5. flex
+```less
+.wp {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+```
+6. grid
+```less
+.wp {
+    display: grid;
+}
+.box {
+    align-self: center;
+    justify-self: center;
+}
+```
+
 ###### 左边定宽，右边自适应方案：float + margin，float + calc
 ```less
 /* 方案1 */ 
@@ -167,3 +283,5 @@
   vertical-align: middle;
 }
 ```
+
+## 实现常用布局（三栏、圣杯、双飞翼、吸顶），可是说出多种方式并理解其优缺点

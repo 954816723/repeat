@@ -21,6 +21,7 @@
     - Vue-Router
     - Vuex
     - Vue-Cli
+    - Nuxt.js
 
 ## React
     - React
@@ -28,6 +29,7 @@
     - React-Router
     - Redux
     - DavJS(基于 redux 和 redux-saga 的数据流方案)
+
 
 ## 算法
 

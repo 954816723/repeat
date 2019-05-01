@@ -49,3 +49,4 @@ if(DEV){
 }else{
     console.log(2);
 }
+var c = 1;
