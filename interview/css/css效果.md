@@ -68,8 +68,6 @@ div::before {
 }
 ```
 
-## 使用 CSS 实现三个 div 等比排列在一行，两列宽度固定中间自适应。
-
 ## 一行文字超出后自动截取(块级元素)
 ```css
 div{
@@ -93,7 +91,7 @@ div{
 ## 消除table表格每行之间的间隔
 ```css
 div{
-     border-collapse: collapse; 
+    border-collapse: collapse; 
     padding: 0;
     /*cellspacing=0 cellpadding=0是属性,写在标签中的,写在css中无效*/
 }
@@ -131,19 +129,61 @@ div:hover{
 }
 ```
 
-## css中使用变量var
-```css
-:root{
-    --width:100px;
-}
-div{
-  width:var(--width);
-}
-
-//js
-document.documentElement.style.setProperty();
-```
-
 ## 使用纯CSS实现曲线运动（贝塞尔曲线）
 
 ## 手写图片瀑布流效果
+```less
+.masonry {
+    // column-count属性指定某个元素应分为的列数
+    column-count: 1;
+    // 指定的列之间的差距
+    column-gap: 0;
+}
+@media (min-width: 400px) {
+    .masonry {
+        column-count: 2;
+    column-gap: 0;
+    }
+}
+@media (min-width: 1200px) {
+    .masonry {
+        column-count: 9;
+    column-gap: 0;
+    }
+}
+.item {
+    // 控制文本块分解成单独的列，以免项目列表的内容跨列，破坏整体的布局
+    break-inside: avoid;
+    box-sizing: border-box;
+    padding: 10px;
+}
+```
+## 超出省略
+```css
+.line-camp( @clamp:2 ) {
+    text-overflow: -o-ellipsis-lastline;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: @clamp;
+    /*! autoprefixer: off */
+    -webkit-box-orient: vertical;
+    /* autoprefixer: on */
+}
+```
+
+## 两端对齐
+```css
+div {
+    margin: 10px 0; 
+    width: 100px;
+    border: 1px solid red;
+    text-align: justify;
+    text-align-last:justify
+}
+div:after{
+    content: '';
+    display: inline-block;
+    width: 100%;
+}
+```

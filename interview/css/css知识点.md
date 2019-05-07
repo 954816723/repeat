@@ -247,3 +247,178 @@ left: -9999px;
 5. `clip-path: polygon(0px 0px,0px 0px,0px 0px,0px 0px);`
 
 ## 谈谈css预处理器机制
+
+## 建议使用 padding 代替 margin
+
+## position:fixed 降级问题
+使用 `position:fixed` 这个属性。如果其父元素中有使用 `transform`，`fixed` 的效果会降级为 `absolute`
+
+## css中使用变量var
+```css
+:root{
+    --width:100px;
+}
+div{
+  width:var(--width);
+}
+
+/* js */
+/* document.documentElement.style.setProperty(); */
+```
+
+## 从 html 元素继承 box-sizing
+```css
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+```
+
+## 1px
+```less
+/* 方案1 */
+.border_bottom { 
+    overflow: hidden; 
+    position: relative; 
+    border: none!important; 
+}
+.border_bottom:after { 
+    content: ".";
+    position: absolute; 
+    left: 0; 
+    bottom: 0; 
+    width: 100%; 
+    height: 1px; 
+    background-color: #d4d6d7; 
+    -webkit-transform-origin: 0 0;  
+    transform-origin: 0 0; 
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+}
+
+/* 方案2 */
+.border_bottom {
+  box-shadow: inset 0px -1px 1px -1px #d4d6d7;
+}
+
+/* 方案3 */
+.min-device-pixel-ratio(@scale2, @scale3) {
+  @media screen and (min-device-pixel-ratio: 2), (-webkit-min-device-pixel-ratio: 2) {
+    transform: @scale2;
+  }
+  @media screen and (min-device-pixel-ratio: 3), (-webkit-min-device-pixel-ratio: 3) {
+    transform: @scale3;
+  }
+}
+
+.border-1px(@color: #DDD, @radius: 2PX, @style: solid) {
+  &::before {
+    content: "";
+    pointer-events: none;
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform-origin: 0 0;
+    border: 1PX @style @color;
+    border-radius: @radius;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    @media screen and (min-device-pixel-ratio: 2), (-webkit-min-device-pixel-ratio: 2) {
+      width: 200%;
+      height: 200%;
+      border-radius: @radius * 2;
+      transform: scale(.5);
+    }
+    @media screen and (min-device-pixel-ratio: 3), (-webkit-min-device-pixel-ratio: 3) {
+      width: 300%;
+      height: 300%;
+      border-radius: @radius * 3;
+      transform: scale(.33);
+    }
+  }
+}
+
+.border-top-1px(@color: #DDD, @style: solid) {
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    border-top: 1Px @style @color;
+    transform-origin: 0 0;
+    .min-device-pixel-ratio(scaleY(.5), scaleY(.33));
+  }
+}
+```
+
+## 解决不同dpr机型圆大小不一样
+```less
+/*@size 建议取双数*/
+.circle(@size, @backgroundColor) {  
+    width: @size;
+    height: @size;
+    background-color: @backgroundColor;
+    [data-dpr="1"] & {
+        width: @size * 0.5;
+        height: @size * 0.5;
+    }
+    [data-dpr="3"] & {
+        width: @size * 1.5;
+        height: @size * 1.5;
+    }
+}
+```
+
+## css优化
+- 保持简单，不要使用嵌套过多过于复杂的选择器
+- 通配符和属性选择器效率最低，需要匹配的元素最多，尽量避免使用
+- 不要使用类选择器和ID选择器修饰元素标签，如h3#markdown-content
+- 不要为了追求速度而放弃可读性与可维护性
+- 不要使用@import
+- 优化重排与重绘
+
+## 1px
+```scss
+@mixin hairline-common($border-radius) {
+  position: relative;
+  z-index: 0;
+  &:before {
+    position: absolute;
+    content: '';
+    border-radius: $border-radius;
+    box-sizing: border-box;
+    transform-origin: 0 0;
+  }
+}
+@mixin hairline($direct: 'all', $border-color: #ccc, $border-radius: 0) {
+  @include hairline-common($border-radius);
+  &:before {
+    transform: scale(.5);
+    @if $direct == 'all' {
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 200%;
+      box-shadow: 0 0 0 1px $border-color;
+      z-index: -1;
+    } @else if $direct == 'left' or $direct == 'right' {
+      #{$direct}: 0;
+      top: 0;
+      width: 0;
+      height: 200%;
+      border-#{$direct}: 1px solid $border-color;
+    } @else {
+      #{$direct}: 0;
+      left: 0;
+      width: 200%;
+      height: 0;
+      border-#{$direct}: 1px solid $border-color;
+    }
+  }
+}
+```
