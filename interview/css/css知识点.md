@@ -303,7 +303,12 @@ html {
   box-shadow: inset 0px -1px 1px -1px #d4d6d7;
 }
 
-/* 方案3 */
+// 方案3
+Element{
+  border-width: thin;
+}
+
+/* 方案4 */
 .min-device-pixel-ratio(@scale2, @scale3) {
   @media screen and (min-device-pixel-ratio: 2), (-webkit-min-device-pixel-ratio: 2) {
     transform: @scale2;
@@ -422,3 +427,4 @@ html {
   }
 }
 ```
+

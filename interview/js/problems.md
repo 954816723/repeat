@@ -449,6 +449,25 @@ MVVM由 Model,View,ViewModel 三部分构成,把View和Model的同步逻辑自�
 Model和View并无直接关联，而是通过ViewModel来进行联系的，Model和ViewModel之间有着双向数据绑定的联系。因此当Model中的数据改变时会触发View层的刷新，View中由于用户交互操作而改变的数据也会在Model中同步。
 这种模式实现了Model和View的数据自动同步，因此开发者只需要专注对数据的维护操作即可，而不需要自己操作dom。
 
+## 判断手机端
+```js
+//  borwserRedirect
+ (function browserRedirect(){
+  var sUserAgent = navigator.userAgent.toLowerCase();
+  var bIsIpad = sUserAgent.match(/ipad/i) == 'ipad';
+  var bIsIphone = sUserAgent.match(/iphone os/i) == 'iphone os';
+  var bIsMidp = sUserAgent.match(/midp/i) == 'midp';
+  var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == 'rv:1.2.3.4';
+  var bIsUc = sUserAgent.match(/ucweb/i) == 'web';
+  var bIsCE = sUserAgent.match(/windows ce/i) == 'windows ce';
+  var bIsWM = sUserAgent.match(/windows mobile/i) == 'windows mobile';
+  var bIsAndroid = sUserAgent.match(/android/i) == 'android';
+  if(bIsIpad || bIsIphone || bIsMidp || bIsUc7 || bIsUc || bIsCE || bIsWM || bIsAndroid ){
+  window.location.href = '跳转的移动端网址';
+  }
+ })();
+```
+
 ## 怎么上传文件
 
 ## 前后端分离
@@ -977,3 +996,39 @@ sortGroup(){
 ## 前端持久化的方式、区别
 
 ## 基于 Localstorage 设计一个 1M 的缓存系统，需要实现缓存淘汰机制
+
+## 摇一摇事件
+html5新增了一个`devicemotion`的事件，可以使用手机的重力感应
+```js
+const EMPTY_VALUE = 100;
+const THREAD_HOLD = 13.8;
+var minX = EMPTY_VALUE,
+    minY = EMPTY_VALUE;
+window.ondevicemotion = function(event){
+    var gravity = event.accelerationIncludingGravity,
+        x = gravity.x,
+        y = gravity.y;
+    if(x < minX) minX = x;
+    if(y < minY) minY = y;
+    if(Math.abs(x - minX) > THREAD_HOLD &&  
+            Math.abs(y - minY) > THREAD_HOLD){
+        console.log("shake");
+        var event = new CustomEvent("shake");
+        window.dispatchEvent(event);
+        minX = minY = EMPTY_VALUE;
+    }   
+}   
+    
+window.addEventListener("shake", function(){
+    console.log("window shake callback was called");
+});
+```
+
+## 自定义事件
+```js
+var event = new CustomEvent("shake");
+window.dispatchEvent(event);
+window.addEventListener("shake", function(){
+    console.log("window shake callback was called");
+});
+```

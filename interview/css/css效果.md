@@ -187,3 +187,40 @@ div:after{
     width: 100%;
 }
 ```
+
+## input框placeholder点击上移效果
+隐藏默认palceholder
+```css
+input:placeholder-shown::placeholder {
+    color: transparent;
+}
+```
+将label偏移代替palceholder
+```less
+.input-label{
+    position: absolute;
+    font-size: 16px;
+    line-height: 1.5;
+    left: 16px;
+    top: 14px;
+    color: #a2a9b6;
+    padding: 0 2px;
+    transform-origin: 0 0;
+    pointer-events: none;
+    transition: all .25s;
+}
+```
+label元素在输入框focus时候，以及非placeholder显示的时候进行重定位（缩小并位移到上方）
+```less
+input:not(:placeholder-shown)~.input-label,
+input:focus~.input-label {
+    color: #2486ff;
+    transform: scale(0.75) translate(-2px, -32px);
+}
+```
+label设置白底
+```less
+.input-control~.input-label {
+    background-color: #fff;
+}
+```
