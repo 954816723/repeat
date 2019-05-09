@@ -1,4 +1,28 @@
 ## linear-gradient
+线性渐变 
+`background: linear-gradient(direction, color-stop1, color-stop2, ...);`
+需要制定方向(角度),以及渐变颜色,至少两个  
+
+## -webkit-border-image
+设置边框的图像  
+
+## text-transform
+转换文本大小写  
+capitalize  uppercase lowercase  
+
+## box-shadow
+设置div的阴影  
+`box-shadow: h-shadow v-shadow blur spread color inset;`
+
+## text-shadow
+阴影文本  
+`text-shadow: h-shadow v-shadow blur color;`
+
+## text-align:justify
+实现两端对齐文本效果。
+
+## text-align-last:right
+段落的最后一行对齐方式
 
 ## animation
 animation-name	            指定要绑定到选择器的关键帧的名称  
@@ -122,15 +146,3 @@ flex的值可以是无单位的数字,也可以有单位,也可以是none(不伸
 `flex-grow : ` 设置子容器弹性伸展的比例(按比例放大)
 `flex-shrink : `  设置子容器弹性收缩的比例(按比例缩小)
 `order : `  改变子容器的排列顺序,默认0可负,越小越靠前
-
-## -webkit-border-image
-
-## text-transform
-
-## box-shadow
-
-## text-align:justify
-实现两端对齐文本效果。
-
-## text-align-last:right
-段落的最后一行对齐方式

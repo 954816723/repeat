@@ -23,28 +23,103 @@ async是Generator函数的语法糖,函数内部使用await来表示异步
 正常情况下`await`命令后面跟着的是`Promise`,如果不是的话，也会被转换成一个立即`resolve`的`Promise`  
 当`async`函数中只要一个`await`出现`reject`状态，则后面的`await`都不会被执行  
 可以添加`try/catch`来处理错误  
+
 ###### Promise
+具有三种状态:pending fulfilled rejected  
+状态一旦改变就不会再变   
+必须调用then方法才能将值从Promise实例中取出  
+Promise创建后立即执行  
+Promise接受一个函数作为参数,函数有两个参数,resovle,reject  
+then方法中接受两个参数,第一个resolved状态回调,第二个rejected回调  
+catch方法指定发生错误时的回调  
+all方法,多个实例组成数组作为参数,都成功才会是成功态,有一个失败就是失败态,返回失败实例的返回值  
+resovle方法,返回一个新的promise实例,状态为Fulfilled
+reject方法,返回一个新的promise实例,状态为Rejected  
 
 ###### class
-
-###### Iterator
+类  
+constructor构造方法,其中的this关键字代表实例对象  
+class中定义的方法都定义在类的prototype上  
+constructor是类的默认方法,new时自动调用,默认返回实例对象  
+类的内部可以使用set/get关键字  
+类不存在变量提升  
+类方法前加上static,表示静态方法,只能通过类直接调用  
+- extend 类的继承  
+子类必须在constructor中调用super方法
 
 ###### 箭头函数
+1. 没有arguments  
+2. 没有prototype,不能作为构造函数  
+3. 没有自己的this,指向外层不是箭头函数的this 
 
 ###### 解构赋值
 
 ###### 扩展运算符...
+将一个数组转为用逗号分割的参数序列  
 
-###### Generator
+### 剩余运算符
+(...rest) 代替arguments
 
-######Set/Map
+###### Iterator
+迭代器,为不同的数据结构提供统一的访问机制  
+任何数据只要部署iterator接口,就可以完成遍历操作  
+默认部署在[Symbol.iterator]属性上  
+默认部署iterator接口的数据结构有:Array Map Set String TypeArray arguments NodeList  
 
-###### weakset/weakmap  
+###### Generator *
+生成器,异步编程解决方案  
+调用Generator函数返回一个遍历器对象  
+每次调用遍历器对象的next方法,返回有value和done两个属性的对象  
+遇到yield就暂停后面的操作,将yield后面表达式的值作为value的值  
+每次调用next向下执行,知道遇到yield  
+一直到函数结束或return  
+
+###### Symbol
+表示独一无二的值  
+通过函数Symbol()创建  
+可以接受一个字符串作为参数
+Symbol 值作为对象属性名时不能用点运算符  
+
+## Proxy
+用于修改某些操作的默认行为  
+```js
+let person = {
+    name:''hehe
+}
+let proxy = new Proxy(person,{
+    get:function(target,property){
+        return target[property]
+    },
+    set:function(obj,prop,value){
+        obj[prop] = value
+    }
+})
+```
+
+###### Set
+新的数据结构,类似于数组,值都是唯一的  
+本身是构造函数  
+属性:  
+Set.property.constructor:本身  
+Set.property.size: Set实例的成员个数  
+方法:  
+add() delete() has() clear()  
+
+## Map
+类似于对象,键值对集合,但是键可以是各种类型的值  
+
+###### WeakSet
+结构与Set类似,不重复值的集合  
+但是:  
+1. 成员只能是对象  
+2. 对象都是弱引用  
+3. 不可遍历  
+
+###### WweakMap  
 
 ###### 装饰器
 
-## 原型/作用域/作用域链
-见repeat.md
+## DOM操作
 
 ## 事件循环(Event Loop)
 JS是一门非阻塞单线程语言,事件循环是JS实现异步的方法,也是JS的执行机制  
@@ -127,8 +202,12 @@ __proto__将对象连接起来组成原型链
 ## 原型链的终点指向什么？
 Object.prototype  
  
-## this/箭头函数
-见repeat.md
+## this
+函数执行前面是否有.  
+自执行函数this永远是window,严格模式下为undefined  
+元素事件绑定方法,事件触发,方法中this指向当前元素  
+构造函数中,this指向当前实例  
+call/bind/apply改变this指向,优先级最高  
 
 ## 闭包
 闭包就是能够读取其他函数内部变量的函数  
@@ -154,11 +233,15 @@ macrotask：主代码块，setTimeout，setInterval、setImmediate等。
 microtask：process.nextTick（相当于node.js版的setTimeout），Promise 。process.nextTick的优先级高于Promise。
 
 ## 跨域
+repeat.md
+
+## session/cookie
+
+## token
 
 ## ssr性能优化，node中间层细节处理
 
 ## CI/CD
-
 
 ## 数组的方法
 
@@ -345,7 +428,8 @@ ES7:幂运算(** 3**2=9) Array.prototype.includes()
 ES8:async await Object.values/Object.entries String padding(字符串填充) Object.getOwnPropertyDescriptors
 
 ## for...in迭代和for...of有什么区别
-for...in一般用来遍历对象,但是会遍历到原型上的方法,使用hasOwnProperty(key)来判断
+for...of获取键值,in获取键名
+for...in一般用来遍历对象,但是会遍历到原型上的方法,使用hasOwnProperty(key)来判断 of值变脸当前对象
 for...in如果用来遍历数组,索引是字符串,不能用于运算,遍历顺序可能不是按照数组内部顺序,同时会遍历数组以及原型上的可枚举属性
 for...of一般用来遍历数组/map/set/字符串等拥有迭代器对象的集合,不能遍历对象
 for...of与forEach不同的是能响应break,continue和return语句
@@ -366,6 +450,8 @@ call比apply的性能更好
 ## lodash和ramda的区别是什么？
 
 ## 字符串和new String出来的字符串有啥区别？
+直接赋值字符串跟使用String()出来的相等,都是string类型  
+new String()出来的是对象类型
 
 ## 浅拷贝/深拷贝
 见repeat.md

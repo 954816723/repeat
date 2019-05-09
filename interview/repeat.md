@@ -533,7 +533,7 @@ Object.assign()
 拓展运算符...  
 Array.prototype.concat()  
 Array.prototype.slice()  
-```
+```js
 let a = {
     name: "muyiy",
     book: {
@@ -544,7 +544,7 @@ let a = {
 let b = Object.assign({}, a);
 let b= {...a};
 ```
-```
+```js
 function cloneShallow(source) {
     var target = {};
     for (var key in source) {

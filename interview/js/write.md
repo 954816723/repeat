@@ -1,6 +1,49 @@
 ## Promise
 
 ## 浅拷贝/深拷贝
+```js
+let a = {
+    name: "muyiy",
+    book: {
+        title: "You Don't Know JS",
+        price: "45"
+    }
+}
+let b = Object.assign({}, a);
+let b= {...a};
+
+function cloneShallow(source) {
+    var target = {};
+    for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+            target[key] = source[key];
+        }
+    }
+    return target;
+}
+```
+```js
+JSON.parse(JSON.stringify(arr))  
+// 但是不能处理函数,会忽略undefined,忽略Symbol,不能解决循环引用的对象  
+function extend(source){
+    let target;
+    if(typeof source === 'object'){
+        target = Array.isArray(source) ? [] : {};
+        for(pop in source){
+            if(source.hasOwnProperty(pop)){
+                if(typeof source[pop] === 'object'){
+                    target[pop] = extend(source[pop]);
+                }else{
+                    target[pop] = source[pop];
+                }
+            }
+        }
+    }else{
+        target = source;
+    }
+    return target;
+}
+```
 
 ## 防抖/节流
 ```js
@@ -65,6 +108,14 @@ var result = arr.sort().reduce((init, current)=>{
     return init;
 }, []);
 console.log(result);//1,2,3,4,5
+
+Array.prototype.unique = function () {
+  const tmp = new Map();
+  return this.filter(item => {
+    return !tmp.has(item) && tmp.set(item, 1);
+  })
+}
+
 
 ```
 
@@ -570,7 +621,7 @@ function flatten(arr){
 
 function flatten(arr){
     return [].concat(...arr.map(x=>{
-        Array.isArray(x) ? flatten(x) : x;
+        return Array.isArray(x) ? flatten(x) : x;
     }))
 }
 
@@ -623,7 +674,17 @@ if (typeof Object.assign2 != 'function') {
 ```
 
 ## 实现sleep
-
+```js
+ function sleep(ms){
+  var temple=new Promise((resolve)=>{
+    console.log(111);setTimeout(resolve,ms)
+  });
+  return temple
+}
+sleep(500).then(function(){
+   //console.log(222)
+});
+```
 ## ES6的Set内部实现
 
 ## 手写indexOf
@@ -643,15 +704,80 @@ function indexOf(str, val){
     return -1
 }
 ```
-## 手动实现parseInt
+<!-- ## 手动实现parseInt -->
 
-## reduce实现map
+## 实现map
+```js
+ Array.prototype.selfMap = function () {
+      const ary = this
+      const result = []
+      const [ fn, thisArg ] = [].slice.call(arguments)
+      if (typeof fn !== 'function') {
+        throw new TypeError(fn + 'is not a function')  
+      }
+      for (let i = 0; i < ary.length; i++) {
+        result.push(fn.call(thisArg, ary[i], i, ary))
+      }
+      return result
+  }
+```
+
+## reduce实现map/filter
+```js
+const reduceMap = (fn, thisArg /*真想去掉thisArg这个参数*/ ) => {
+    return (list) => {
+        // 不怎么愿意写下面这两个判断条件
+        if (typeof fn !== 'function') {
+            throw new TypeError(fn + 'is not a function')  
+        }
+        if (!Array.isArray(list)) {
+            throw new TypeError('list must be a Array')
+        }
+        if (list.length === 0) return []
+        return list.reduce((acc, value, index) => {
+            return acc.concat([ fn.call(thisArg, value, index, list) ])
+        }, [])
+    }
+}
+const reduceFilter = (fn, thisAry /* thisAry知不知你好讨厌啊 */ )  => {
+    return (list) => {
+        if (typeof fn !== 'function') {
+            throw new TypeError(fn + 'is not a function')  
+        }
+        if (!Array.isArray(list)) {
+            throw new TypeError('list must be a Array')
+        }
+        if (list.length === 0) return []
+        return list.reduce((acc, value, index) => {
+            return fn.call(thisAry, value, index, list) ? acc.concat([ value ]) : acc
+        }, [])
+    }    
+}
+// for循环实现
+Array.prototype.selfFilter = function () {
+    const ary = this
+    const result = []
+    const [ fn , thisArg ] = [].slice.call(arguments)
+    
+    if (typeof fn !== 'function') {
+        throw new TypeError(fn + 'is not a function')  
+    }
+    
+    for (let i = 0; i < ary.length; i++) {
+        if (fn.call(thisArg, ary[i], i, ary)) {
+            result.push(ary[i])
+        }
+    }
+    return result
+}
+```
 
 ## vue双向数据绑定
 
 ## 手写 Proxy / Object.defineProperty
 
 ## es5 实现 class
+Object.defineProperty()
 
 
 
