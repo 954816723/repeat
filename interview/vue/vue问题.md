@@ -1,18 +1,26 @@
 ## 使用
 ###### 常用指令
 v-model 表单
-v-on/: 变量
+v-bind/: 变量
+v-on/@ 绑定事件
 v-for 循环
 v-if
 v-show
 v-clock
 v-pre 跳过编译
 
+ref 给元素或子组件注册引用信息
+this.refs. 来获取
+
 this.$route
 this.$router
 this.$options   当前 Vue 实例的初始化选项
 this.$refs
 this.$parent
+
+`<transition name="hehe"></transition>`
+`hehe-enter-active  hehe-leave-active`
+`hehe-enter  hehe-leave-to`
 
 ###### export default{}
 - data:{} / data(){reutrn {}}
@@ -47,6 +55,62 @@ export default {
     mixins:[mixinFn],
 }
 
+```
+###### 跨域
+```js
+const path = require('path')
+const express = require('express')
+const apiRoutes = express.Router();
+const axios = require('axios')
+function resolve(dir){
+    return path.join(__dirname,dir)
+}
+
+module.exports = {
+    devServer:{
+        port:8080,
+        // open:true,
+        https: false,
+        // mode:'production',
+        // hotOnly: false,
+        host:'localhost',
+        disableHostCheck:true,
+        proxy:{//代理
+            '/':{
+                target: 'https://elm.cangdu.org',//代理转向地址
+                ws: false,//是否启用websockets
+                changeOrigin: true,//是否跨域
+                secure: false,
+                pathRewrite: {//重写路径
+                    '^/': ''
+                }
+            }
+        },
+        // express实现
+        before:app=>{
+            apiRoutes.get('/apiGuess',function(req,res){
+                let url = 'https://elm.cangdu.org/v1/cities';
+                axios.get(url,{
+                    params:req.query
+                }).then((response) => {
+                    res.json(response.data)
+                }).catch((err) => {
+                    console.log(err);
+                })
+            })
+            app.use('/api',apiRoutes)
+        }
+    },
+    // assetsDir: 'static',
+    // publicPath: '/',
+    chainWebpack:config=>{
+        config.resolve.alias
+            .set('common', resolve('src/common'))
+            .set('config',resolve('src/config'))
+            .set('components',resolve('src/components'))
+            .set('api',resolve('src/api'))
+    }
+}
 ```
 
 ###### 插槽
@@ -241,9 +305,18 @@ destroyed
     Vue实例销毁后调用,调用后,实例指示的所有东西都会解绑,事件监听器移除,所有子实例销毁
 
 ## 双向数据绑定MVVM
+通过observe将数据对象进行递归遍历,包括子属性对象的属性,利用`Object.definePrperty()`实现对属性的劫持,都加上Getter和Setter,如果数据有变动就通知订阅者  
+Compile指令解析,对每个元素节点指令进行扫描和解析,根据指令模版替换数据,同时绑定对应的更新函数  
+Watcher,连接Observer和Compile,能够订阅并收到每个属性变动的通知,执行指令绑定的回调函数,从而更新视图  
+入口函数.整合以上三者  
+
 ```js
 let obj = {}
 Object.defineProperty(obj,'a',{
+    configurable:true, //配置,默认false
+    writable:true,  //可写,默认false
+    enumerable:true,//是否可枚举,默认false
+    value:'hehe',
     get:function(){
         console.log('get被调用');
     },
@@ -295,6 +368,15 @@ export default {
     }
 }
 
+```
+provide/inject
+```js
+provide() {
+    return {
+        for: "demo"
+    }
+},
+inject:['for']
 ```
 - vuex
 

@@ -342,7 +342,7 @@ parent.sayName();    // parent name: father
 var child = new Child('son', 'father');
 ```
 
-## 封装fetch
+## 封装fetch/ajax
 ```js
 async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 	type = type.toUpperCase();

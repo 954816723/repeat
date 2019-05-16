@@ -66,6 +66,22 @@ function drop(ev)
 }
 ```
 
+## 修改placeholder属性
+```css
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color:    #909;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color:    #909;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:    #909;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color:    #909;
+}
+```
+
 ## css3新属性
 ###### 边框：
 border-radius：圆角边框，border-radius:25px;

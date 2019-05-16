@@ -120,6 +120,20 @@ add() delete() has() clear()
 ###### 装饰器
 
 ## DOM操作
+可视区域高度:  window.innerHeight
+页可见区域宽： document.body.clientWidth;
+网页可见区域高： document.body.clientHeight;
+网页可见区域宽： document.body.offsetWidth (包括边线的宽);
+网页可见区域高： document.body.offsetHeight (包括边线的宽);
+网页正文全文宽： document.body.scrollWidth;
+网页正文全文高： document.body.scrollHeight;
+网页被卷去的高： document.body.scrollTop;
+网页被卷去的左： document.body.scrollLeft;
+网页正文部分上： window.screenTop;
+网页正文部分左： window.screenLeft;
+屏幕分辨率的高： window.screen.height;
+屏幕分辨率的宽： window.screen.width;
+屏幕可用工作区高度： window.screen.availHeight;
 
 ## 事件循环(Event Loop)
 JS是一门非阻塞单线程语言,事件循环是JS实现异步的方法,也是JS的执行机制  
@@ -188,7 +202,7 @@ close callbacks: 执行close事件的callback，例如socket.on('close'[,fn])或
 
 ## 作用域链
 可理解为包含自身变量对象和上级变量对象的列表  
-通过[[Scope]]睡醒查找上级变量  
+通过[[Scope]]属性查找上级变量  
 
 ## 原型
 通过prototype属性,指向一个原型对象,原型对象中的属性和方法都可以被构造函数的实例共享  
@@ -236,8 +250,54 @@ microtask：process.nextTick（相当于node.js版的setTimeout），Promise 。
 repeat.md
 
 ## session/cookie
+- cookie  
+大小限制在4kb左右,个数一般不超过20个  
+一般用于保存登录信息和标记用户  
+每次都会写到在HTTP头中  
+生命周期在设置的过期时间内  
+在所有同源窗口中是共享的  
+`document.cookie="username=John Doe; expires=Thu, 18 Dec 2013 12:00:00 GMT; path=/;Domain=<domain-value>";`  
+可选参数:expires max-age path Domain Secure(SSL/HTTPS协议时cookie才会被发送) HttpOnly(服务器设置,客户端无法更改cookie)  
+删除cookie需将cookie的有效时间更改  
+- session  
+服务器端保存数据的结构  
+session的运行依赖session id  
+而session id存在于cookie中  
+- sessionStorage  
+大小可达到5M或更多  
+仅在当前窗口关闭前有效  
+仅在本地存储,不会发送给服务器  
+不在不同的浏览器窗口中共享,即使相同页面  
+API:同localStorage  
+- localStorage  
+大小可达到5M或更多  
+始终有效,除非手动删除  
+仅在本地存储,不会发送给服务器  
+在所有同源窗口中是共享的  
+API:  
+localStorage.setItem("key","value")  
+localStorage.getItem("key")  
+localStorage.key(i) 获取第i对的名字  
+localStorage.removeItem("key")  
+localStorage.clear() 清空  
 
 ## token
+
+## rem
+```js
+(function(win,doc){
+    let docEle = doc.documentElement,
+        resizeEvt = 'orientationchange' in win ? '' : 'resize',
+        recalc = function(){
+            let clientWidth = docEle.clientWidth;
+            if (!clientWidth) return;
+            docEle.style.fontSize = 20 * (clientWidth / 320) + 'px';
+        };
+    if(!doc.addEventListener) return;
+    win.addEventListener(resizeEvt,recalc,false);
+    doc.addEventListener('DOMContentLoaded',recalc,false);
+})(window,document)
+```
 
 ## ssr性能优化，node中间层细节处理
 
@@ -246,6 +306,10 @@ repeat.md
 ## 数组的方法
 
 ## 说说GET与POST的区别
+传参方式:get是url传参,post是请求体传参  
+安全性:get通过地址栏传参数据可见,不安全,post参数在地址栏不可见,较安全  
+大小限制:get请求有长度限制 2k
+get的内容可以被浏览器缓存,post不可以  
 
 ## window的onload事件和DOMContentLoaded谁先谁后？
 DOMContentLoaded要在onload之前
@@ -317,12 +381,6 @@ tree shaking 去除没有使用的代码
 优化图片，使用 base64 代替小图
 file name with hash (etag)
 
-## cookies与session有什么区别？
-
-## rem
-```
-
-```
 
 ## 怎么实现继承
 原型链继承
@@ -821,6 +879,7 @@ new Promise(function (resolve) {
 });
 
 console.log('script end');
+// script start / async1 start / async1 end / promise1 /  script end / setTimeout/ async2 / promise2
 ```
 ## 使用递归的方法，将obj变为obj2的格式(拼多多2018)
 ```js
