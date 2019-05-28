@@ -224,3 +224,8 @@ label设置白底
     background-color: #fff;
 }
 ```
+
+## 设置滚动条
+```css
+::-webkit-scrollbar{}
+```
