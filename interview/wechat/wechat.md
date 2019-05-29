@@ -73,6 +73,10 @@ App({
     ]
 }
 ```
+###### page.js
+```js
+
+```
 ###### project.config.json
 工具配置  
 
