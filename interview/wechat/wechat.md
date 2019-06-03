@@ -17,6 +17,7 @@ Page...
 
 ###### app.js
 ```js
+// App() 必须在 app.js 中调用，必须调用且只能调用一次。不然会出现无法预期的后果  
 App({
     onLaunch (options) {
         // Do something initial when launch.
@@ -73,17 +74,64 @@ App({
     ]
 }
 ```
-###### page.js
+###### [page].js
 ```js
-
+//index.js
+Page({
+  data: {
+    text: "This is page data."
+  },
+  onLoad: function(options) {
+    // Do some initialize when page load.
+  },
+  onReady: function() {
+    // Do something when page ready.
+  },
+  onShow: function() {
+    // Do something when page show.
+  },
+  onHide: function() {
+    // Do something when page hide.
+  },
+  onUnload: function() {
+    // Do something when page close.
+  },
+  onPullDownRefresh: function() {
+    // Do something when pull down.
+  },
+  onReachBottom: function() {
+    // Do something when page reach bottom.
+  },
+  onShareAppMessage: function () {
+    // return custom share data when user share.
+  },
+  onPageScroll: function() {
+    // Do something when page scroll
+  },
+  onResize: function() {
+    // Do something when page resize
+  },
+  onTabItemTap(item) {
+    console.log(item.index)
+    console.log(item.pagePath)
+    console.log(item.text)
+  },
+  // Event handler.
+  viewTap: function() {
+    this.setData({
+      text: 'Set some data for updating view.'
+    }, function() {
+      // this is setData callback
+    })
+  },
+  customData: {
+    hi: 'MINA'
+  }
+})
 ```
 ###### project.config.json
 工具配置  
 
-
-
-## App()
-App() 必须在 app.js 中调用，必须调用且只能调用一次。不然会出现无法预期的后果  
-
-
 ## 组件式编程  
+
+
