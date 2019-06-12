@@ -3,7 +3,7 @@ class Algo {
 
     }
     // 冒泡排序
-    bubleSort(arr) {
+    bubbleSort(arr) {
         let len = arr.length;
         for (let outer = len; outer >= 2; outer--) {
             for (let inner = 0; inner < outer - 1; inner++) {
