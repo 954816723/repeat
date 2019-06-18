@@ -1,10 +1,64 @@
 function divEscapedContentElement(message){
-    let div = document.createElement('div');
-    div.innerText = message;
-    return div;
+    return $('<div></div>').text(message);
 }
 function divSystemContentElement(message){
-    let div = document.createElement('div');
-    div.innerHTML = message;
-    return div;
+    return $('<div></div>').html('<i>' + message + '</i>');
 }
+function processUserInput(chatApp,socket){
+    let message = $('#send-message').val();
+    let systemMessage;
+    if(message.charAt(0) == '/'){
+        systemMessage = chatApp.processCommand(message);
+        if(systemMessage){
+            $('#message').append(divSystemContentElement(systemMessage))
+        }
+    }else{
+        chatApp.sendMessage($('#room').text(),message);
+        $('#message').append(divEscapedContentElement(message));
+        $('#message').scrollTop($('#message').prop('scrollHeight'))
+    }
+    $('#send-message').val('')
+}
+let socket = io.connect();
+$(document).ready(function(){
+    let chatApp = new Chat(socket);
+    socket.on('nameResult',function(result){
+        let message;
+        if(result.success){
+            message = 'You are now konwn as ' + result.name + '.';
+        }else{
+            message = result.message;
+        }
+        $('#message').append(divSystemContentElement(message));
+    })
+    socket.on('joinResult',function(result){
+        $('#room').text(result.room);
+        $('#message').append(divSystemContentElement('Room changed.'));
+    })
+    socket.on('message',function(message){
+        let newElement = $('<div></div>').text(message.text);
+        $('#message').append(newElement);
+    })
+    socket.on('rooms',function(rooms){
+        console.log(rooms)
+        $('#room-list').empty();
+        for(let room in rooms){
+            // room = room.substring(1,room.length);
+            if(room != ''){
+                $('#room-list').append(divEscapedContentElement(room));
+            }
+        }
+        $('#room-list div').click(function(){
+            chatApp.processCommand('/join' + $(this).text());
+            $('#send-message').focus();
+        })
+    })
+    setInterval(function(){
+        socket.emit('rooms')
+    },1000)
+    $('#send-message').focus();
+    $('#send-button').click(function(){
+        processUserInput(chatApp,socket);
+        return false;
+    })
+})

@@ -24,7 +24,8 @@ function joinRoom(socket,room){
     socket.broadcast.to(room).emit('message',{
         text:nickNames[socket.id] + 'has joined' + room + '.'
     });
-    let usersInRoom = io.sockets.clients(room);
+    // let usersInRoom = io.sockets.clients(room);
+    let usersInRoom = io.sockets.adapter.rooms[room];
     if(usersInRoom.length > 1){
         let msg = 'Users currently in' + room + ':';
         for(let index in usersInRoom){
@@ -33,12 +34,12 @@ function joinRoom(socket,room){
                 if(index > 0){
                     msg += ',';
                 }
+                msg += nickNames[userSockedId];
             }
-            msg += nickNames[userSockedId];
         }
+        msg += '.';
+        socket.emit('message',{text:msg});
     }
-    msg += '.';
-    socket.emit('message',{text:msg});
 }
 // 更名请求处理
 function handleNameChangeAttempts(socket,nickNames,namesUsed){
@@ -59,7 +60,7 @@ function handleNameChangeAttempts(socket,nickNames,namesUsed){
                     success:true,
                     name:name
                 });
-                socket.boroadcast.to(currentRoom[socket.id]).emit('message',{
+                socket.broadcast.to(currentRoom[socket.id]).emit('message',{
                     text:prevName + 'is now known as ' + name + '.'
                 })
             }else{
@@ -109,7 +110,8 @@ exports.listen = function(server){
         handleRoomJoining(socket);
         // 用户发送请求时,提供已被占用的聊天室的列表
         socket.on('rooms',function(){
-            socket.emit('rooms',io.sockets,manager.rooms);
+            // socket.emit('rooms',io.sockets,manager.rooms);
+            socket.emit('rooms',io.sockets.adapter.rooms);
         });
         // 断开连接 
         handleClientDisconnection(socket,nickNames,namesUsed);
