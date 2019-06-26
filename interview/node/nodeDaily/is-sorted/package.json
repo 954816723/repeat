@@ -1,0 +1,28 @@
+{
+    "name":"is-sortd",
+    "version":"0.0.1",
+    "description": "my daily node module",
+    "scripts": {
+        "standard":"standard",
+        "test":"npm run-script unit",
+        "unit":"tape test/*.js"
+    },
+    "repository":{
+        "type": "git",
+        "url": "https://github.com/954816723/repeat/interview/js/node"
+    },
+    "bugs": {
+        "url": "https://github.com/954816723/repeat/interview/js/node"
+    },
+    "homepage": "https://github.com/954816723/repeat/interview/js/node",
+    "keywords": [
+        "is-sorted",
+        "sorting"
+    ],
+    "author": "Me",
+    "license": "MIT",
+    "devDependencies": {
+        "standard":"*",
+        "tape":"^4.8.0"
+    }
+}
