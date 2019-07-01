@@ -1,4 +1,4 @@
-const http = requrie('http');
+const http = require('http');
 
 const PORT = 8080;
 

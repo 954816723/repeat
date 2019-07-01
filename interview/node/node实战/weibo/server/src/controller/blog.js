@@ -16,7 +16,31 @@ const getList = (author,keyword) => {
         },
     ]
 }
+const getDetail = (id)=>{
+    return {
+        id:1,
+        title:'标题A',
+        content:'内容A',
+        createTime:1561454787734,
+        author:'zhangsan'
+    }
+}
+const newBlog = (blogData = {}) => {
+    return {
+        id:3,
 
+    }
+}
+const updateBlog = (id,blogData = {}) => {
+    return true
+}
+const delBlog = (id) => {
+    return true
+}
 module.exports = {
-    getList
+    getList,
+    getDetail,
+    newBlog,
+    updateBlog,
+    delBlog
 }
