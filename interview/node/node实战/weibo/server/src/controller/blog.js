@@ -34,10 +34,21 @@ const updateBlog = (id,blogData = {}) => {
     let title = blogData.title,
         content = blogData.content;
     let sql = `update blogs title='${title}',content='${content}' where id='${id}'`;
-    return exec(sql).then()
+    return exec(sql).then(updateData=>{
+        if(updateData.affectedRows > 0){
+            return true;
+        }
+        return false;
+    })
 }
-const delBlog = (id) => {
-    return true
+const delBlog = (id,author) => {
+    let sql = `delete from blogs where id='${id}' and author='${author}'`;
+    return exec(sql).then(delData=>{
+        if(delData.affectedRows > 0){
+            return true;
+        }
+        return false
+    })
 }
 module.exports = {
     getList,
