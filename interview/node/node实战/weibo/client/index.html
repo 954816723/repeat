@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>index</title>
+</head>
+<body>
+    <div class="app">
+        <h2>博客首页</h2>
+        <div class="list">
+            <div class="item">
+                <h4><a href="/detail.html">测试1</a></h4>
+                <span><a href="/">zhangsan</a> 2019年7月5号</span>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(()=>{
+            $.get('/api/blog/list').then(res=>{
+                console.log(res);
+            })
+        })
+    </script>
+    
+</body>
+</html>

@@ -47,7 +47,11 @@ const delBlog = (id,author) => {
         if(delData.affectedRows > 0){
             return true;
         }
+<<<<<<< HEAD
         return false;
+=======
+        return false
+>>>>>>> be3e1290ebf5ab34a48c8f000d5d15e490d37893
     })
 }
 module.exports = {
