@@ -32,3 +32,6 @@ MySQL8.0版本的加密方式和MySQL5.0的不一样，连接会报错。
 `mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '123456';`  
 6. 刷新：   
 `mysql> FLUSH PRIVILEGES;`  
+
+- 更改数据库密码
+`ALTER USER 'root'@'localhost' IDENTIFIED BY '!Password1';`  
