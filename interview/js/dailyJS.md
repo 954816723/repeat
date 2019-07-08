@@ -31,3 +31,45 @@ function random(){
     return Math.floor(Math.random()*31+2)
 }
 ```
+## 2019/7/8
+###### html的元素有哪些（包含H5）
+div span p ul li table tr th td form input button header section footer h1~h6 textarea image video audio i head body html canvas nav article   
+
+###### CSS3有哪些新增的特性？
+transform transition linear-gradient animation box-shadow border-radius border-radius box-sizing text-shadow @font-face word-wrap word-break   
+
+###### 写一个方法去掉字符串中的空格
+```js
+let str = string.trim().split(' ').join('');
+
+function trim(str){
+    let reg = /\s+/g;
+    let result = str.replace(reg,str);
+    console.log(result);
+}
+```
+## 2019/7/8
+###### HTML全局属性(global attribute)有哪些（包含H5）？
+全局属性是所有HTML元素共有的属性; 它们可以用于所有元素，即使属性可能对某些元素不起作用  
+class id title type width height data-* value src target disabled checked ref name style 
+
+###### 在页面上隐藏元素的方法有哪些？
+`display:none`    
+`visibility:hidden`  
+`opacity:0`  
+`width:0;height:0;overflow:hidden;`  
+`margin-left:-100%`  
+`z-index:-9999999`  
+`transform:scale(0)`  
+
+###### 去除字符串中最后一个指定的字符
+```js
+function del(str,val){
+    if(typeof str !== 'string'){
+        console.log('不是字符串');
+        return
+    }
+    let i = str.lastIndexOf(val);
+    return str.substring(0,i) + str.substring(i+1,str.length)
+}
+```
