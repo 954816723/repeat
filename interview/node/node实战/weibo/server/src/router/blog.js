@@ -47,13 +47,10 @@ const handleBlogRouter = (req,res) => {
     }
     // 更新一篇博客
     if(method === 'POST' && path === '/api/blog/update'){
-<<<<<<< HEAD
-=======
         const loginCheckResult = loginCheck(req);
         if(loginCheckResult){
             return loginCheckResult
         }
->>>>>>> be3e1290ebf5ab34a48c8f000d5d15e490d37893
         const result = updateBlog(id,req.body);
         return result.then(val=>{
             if(val){
@@ -65,15 +62,6 @@ const handleBlogRouter = (req,res) => {
     }
     // 删除一篇博客
     if(method === 'POST' && path === '/api/blog/del'){
-<<<<<<< HEAD
-        const author = 'zhangsan';
-        const result = delBlog(id,author);
-        return result.then(val=>{
-            if(val){
-                return new SuccessModel();
-            }else{
-                return new ErrorModel('更新失败')
-=======
         const loginCheckResult = loginCheck(req);
         if(loginCheckResult){
             return loginCheckResult
@@ -85,7 +73,6 @@ const handleBlogRouter = (req,res) => {
                 return new SuccessModel();
             }else{
                 return new ErrorModel('删除失败')
->>>>>>> be3e1290ebf5ab34a48c8f000d5d15e490d37893
             }
         })
     }

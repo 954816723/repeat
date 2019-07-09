@@ -1,12 +1,15 @@
-const {exec} = require('../db/mysql');
+const {exec,escape} = require('../db/mysql');
+const {genPassword} = require('../utils/cryp');
 
-<<<<<<< HEAD
-const loginCheck = (username,password) => {
-    let sql = `select username realname from users where username='${username}' and password='${password}'`;
-=======
 const login = (username,password) => {
-    const sql = `select username realname from users where username='${username} and password='${password}'`;
->>>>>>> be3e1290ebf5ab34a48c8f000d5d15e490d37893
+    // 生成加密密码
+    // password = genPassword(password);
+    
+    // 防止sql注入
+    username = escape(username);
+    password = escape(password);
+
+    const sql = `select username realname from users where username=${username} and password=${password}`;
     return exec(sql).then(rows=>{
         return rows[0] || {}
     })

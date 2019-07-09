@@ -73,3 +73,36 @@ function del(str,val){
     return str.substring(0,i) + str.substring(i+1,str.length)
 }
 ```
+## 2019/7/9
+###### HTML5的文件离线储存怎么使用，工作原理是什么？
+`service workers`
+
+###### CSS选择器有哪些？哪些属性可以继承？
+`id` `class` `标签` `后代` `子选择器` `兄弟选择器` `属性选择器`  `伪类选择器` `伪元素选择器`  
+字体类的属性可以继承  
+
+###### 写一个方法把下划线命名转成大驼峰命名
+```js
+function trans(str){
+    let temp = str.split('_');
+    let arr =temp.map(item=>{
+        return item.substr(0,1).toUpperCase() + item.substring(1);
+    })
+    console.log(arr.join(''))
+}
+```
+## 2019/7/9
+###### 简述超链接target属性的取值和作用
+`_blank 另一窗口打开` `_self 当前窗口打开` `_top 跳出框架在整个页面打开`  
+
+###### CSS3新增伪类有哪些并简要描述
+`first-of-type` `last-o type` `only-of-type` `only-child` `nth-child()` `nth-last-child()` `nth-of-type()` `last-child` `empty` `target` `not()` `enabled` `disabled` `checked`   
+
+###### 写一个把字符串大小写切换的方法
+```js
+function caseConvert(str){
+    return str.replace(/([a-z]*)([A-Z]*)/g, (m, s1, s2)=>{
+	return `${s1.toUpperCase()}${s2.toLowerCase()}`
+    })
+}
+```
