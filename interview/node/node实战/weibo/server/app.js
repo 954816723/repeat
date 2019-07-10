@@ -1,7 +1,11 @@
-const handleBlogRouter = require('./src/router/blog.js')
-const handleUserRouter = require('./src/router/user.js')
+// 博客路由
+const handleBlogRouter = require('./src/router/blog.js') 
+// 登录路由
+const handleUserRouter = require('./src/router/user.js') 
 const querystring = require('querystring')
+// redis读取 保存
 const {set, get} = require('./src/db/redis.js')
+// 日志
 const {access} = require('./src/utils/log.js')
 // session数据
 const SESSION_DATA = {}

@@ -106,3 +106,33 @@ function caseConvert(str){
     })
 }
 ```
+## 2019/7/10
+###### label都有哪些作用？并举相应的例子说明
+1. 单击关联标签激活input,给input一个id属性,label一个for属性,设为相同值  
+2. 应用  
+    - 利用label模拟button,解决不同浏览器原生button样式不同问题  
+    - 结合checkbox表单元素实现纯CSS状态控制  
+    - input的focus事件会触发锚点定位，我们可以利用label当触发器实现选项卡切换效果  
+
+###### 用css创建一个三角形，并简述原理
+```css
+.box{
+    width: 0;
+    height: 0;
+    background-color: #fff;
+    border-right: 100px solid rgb(34, 230, 220);
+    border-left: 100px solid rgb(202, 146, 25);
+    border-top: 100px solid rgb(29, 156, 194);
+    border-bottom: 100px solid rgb(16, 204, 101);
+}
+```
+
+###### 写一个去除制表符和换行符的方法
+```js
+const removeSymbol = (str) => str.replace(/\t|\n|\r|\v|\f/g, "");
+
+const str =
+  "\t11122233\n_aaaaaaa\r\n_bbbbbb\t_3333333\r_4444444\n_555555";
+  
+console.log(removeSymbol(str));
+```
