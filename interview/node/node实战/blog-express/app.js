@@ -10,6 +10,7 @@ var logger = require('morgan');
 // var usersRouter = require('./routes/users');
 const blogRouter = require('./routes/blog');
 const userRouter = require('./routes/user');
+const session = require('express-session');
 
 var app = express();
 
@@ -28,9 +29,18 @@ app.use(cookieParser());
 // 设置静态文件目录
 // app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(session({
+  secret:"miyao_123",
+  cookie:{
+    path:'/', //默认配置
+    httpOnly:true,  //默认配置
+    maxAge:24*60*60*1000
+  }
+}))
+
 // 注册路由
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// app.use('/', indexRouter);
+// app.use('/users', usersRouter);
 app.use('/api/blog', blogRouter);
 app.use('/login', userRouter);
 
