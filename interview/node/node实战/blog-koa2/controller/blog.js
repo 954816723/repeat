@@ -1,55 +1,51 @@
 const {exec} = require('../db/mysql');
 const xss = require('xss');
 
-const getList = (author,keyword) => {
+const getList = async (author,keyword) => {
     let sql = 'select * from blogs where 1=1 ';
     if(author){
         sql += `and author='${author}'`
     }
     if(keyword){
-        sql += `and title like '%${keyword}%' `
+        sql += `and title like '%${keyword}%'`
     }
     sql += `order by createtime desc;`;
-    return exec(sql)
+    return await exec(sql)
 }
-const getDetail = (id)=>{
+const getDetail = async (id)=>{
     let sql = `select * from blogs where id='${id}'`
-    return exec(sql).then(rows=>{
-        return rows[0]
-    })
+     const rows = await exec(sql);
+     return rows[0]
 }
-const newBlog = (blogData = {}) => {
+const newBlog = async (blogData = {}) => {
     let title = xss(blogData.title),
         content = xss(blogData.content),
         author = blogData.author,
         createtime = Date.now();
     let sql = `insert into blogs (title,content,author,createtime) 
                 values ('${title}','${content}','${author}','${createtime}')`;
-    return exec(sql).then(insertData=>{
-        return {
-            id:insertData.insertId
-        }
-    })
+    const insertData = await exec(sql)
+    return {
+        id:insertData.insertId
+    }
 }
-const updateBlog = (id,blogData = {}) => {
+const updateBlog = async (id,blogData = {}) => {
     let title = xss(blogData.title),
         content = xss(blogData.content);
-    let sql = `update blogs title='${title}',content='${content}' where id='${id}'`;
-    return exec(sql).then(updateData=>{
-        if(updateData.affectedRows > 0){
-            return true;
-        }
-        return false;
-    })
+    let sql = `update blogs set title='${title}',content='${content}' where id='${id}'`;
+    const updateData = await exec(sql)
+    if(updateData.affectedRows > 0){
+        return true;
+    }
+    return false;
 }
-const delBlog = (id,author) => {
+const delBlog = async (id,author) => {
     let sql = `delete from blogs where id='${id}' and author='${author}'`;
-    return exec(sql).then(delData=>{
-        if(delData.affectedRows > 0){
-            return true;
-        }
-        return false;
-    })
+    const delData = await exec(sql)
+    if(delData.affectedRows > 0){
+        return true;
+    }
+    return false;
 }
 module.exports = {
     getList,

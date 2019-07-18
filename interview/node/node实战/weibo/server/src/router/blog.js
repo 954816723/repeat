@@ -43,7 +43,6 @@ const handleBlogRouter = (req,res) => {
     // 新建一篇博客
     if(method === 'POST' && path === '/api/blog/new'){
         const loginCheckResult = loginCheck(req);
-        console.log(req)
         if(loginCheckResult){
             return loginCheckResult
         }

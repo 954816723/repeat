@@ -34,7 +34,7 @@ const newBlog = (blogData = {}) => {
 const updateBlog = (id,blogData = {}) => {
     let title = xss(blogData.title),
         content = xss(blogData.content);
-    let sql = `update blogs title='${title}',content='${content}' where id='${id}'`;
+    let sql = `update blogs set title='${title}',content='${content}' where id='${id}'`;
     return exec(sql).then(updateData=>{
         if(updateData.affectedRows > 0){
             return true;
