@@ -11,7 +11,7 @@ class AnswersCtl {
             ctx.throw()
         }
         ctx.state.answer = answer
-        await next(404,'该问题下没有此答案')
+        await next()
     }
     async checkAnswerer(ctx,next){
         const {answer} = ctx.state
