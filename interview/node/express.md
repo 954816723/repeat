@@ -288,9 +288,101 @@ var logger = require("morgan");
 var app = express();
 app.use(logger("short")); 
 ```
-###### cookie-parses
+###### cookie-parser
 - 解析浏览器中的 cookie 信息  
+###### body-parser
+- 请求体解析中间件  
 ###### helmet 
 - 添加 HTTP 头部信息来应对一些网络攻击  
 ###### connect-ratelimit
 - 控制每小时的连接数  
+###### archiver
+- 打包模块  
+###### co
+- 以同步形式编写异步代码的模块  
+###### compression
+- 压缩请求,gzip压缩  
+###### connect-timeout
+- 处理超时连接  
+###### debug
+- 日志工具
+###### express-session
+###### fdfs
+###### glob
+###### hbs
+###### images
+###### jr-qrcode
+###### lodash
+###### log4js
+###### md5
+###### md5-file
+###### moment
+###### multiparty
+###### mysql
+###### connect-redis
+###### passport
+###### passport-weixin
+###### qr-image
+###### request-promise
+###### semver
+###### sequelize
+###### serve-favicon
+###### session.socket.io
+###### socket.io
+###### string
+###### striptags
+###### svg2png
+###### text-to-svg
+###### type-is
+###### uuid
+
+###### captchapng
+###### chai
+###### chalk
+###### chromedriver
+###### codemirror
+###### connect-history-api-fallback
+###### cross-spawn
+###### eventsource-polyfill
+###### function-bind
+###### lolex
+###### mocha
+###### nightwatch
+###### opn
+###### ora
+###### phantomjs-prebuilt
+###### queuedo
+###### selenium-server
+###### semver
+###### shelljs
+###### summernote
+
+###### http-proxy-middleware
+###### webpack
+###### webpack-dev-middleware
+###### webpack-hot-middleware
+###### webpack-merge
+###### url-loader
+###### json-loader
+###### inject-loader
+###### isparta-loader
+###### css-loader
+###### html-webpack-plugin
+###### extract-text-webpack-plugin
+
+###### babel-core
+###### babel-eslint
+###### babel-loader
+###### babel-plugin-transform-runtime
+###### babel-preset-es2015
+###### babel-preset-stage-2
+###### babel-register
+
+###### eslint
+###### eslint-config-standard
+###### eslint-friendly-formatter
+###### eslint-loader
+###### eslint-plugin-html
+###### eslint-plugin-promise
+###### eslint-plugin-standard
+

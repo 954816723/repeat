@@ -167,3 +167,7 @@ var childInNums = parent.split(child).length - 1
 ## 2019.8.5
 #### 写 React / Vue 项目时为什么要在列表组件中写 key，其作用是什么？
 key的作用是为了在diff算法执行时更快的找到对应的节点，提高diff速度  
+
+## 2019.8.6
+#### ['1', '2', '3'].map(parseInt) what & why ?
+[1,NaN,NaN]

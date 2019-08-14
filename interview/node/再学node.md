@@ -35,3 +35,6 @@ MySQL8.0版本的加密方式和MySQL5.0的不一样，连接会报错。
 
 - 更改数据库密码
 `ALTER USER 'root'@'localhost' IDENTIFIED BY '!Password1';`  
+
+#### centos下修改nvm下载地址
+`export NVM_NODEJS_ORG_MIRROR=http://npm.taobao.org/mirrors/node`  
