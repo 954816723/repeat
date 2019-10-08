@@ -150,6 +150,9 @@ Array.
     every() 遍历数组,都返回true返回true,否则false  
     some() 遍历数组,有一项是true就返回true,否则返回false  
     isArray() 确定传递的值是不是Array  
+    flat() 将嵌套的数组“拉平”，变成一维的数组。该方法返回一个新数组，对原数据没有影响,默认拉平一层,传入参数表示拉平多少层,`Infinity`关键字表示无论多少层都拉平  
+    flatMap() 方法对原数组的每个成员执行一个函数  
+
 
 - Object  
 Object.prorotype 给对象原型上添加方法  

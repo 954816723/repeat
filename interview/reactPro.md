@@ -541,6 +541,40 @@
 
 #### React声明组件有哪几种方法，各有什么不同？
 
+#### React 中 setState 什么时候是同步的，什么时候是异步的？
+
+#### React setState 笔试题，下面的代码输出什么？
+```js
+class Example extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      val: 0
+    };
+  }
+  
+  componentDidMount() {
+    this.setState({val: this.state.val + 1});
+    console.log(this.state.val);    // 第 1 次 log
+
+    this.setState({val: this.state.val + 1});
+    console.log(this.state.val);    // 第 2 次 log
+
+    setTimeout(() => {
+      this.setState({val: this.state.val + 1});
+      console.log(this.state.val);  // 第 3 次 log
+
+      this.setState({val: this.state.val + 1});
+      console.log(this.state.val);  // 第 4 次 log
+    }, 0);
+  }
+
+  render() {
+    return null;
+  }
+};
+```
+
 ## ReactNative
 #### 如何在React Native中设置环境变量？
 
@@ -585,7 +619,12 @@
 
 #### 请你说说React的路由是什么？
 
+#### react-router 里的 `<Link>` 标签和 `<a>` 标签有什么区别
+
+
 ## Redux/Mobx
+#### redux 为什么要把 reducer 设计成纯函数
+
 #### 你有了解Rxjs是什么吗？它是做什么的？
 
 #### 在Redux中怎么发起网络请求？

@@ -199,10 +199,47 @@ WeakMap
 #### 请分别用深度优先思想和广度优先思想实现一个拷贝函数？
 
 #### ES5/ES6 的继承除了写法以外还有什么区别？
+###### class
+- `class`声明不像`function`声明,它不存在变量提升,它类似`let`声明,存在`TDZ`  
+- `class`中的代码都会自动的使用严格模式,没办法选择  
+- 所有的方法都是不可枚举的,注:非绑定当前对象的方法  
+- `class`内所有的方法都缺少`[[Construct]]`方法,如果对这些方法进行`new`会出错  
+- 不携带`new`操作符调用`class`会报错  
+- 尝试在类的方法中改变类名会出错  
+
+> `new.target`属性允许你检测函数或构造方法是否是通过new运算符被调用的  
+
+继承的差异:  
+```js
+class Super {}
+class Sub extends Super {}
+
+const sub = new Sub();
+
+Sub.__proto__ === Super;
+```
+子类可以直接通过 __proto__ 寻址到父类。  
+```js
+function Super() {}
+function Sub() {}
+
+Sub.prototype = new Super();
+Sub.prototype.constructor = Sub;
+
+var sub = new Sub();
+
+Sub.__proto__ === Function.prototype;
+```
+而通过 ES5 的方式，`Sub.__proto__ === Function.prototype`  
 
 #### setTimeout、Promise、Async/Await 的区别
+事件循环中分为宏任务队列和微任务队列  
+`setTimeout`的回调函数放到宏任务队列里,等到执行栈清空后执行  
+`promise`中`resolve`之前的同步代码会立即执行,回调函数会放到相应宏任务的微任务队列里,等宏任务中的同步代码执行完毕再执行  
+`async`函数表示函数中可能会有异步方法,`await`后面跟一个表达式,`async`方法执行时,遇到`await`会立即执行表达式,然后把表达式后面的代码放到微任务队列里,让出执行栈,让同步代码先执行  
 
 #### Async/Await 如何通过同步的方式实现异步
+`async awiat` 是一种语法糖，基于`Generator` 函数和自动执行器实现  
 
 #### 异步笔试题
 ```js
@@ -229,6 +266,7 @@ new Promise(function(resolve) {
 });
 console.log('script end');
 ```
+`script start -> async1 start -> async2 -> promise1 -> script end -> async1 end -> promise2 -> setTimeout`
 
 #### 算法手写题
 已知如下数组：  
@@ -236,55 +274,83 @@ console.log('script end');
 var arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10];  
 
 编写一个程序将数组扁平化去并除其中重复部分数据，最终得到一个升序且不重复的数组  
+```js
+function flatten(arr){
+	return Array.from(new Set(arr.flat(Infinity))).sort((a,b)=>a-b)
+}
+function flatten(arr) {
+    let temp = [].concat(...arr.map(item => (Array.isArray(item) ? flatten(item) : [item])))
+	return Array.from(new Set(temp)).sort((a, b) => {
+		return a - b
+	})
+}
+```
 
 #### JS 异步解决方案的发展历程以及优缺点。
+1. 回调函数  
+优点: 解决了同步问题  
+缺点: 回调地狱,不能用try/catch捕获错误,不能return  
+2. Promise  
+优点: 解决了回调地狱,可以链式调用  
+缺点: 无法取消promise,错误需要通过回调函数来捕获  
+3. Generator  
+优点: 可以控制函数的执行  
+缺点: 写法较为繁琐  
+4. Async/Await  
+优点: 代码清晰,不用像Promise写很多then,处理了回调地狱问题  
+缺点: await将异步代码改造成同步代码,如果多个异步操作没有依赖性而使用await会导致性能上的降低  
 
 #### Promise 构造函数是同步执行还是异步执行，那么 then 方法呢？
+Promise构造函数是同步执行的,then方法中的回调函数是异步执行  
 
 #### 情人节福利题，如何实现一个 new
+```js
+function _new(fn,...arg){
+	const obj = Object.ceate(fn.prototype)
+	const res = fn.call(obj,arg)
+	return res instanceof Object ? res : obj
+}
+```
 
 #### 简单讲解一下http2的多路复用
+HTTP2采用二进制格式传输，取代了HTTP1.x的文本格式，二进制格式解析更高效  
+多路复用代替了HTTP1.x的序列和阻塞机制，所有的相同域名请求都通过同一个TCP连接并发完成。在HTTP1.x中，并发多个请求需要多个TCP连接，浏览器为了控制资源会有6-8个TCP连接都限制  
+HTTP2中:  
+- 同域名下所有通信都在单个连接上完成，消除了因多个 TCP 连接而带来的延时和内存消耗  
+- 单个连接上可以并行交错的请求和响应，之间互不干扰  
 
 #### 谈谈你对TCP三次握手和四次挥手的理解
 
 #### A、B 机器正常连接后，B 机器突然重启，问 A 此时处于 TCP 什么状态
 如果A 与 B 建立了正常连接后，从未相互发过数据，这个时候 B 突然机器重启，问 A 此时处于 TCP 什么状态？如何消除服务器程序中的这个状态？（超纲题，了解即可）  
 
-#### React 中 setState 什么时候是同步的，什么时候是异步的？
-
-#### React setState 笔试题，下面的代码输出什么？
-```js
-class Example extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      val: 0
-    };
-  }
-  
-  componentDidMount() {
-    this.setState({val: this.state.val + 1});
-    console.log(this.state.val);    // 第 1 次 log
-
-    this.setState({val: this.state.val + 1});
-    console.log(this.state.val);    // 第 2 次 log
-
-    setTimeout(() => {
-      this.setState({val: this.state.val + 1});
-      console.log(this.state.val);  // 第 3 次 log
-
-      this.setState({val: this.state.val + 1});
-      console.log(this.state.val);  // 第 4 次 log
-    }, 0);
-  }
-
-  render() {
-    return null;
-  }
-};
-```
-
 #### 介绍下 npm 模块安装机制，为什么输入 npm install 就可以自动安装对应的模块？
+1. npm模块安装机制  
+	- 发出`npm install`命令  
+	- 查询`node_modules`目录中是否已经存在指定模块  
+		- 若存在,不再重新安装  
+		- 不存在  
+			- npm向registry(npm模块仓库提供的查询服务)查询模块压缩包的网址  
+			- 下载压缩包,存放在根目录下的`.npm`目录里  
+			- 解压压缩包到当前项目的`node_modules`目录  
+2. npm实现原理  
+	- 执行工程自称的`preinstall`  
+	- 确定首层依赖模块  
+		1. 首先需要做的是确定工程中的首层依赖,也就是dependencies和devDependences属性中直接指定的模块  
+		2. 工程本身是整棵依赖树的根节点，每个首层依赖模块都是根节点下面的一棵子树，npm 会开启多进程从每个首层依赖模块开始逐步寻找更深层级的节点
+	- 获取模块  
+		1. 获取模块信息。在下载一个模块之前，首先要确定其版本，这是因为 package.json 中往往是 semantic version（semver，语义化版本）。此时如果版本描述文件（npm-shrinkwrap.json 或 			package-lock.json）中有该模块信息直接拿即可，如果没有则从仓库获取。如 packaeg.json 中某个包的版本是 ^1.1.0，npm 就会去仓库中获取符合 1.x.x 形式的最新版本  
+		2. 获取模块实体。上一步会获取到模块的压缩包地址（resolved 字段），npm 会用此地址检查本地缓存，缓存中有就直接拿，如果没有则从仓库下载  
+		3. 查找该模块依赖，如果有依赖则回到第1步，如果没有则停止  
+	- 模块扁平化  
+		上一步获取到的是一棵完整的依赖树，其中可能包含大量重复模块。在 npm3 以前会严格按照依赖树的结构进行安装，因此会造成模块冗余  
+		从 npm3 开始默认加入了一个 dedupe 的过程。它会遍历所有节点，逐个将模块放在根节点下面，也就是 node-modules 的第一层。当发现有重复模块时，则将其丢弃  
+	- 安装模块  
+		这一步将会更新工程中的 node_modules，并执行模块中的生命周期函数（按照 preinstall、install、postinstall 的顺序）  
+	- 执行工程自身生命周期  
+		当前 npm 工程如果定义了钩子此时会被执行（按照 install、postinstall、prepublish、prepare 的顺序
+	- 生成或更新版本描述文件  
+
 
 #### 有以下 3 个判断数组的方法，请分别介绍它们之间的区别和优劣
 Object.prototype.toString.call() 、 instanceof 以及 Array.isArray()  
@@ -303,8 +369,6 @@ Object.prototype.toString.call() 、 instanceof 以及 Array.isArray()
 #### 全局作用域中，用 const 和 let 声明的变量不在 window 上，那到底在哪里？如何去获取？。
 
 #### cookie 和 token 都存放在 header 中，为什么不会劫持 token？
-
-#### 聊聊 Vue 的双向数据绑定，Model 如何改变 View，View 又是如何改变 Model 的
 
 #### 两个数组合并成一个数组
 请把两个数组 ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'D1', 'D2'] 和 ['A', 'B', 'C', 'D']，合并为 ['A1', 'A2', 'A', 'B1', 'B2', 'B', 'C1', 'C2', 'C', 'D1', 'D2', 'D']。  
@@ -343,7 +407,6 @@ var b = 10;
 
 #### 使用迭代的方式实现 flatten 函数。
 
-#### 为什么 Vuex 的 mutation 和 Redux 的 reducer 中不能做异步操作？
 
 #### 下面代码中 a 在什么情况下会打印 1？
 ```js
@@ -354,9 +417,6 @@ if(a == 1 && a == 2 && a == 3){
 ```
 
 #### 介绍下 BFC 及其应用。
-
-#### 在 Vue 中，子组件为何不可以修改父组件传递的 Prop
-如果修改了，Vue 是如何监控到属性的修改并给出警告的。  
 
 #### 下面代码输出什么
 ```js
@@ -393,17 +453,12 @@ obj.push(2)
 console.log(obj)
 ```
 
-#### 双向绑定和 vuex 是否冲突
-
 #### call 和 apply 的区别是什么，哪个性能更好一些
 
 #### 为什么通常在发送数据埋点请求的时候使用的是 1x1 像素的透明 gif 图片？
 
 #### 实现 (5).add(3).minus(2) 功能。
 例： 5 + 3 - 2，结果为 6  
-
-#### Vue 的响应式原理中 Object.defineProperty 有什么缺陷？
-为什么在 Vue3.0 采用了 Proxy，抛弃了 Object.defineProperty？  
 
 #### 怎么让一个 div 水平垂直居中
 
@@ -460,8 +515,6 @@ LazyMan('Tony').eat('lunch').eat('dinner').sleepFirst(5).sleep(10).eat('junk foo
 ```
 
 #### 介绍下如何实现 token 加密
-
-#### redux 为什么要把 reducer 设计成纯函数
 
 #### 如何设计实现无缝轮播
 
@@ -532,8 +585,6 @@ console.log(a[b]);
 向右旋转 1 步: [99, -1, -100, 3]  
 向右旋转 2 步: [3, 99, -1, -100]  
 
-#### Vue 的父组件和子组件生命周期钩子执行顺序是什么
-
 #### input 搜索如何防抖，如何处理中文输入
 
 #### 介绍下 Promise.all 使用、原理实现及错误处理
@@ -563,8 +614,6 @@ add(1)(2, 3); // 6
 add(1, 2)(3); // 6
 add(1, 2, 3); // 6
 ```
-
-#### react-router 里的 `<Link>` 标签和 `<a>` 标签有什么区别
 
 #### 算法题之「两数之和」
 给定一个整数数组和一个目标值，找出数组中和为目标值的两个数。  
@@ -663,13 +712,10 @@ nums2 = [3, 4]
 //中位数是(2 + 3) / 2 = 2.5
 ```
 
-#### vue 在 v-for 时给每项元素绑定事件需要用事件代理吗？为什么？
 
 #### 模拟实现一个深拷贝，并考虑对象相互引用以及 Symbol 拷贝的情况
 
 #### 介绍下前端加密的常见场景和方法
-
-#### React 和 Vue 的 diff 时间复杂度从 O(n^3) 优化到 O(n) ，那么 O(n^3) 和 O(n) 是如何计算出来的？
 
 #### 写出如下代码的打印结果
 ```js
@@ -852,10 +898,6 @@ e: 'ae'
 
 #### 介绍下 http1.0、1.1、2.0 协议的区别？
 
-#### vue 渲染大量数据时应该怎么优化？
-
-#### vue 如何优化首页的加载速度？vue 首页白屏是什么问题引起的？如何解决呢？
-
 #### 为什么 for 循环嵌套顺序会影响性能？
 ```js
 var t1 = new Date().getTime()
@@ -882,8 +924,6 @@ console.log('two time', t3 - t2)
 #### 统计 1 ~ n 整数中出现 1 的次数。
 
 #### webpack 打包 vue 速度太慢怎么办？
-
-#### vue 是如何对数组方法进行变异的？例如 push、pop、splice 等方法
 
 #### 永久性重定向（301）和临时性重定向（302）对 SEO 有什么影响
 
@@ -952,8 +992,6 @@ main();
 例如：红蓝蓝黄红黄蓝红红黄红，排序后为：黄黄黄红红红红红蓝蓝蓝。  
 
 #### 如何实现骨架屏，说说你的思路
-
-
 
 #### 用原生JS封装插件的方式有哪些？
 
