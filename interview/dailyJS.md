@@ -401,6 +401,23 @@ HTTP2中:
 #### 29.聊聊 Redux 和 Vuex 的设计思想
 
 #### 30.说说浏览器和 Node 事件循环的区别
+1. Node Event Loop  
+Node.js的运行机制如下:
+- V8引擎解析JavaScript脚本。
+- 解析后的代码，调用Node API。
+- libuv库负责Node API的执行。它将不同的任务分配给不同的线程，形成一个Event Loop（事件循环），以异步的方式将任务的执行结果返回给V8引擎。
+- V8引擎再将结果返回给用户。
+
+![node-event_loop](./image/node-event.jpg)
+node中事件循环顺序:  
+外部数据输入-->轮询阶段(poll)-->检查阶段(check)-->关闭事件回调阶段(close callback)-->定时器检查阶段(timer)-->  
+I/O事件回调阶段(I/O callbacks)-->闲置阶段(idle,prepare)-->轮询阶段-->按照此顺序反复进行  
+- timers 阶段：这个阶段执行timer（setTimeout、setInterval）的回调
+- I/O callbacks 阶段：处理一些上一轮循环中的少数未执行的 I/O 回调
+- idle, prepare 阶段：仅node内部使用
+- poll 阶段：获取新的I/O事件, 适当的条件下node将阻塞在这里
+- check 阶段：执行 setImmediate() 的回调
+- close callbacks 阶段：执行 socket 的 close 事件回调
 
 #### 31.介绍模块化发展历程
 可从IIFE、AMD、CMD、CommonJS、UMD、webpack(require.ensure)、ES Module、<script type="module"> 这几个角度考虑。  
