@@ -702,6 +702,12 @@ console.log(b.x)    //{n:2}
 
 #### 55.某公司 1 到 12 月份的销售额存在一个对象里面
 如下：{1:222, 2:123, 5:888}，请把数据处理为如下结构：[222, 123, null, null, 888, null, null, null, null, null, null, null]。  
+```js
+let obj = {1:222, 2:123, 5:888}
+const result = Array.from({length:12}).map((item,index)=>{
+    return obj[index+1] || null
+})
+```
 
 #### 56.要求设计 LazyMan 类，实现以下功能。
 ```js
@@ -727,10 +733,23 @@ LazyMan('Tony').eat('lunch').eat('dinner').sleepFirst(5).sleep(10).eat('junk foo
 // 等待了10秒...
 // I am eating junk food
 ```
+```js
+
+```
 
 #### 57.分析比较 opacity: 0、visibility: hidden、display: none 优劣和适用场景。
+`display:none`不占空间,不能点击,造成文档回流,性能消耗较大  
+`visibility:hidden`占据空间,不能点击,只会造成本元素的重绘,性能消耗较少  
+`opacity:0`占据空间,能点击,会造成重绘，性能消耗较少  
+若父节点元素应用了opacity:0和display:none，无论其子孙元素如何挣扎都不会再出现在大众视野  
+父节点元素应用visibility:hidden，子孙元素应用visibility:visible，那么其就会毫无意外的显现出来  
 
 #### 58.箭头函数与普通函数（function）的区别是什么？构造函数（function）可以使用 new 生成实例，那么箭头函数可以吗？为什么？
+- 箭头函数没有 this，它会从自己的作用域链的上一层继承 this（因此无法使用 apply / call / bind 进行绑定 this 值）；
+- 不绑定 arguments，当在箭头函数中调用 aruguments 时同样会向作用域链中查询结果；
+- 不绑定 super 和 new.target；
+- 没有 prototype 属性，即指向 undefined；
+- 无法使用 new 实例化对象，因为普通构造函数通过 new 实例化对象时 this 指向实例对象，而箭头函数没有 this 值，同时 箭头函数也没有 prototype。
 
 #### 59.给定两个数组，写一个方法来计算它们的交集。
 例如：给定 nums1 = [1, 2, 2, 1]，nums2 = [2, 2]，返回 [2, 2]。  
@@ -739,27 +758,75 @@ LazyMan('Tony').eat('lunch').eat('dinner').sleepFirst(5).sleep(10).eat('junk foo
 ```html
 <img src="1.jpg" style="width:480px!important;”>
 ```
+`max-width:300px;`覆盖其样式；
+`transform: scale(0.625);`按比例缩放图片
+`box-sizing: border-box;padding: 0 90px;`
+`document.getElementsByTagName("img")[0].setAttribute("style","width:300px!important;")`
 
 #### 61.介绍下如何实现 token 加密
+- jwt  
+- 需要一个secret（随机数）  
+- 后端利用secret和加密算法(如：HMAC-SHA256)对payload(如账号密码)生成一个字符串(token)，返回前端  
+- 前端每次request在header中带上token  
+- 后端用同样的算法解密  
 
 #### 62.如何设计实现无缝轮播
+因为轮播图基本都在ul盒子里面的li元素,  
+首先获取第一个li元素和最后一个li元素,  
+克隆第一个li元素,和最后一个li元素,  
+分别插入到lastli的后面和firstli的前面,  
+然后监听滚动事件,如果滑动距离超过x或-x,让其实现跳转下一张图或者跳转上一张,(此处最好设置滑动距离),  
+然后在滑动最后一张实现最后一张和克隆第一张的无缝转换,当到克隆的第一张的时候停下的时候,,让其切入真的第一张,则实现无线滑动,向前滑动同理  
 
 #### 63.模拟实现一个 Promise.finally
+```js
+Promise.prototype.finally = function (callback) {
+  let P = this.constructor;
+  return this.then(
+    value  => P.resolve(callback()).then(() => value),
+    reason => P.resolve(callback()).then(() => { throw reason })
+  );
+};
+```
 
 #### 64. a.b.c.d 和 a['b']['c']['d']，哪个性能更高？
 
 #### 65.ES6 代码转成 ES5 代码的实现思路是什么
+将ES6的代码转换为AST语法树，然后再将ES6 AST转为ES5 AST，再将AST转为代码  
 
 #### 66.数组编程题
 随机生成一个长度为 10 的整数类型的数组，例如 [2, 10, 3, 4, 5, 11, 10, 11, 20]，将其排列成一个新数组，要求新数组形式如下，例如 [[2, 3, 4, 5], [10, 11], [20]]。  
+```js
+
+```
 
 #### 67.如何解决移动端 Retina 屏 1px 像素问题
 
 #### 68.如何把一个字符串的大小写取反（大写变小写小写变大写），例如 ’AbC' 变成 'aBc' 。
+```js
+function processString (s) {
+    var arr = s.split('');
+    var new_arr = arr.map((item) => {
+        return item === item.toUpperCase() ? item.toLowerCase() : item.toUpperCase();
+    });
+    return new_arr.join('');
+}
+console.log(processString('AbC'));
+```
 
 #### 69.介绍下 webpack 热更新原理，是如何做到在不刷新浏览器的前提下更新页面的
+https://zhuanlan.zhihu.com/p/30669007  
 
 #### 70.实现一个字符串匹配算法，从长度为 n 的字符串 S 中，查找是否存在字符串 T，T 的长度是 m，若存在返回所在位置。
+```js
+const find = (S, T) => {
+  if (S.length < T.length) return -1
+  for (let i = 0; i < S.length; i++) {
+    if (S.slice(i, i + T.length) === T) return i
+  }
+  return -1
+}
+```
 
 #### 71.为什么普通 for 循环的性能远远高于 forEach 的性能，请解释其中的原因。
 
@@ -768,6 +835,7 @@ LazyMan('Tony').eat('lunch').eat('dinner').sleepFirst(5).sleep(10).eat('junk foo
 #### 73.使用 JavaScript Proxy 实现简单的数据绑定
 
 #### 74.数组里面有10万个数据，取第一个元素和第10万个元素的时间相差多少
+js 中数组元素的存储方式并不是连续的，而是哈希映射关系。哈希映射关系，可以通过键名 key，直接计算出值存储的位置，所以查找起来很快  
 
 #### 75.输出以下代码运行结果
 ```js
@@ -776,20 +844,22 @@ var a={}, b='123', c=123;
 a[b]='b';
 a[c]='c';  
 console.log(a[b]);
-
+// 'c'
 ---------------------
 // example 2
 var a={}, b=Symbol('123'), c=Symbol('123');  
 a[b]='b';
 a[c]='c';  
 console.log(a[b]);
-
+// 'b'
 ---------------------
 // example 3
 var a={}, b={key:'123'}, c={key:'456'};  
 a[b]='b';
 a[c]='c';  
 console.log(a[b]);
+// 'c'
+// 对象类型会调用 toString 方法转换成字符串 [object Object]
 ```
 
 #### 76.算法题「旋转数组」
@@ -812,11 +882,21 @@ console.log(a[b]);
 向右旋转 2 步: [3, 99, -1, -100]  
 
 #### 77.input 搜索如何防抖，如何处理中文输入
+通过compositionstart & compositionend做的中文输入处理  
 
 #### 78.介绍下 Promise.all 使用、原理实现及错误处理
 
 #### 79.打印出 1 - 10000 之间的所有对称数
 例如：121、1331 等  
+```js
+let result = [];
+for (let i = 1; i <= 10000; i++) {
+    let reverse = Number(i.toString().split('').reverse().join(''));
+    if (i === reverse) {
+        result.push(i);
+    }
+}
+```
 
 #### 80.周一算法题之「移动零」
 给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。  
@@ -830,6 +910,13 @@ console.log(a[b]);
 尽量减少操作次数。  
 
 #### 81.var、let 和 const 区别的实现原理是什么
+var可以重复声明,无法限制修改,没有块级作用域  
+let不能重复声明,变量可以修改  
+const定义一个不能修改的常量,不能重复声明  
+与var不同的是,let和const是直接在最近的词法环境中定义变量  
+var的话会直接在栈内存里预分配内存空间，然后等到实际语句执行的时候，再存储对应的变量，如果传的是引用类型，那么会在堆内存里开辟一个内存空间存储实际内容，栈内存会存储一个指向堆内存的指针  
+let的话，是不会在栈内存里预分配内存空间，而且在栈内存分配变量时，做一个检查，如果已经有相同变量名存在就会报错  
+const的话，也不会预分配内存空间，在栈内存分配变量时也会做同样的检查。不过const存储的变量是不可修改的，对于基本类型来说你无法修改定义的值，对于引用类型来说你无法修改栈内存里分配的指针，但是你可以修改指针指向的对象里面的属性  
 
 #### 82.请实现一个 add 函数，满足以下功能。
 ```js
