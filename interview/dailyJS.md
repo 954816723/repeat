@@ -412,22 +412,61 @@ Node.js的运行机制如下:
 node中事件循环顺序:  
 外部数据输入-->轮询阶段(poll)-->检查阶段(check)-->关闭事件回调阶段(close callback)-->定时器检查阶段(timer)-->  
 I/O事件回调阶段(I/O callbacks)-->闲置阶段(idle,prepare)-->轮询阶段-->按照此顺序反复进行  
-- timers 阶段：这个阶段执行timer（setTimeout、setInterval）的回调
-- I/O callbacks 阶段：处理一些上一轮循环中的少数未执行的 I/O 回调
-- idle, prepare 阶段：仅node内部使用
-- poll 阶段：获取新的I/O事件, 适当的条件下node将阻塞在这里
-- check 阶段：执行 setImmediate() 的回调
-- close callbacks 阶段：执行 socket 的 close 事件回调
+- timers 阶段：这个阶段执行timer（setTimeout、setInterval）的回调,是由poll阶段控制的  
+- I/O callbacks 阶段：处理一些上一轮循环中的少数未执行的 I/O 回调  
+- idle, prepare 阶段：仅node内部使用  
+- poll 阶段：获取新的I/O事件, 适当的条件下node将阻塞在这里  
+	- 如果 poll 队列不为空，会遍历回调队列并同步执行，直到队列为空或者达到系统限制  
+	- 如果 poll 队列为空时，会有两件事发生  
+		- 如果有 setImmediate 回调需要执行，poll 阶段会停止并且进入到 check 阶段执行回调  
+		- 如果没有 setImmediate 回调需要执行，会等待回调被加入到队列中并立即执行回调，这里同样会有个超时时间设置防止一直等待下去  
+	- 当然设定了 timer 的话且 poll 队列为空，则会判断是否有 timer 超时，如果有的话会回到 timer 阶段执行回调。  
+- check 阶段：执行 setImmediate() 的回调  
+- close callbacks 阶段：一些准备关闭的回调函数,如执行 socket 的 close 事件回调  
+注意：上面六个阶段都不包括 `process.nextTick()`  
+
+`process.nextTick()`  
+这个函数其实是独立于 Event Loop 之外的，它有一个自己的队列，当每个阶段完成后，如果存在 nextTick 队列，就会清空队列中的所有回调函数，并且优先于其他 microtask 执行  
+
+Node与浏览器的 Event Loop 差异  
+- node11版本一旦执行一个阶段里的一个宏任务(setTimeout,setInterval和setImmediate)就立刻执行微任务队列，这就跟浏览器端运行一致  
+- node10及其之前版本：microtask会在事件循环的各个阶段之间执行，也就是一个阶段执行完毕，就会去执行microtask队列的任务  
 
 #### 31.介绍模块化发展历程
-可从IIFE、AMD、CMD、CommonJS、UMD、webpack(require.ensure)、ES Module、<script type="module"> 这几个角度考虑。  
+可从IIFE、AMD、CMD、CommonJS、UMD、webpack(require.ensure)、ES Module、`<script type="module">` 这几个角度考虑。  
+- IIFE: 使用自执行函数来编写模块化,特点:*在一个单独的函数作用域中执行代码,避免变量冲突*  
+- AMD: 使用requireJS来编写模块化,特点:*依赖必须提前声明好*  
+- CMD: 使用seaJS来编写模块化,特点L:*支持动态引入依赖文件*  
+- CommonJS: nodejs中自带的模块化,通过require引入  
+- UMD: 兼容AMD,CommonJS模块化语法  
+- webpack(require.ensure): webpack2.x版本中的代码分割 
+- ES Module: ES6中引入的模块化,通过export导出,import导入  
 
 #### 32.全局作用域中，用 const 和 let 声明的变量不在 window 上，那到底在哪里？如何去获取？。
+ES5中,顶层对象的属性和全局变量是等价的,var和function声明的全局变量,自然也是顶层对象  
+ES6中,let,const,class声明的全局变量,不属于顶层对象的属性,它们会生成块级作用域,可以在作用域中获取到它们  
 
 #### 33.cookie 和 token 都存放在 header 中，为什么不会劫持 token？
+XSS: 跨站脚本攻击,通过各种方式将恶意代码注入到用户的页面中,通过脚本获取cookie或localStorage等信息,发起请求  
+	 过滤<>标签,不信任用户输入,对用户身份信息等cookie层面的信息进行http-only处理  
+CSRF: 跨站请求攻击,攻击者通过技术手段欺骗用户的浏览器访问一个曾经认证过的网站并进行操作,由于已经认证过,网站会认为是真正的用户在操作  
+	  对于cookie不信任,对每次请求都进行身份认证,比如token的处理  
+cookie和token都能被劫持,只是cookie会被浏览器自动带上,而token需要设置header才可以  
 
 #### 34.两个数组合并成一个数组
 请把两个数组 ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'D1', 'D2'] 和 ['A', 'B', 'C', 'D']，合并为 ['A1', 'A2', 'A', 'B1', 'B2', 'B', 'C1', 'C2', 'C', 'D1', 'D2', 'D']。  
+```js
+let a = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'D1', 'D2']
+let b = ['A', 'B', 'C', 'D'].map(item=>{
+	return item + '3'
+})
+let c = [...a,...b].map(item=>{
+	if(item.inclueds('3')){
+		return item.split('')[0]
+	}
+	return item
+})
+```
 
 #### 35.改造下面的代码，使之输出0 - 9，写出你能想到的所有解法。
 ```js
@@ -435,6 +474,25 @@ for (var i = 0; i< 10; i++){
 	setTimeout(() => {
 		console.log(i);
     }, 1000)
+}
+```
+```js
+for (let i = 0; i< 10; i++){
+	setTimeout(() => {
+		console.log(i);
+    }, 1000)
+}
+for (var i = 0; i< 10; i++){
+	(function(i){
+		setTimeout(() => {
+			console.log(i);
+		}, 1000)
+	})(i)
+}
+for (var i = 0; i< 10; i++){
+	setTimeout((i) => {
+		console.log(i);
+    }, 1000,i)
 }
 ```
 
@@ -448,6 +506,7 @@ var b = 10;
     console.log(b); 
 })();
 ```
+***非匿名自执行函数,函数名只读无法修改***
 
 #### 38.简单改造下面的代码，使之分别打印 10 和 20。
 ```js
@@ -457,43 +516,132 @@ var b = 10;
     console.log(b); 
 })();
 ```
+```js
+// 10
+var b = 10;
+(function b(b){
+    console.log(b); 
+    b = 20;
+})(b);
+// 20
+(function (){
+    b = 20;
+    console.log(b); 
+})();
+```
 
 #### 39.浏览器缓存读取规则
 可以分成 Service Worker、Memory Cache、Disk Cache 和 Push Cache，那请求的时候 from memory cache 和 from disk cache 的依据是什么，哪些数据什么时候存放在 Memory Cache 和 Disk Cache中？  
+![缓存](./image/缓存.jpg)
 
 #### 40.使用迭代的方式实现 flatten 函数。
-
+```js
+function flatten(arr){
+    return arr.reduce((newVal,oldVal)=>{
+        return newVal.concat(Array.isArray(oldVal)? flatten(oldVal) : oldVal)
+    },[])
+}
+```
 
 #### 41.下面代码中 a 在什么情况下会打印 1？
 ```js
-var a = ?;
+// var a = ?;
 if(a == 1 && a == 2 && a == 3){
  	console.log(1);
 }
 ```
+<!-- ==会进行隐式类型转换,会调用本类型的toString或者valueOf方法 -->
+```js
+var a = {
+    i:1,
+    toString(){
+        return a.i++
+    }
+}
+```
 
 #### 42.介绍下 BFC 及其应用。
+- Block Formatting Contexts(块级格式化上下文)  
+它是页面中的一块渲染区域,并且有一套渲染规则,它决定了其子元素将如何定位,以及和其它元素的关系和相互作用  
+- 特性  
+1. BFC 内部的子元素，在垂直方向，边距会发生重叠。
+2. BFC在页面中是独立的容器，外面的元素不会影响里面的元素，反之亦然。
+3. BFC区域不与旁边的float box区域重叠。（可以用来清除浮动带来的影响）。
+4. 计算BFC的高度时，浮动的子元素也参与计算。
+- 如何生成BFC
+1. 方法1：overflow: 不为visible，可以让属性是 hidden、auto。【最常用】
+2. 方法2：浮动中：float的属性值不为none。意思是，只要设置了浮动，当前元素就创建了BFC。
+3. 方法3：定位中：只要posiiton的值不是 static或者是relative即可，可以是absolute或fixed，也就生成了一个BFC。
+4. 方法4：display为inline-block, table-cell, table-caption, flex, inline-flex
+5. 根元素
+- BFC应用
+1. 阻止margin重叠
+2. 可以包含浮动元素 —— 清除内部浮动(清除浮动的原理是两个div都位于同一个 BFC 区域之中)
+3. 自适应两栏布局
+4. 可以阻止元素被浮动元素覆盖
 
 #### 43.下面代码输出什么
 ```js
 var a = 10;
 (function () {
-    console.log(a)
+    console.log(a)   //undefined
     a = 5
-    console.log(window.a)
+    console.log(window.a)  //10
     var a = 20;
-    console.log(a)
+    console.log(a)  //20
 })()
 ```
 
 #### 44.实现一个 sleep 函数
 比如 sleep(1000) 意味着等待1000毫秒，可从 Promise、Generator、Async/Await 等角度实现  
+```js
+function sleep(time){
+    return new Promise((resolve,reject)=>{
+        setTimeout(resolve,time)
+    })
+}
+sleep(1000).then(()=>{
+    console.log(123)
+})
+
+const sleep = (time) => {
+    return new Promise((resolve => setTimeout(resolve,time)))
+}
+async function sleepAsync(){
+    await sleep(1000)
+    console.log(123)
+}
+sleepAsync()
+
+function* sleepGenerator(time){
+    yield new Promise(resolve => setTimeout(resolve,time))
+}
+sleepGenerator(1000).next().value.then(()=>{
+    console.log(123)
+})
+
+function sleep(fn,time){
+    if(typeof fn === 'function'){
+        setTimeout(fn,time)
+    }
+}
+function fns(){
+    console.log(123)
+}
+sleep(fns,1000)
+```
 
 #### 45.使用 sort() 对数组 [3, 15, 8, 29, 102, 22] 进行排序，输出结果
+102 15 22 29 3 8
+Array.sort()默认的排序方法会将数组元素转换为字符串,然后比较字符串中字符的UTF-16编码顺序来进行排序  
 
 #### 46.介绍 HTTPS 握手过程
 
 #### 47.HTTPS 握手过程中，客户端如何验证证书的合法性
+- 校验证书的颁发机构是否受客户端信任。  
+- 通过 CRL 或 OCSP 的方式校验证书是否被吊销。  
+- 对比系统时间，校验证书是否在有效期内。  
+- 通过校验对方是否存在证书的私钥，判断证书的网站域名是否与证书颁发的域名一致。  
 
 #### 48.输出以下代码执行的结果并解释为什么
 ```js
@@ -508,13 +656,34 @@ obj.push(1)
 obj.push(2)
 console.log(obj)
 ```
+```js
+// 类数组
+[,,1,3,splice:Array.prototype.splice,push:Array.prototype.push]
+```
+`push`方法根据length属性来决定从哪里开始插入给定的值,如果length不能转成数值,则插入的元素索引为0,包括不存在时,则创建它  
+浏览器控制台中 DevTools会判断是否为类数组
+类数组必须有几个组成部分:  
+1. 属性要为索引(数字)属性  
+2. 必须有length属性  
+3. 最好加上push方法  
+4. `splice` Array.prototype.splice  
 
 #### 49.call 和 apply 的区别是什么，哪个性能更好一些
+传参方式不一样,call和apply第一个参数都是指定this指向,call从第二个参数开始参数是一个个传递,而apply是传入带下标的集合,数组或类数组  
+call比apply的性能好,因为call传入的参数格式正是内部所需要的格式  
 
 #### 50.为什么通常在发送数据埋点请求的时候使用的是 1x1 像素的透明 gif 图片？
 
 #### 51.实现 (5).add(3).minus(2) 功能。
 例： 5 + 3 - 2，结果为 6  
+```js
+Number.prototype.add = (n)=>{
+    return this.valueOf() + n
+}
+Number.prototype.minus = (n)=>{
+    return this.valueOf() - n
+}
+```
 
 #### 52.怎么让一个 div 水平垂直居中
 
@@ -524,9 +693,10 @@ var a = {n: 1};
 var b = a;
 a.x = a = {n: 2};
 
-console.log(a.x) 	
-console.log(b.x)
+console.log(a.x) 	//undefined
+console.log(b.x)    //{n:2}
 ```
+`.`运算符优先级高于`=`运算符
 
 #### 54.冒泡排序如何实现，时间复杂度是多少， 还可以如何改进？
 
