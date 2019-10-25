@@ -2,90 +2,241 @@
 #### 从0到1自己构架一个vue项目，说说有哪些步骤、哪些重要插件、目录结构你会怎么组织
 
 #### 你知道vue的模板语法用的是哪个web模板引擎的吗？说说你对这模板引擎的理解
+`mustache`胡子语法  
+- 可维护性（后期改起来方便）  
+- 可扩展性（想要增加功能，增加需求方便）  
+- 开发效率提高（程序逻辑组织更好，调试方便）  
 
 #### 你知道v-model的原理吗？说说看
+`v-model`是一个语法糖  
+监听input事件和绑定属性值  
 
 #### 你有使用过vue开发多语言项目吗？说说你的做法？
+i18n  
 
 #### 在使用计算属性的时，函数名和data数据源中的数据可以同名吗？
+不能同名,因为不管是计算属性还是data还是props 都会被挂载在vm实例上，因此 这三个都不能同名  
 
 #### vue中data的属性可以和methods中的方法同名吗？为什么？
+data中的属性和methods方法重名会优先执行data中的属性并且报错  
 
 #### 怎么给vue定义全局的方法？
+- 通过`Vue.prototype[method] = xxx`  
+- 通过插件`Vue.use(plugin)`  
+- 通过mixin`Vue.mixin()`  
 
 #### vue2.0不再支持v-html中使用过滤器了怎么办？
+使用`Vue.filter`
 
 #### 怎么解决vue打包后静态资源图片失效的问题？
+找到config/index.js 配置文件，找build打包对象里的assetsPublicPath属性,默认值为/，更改为./就好了  
+最新的vue-cli 需要在根目录下建一个vue.config.js 在里面配置publicPath即可  
 
 #### 怎么解决vue动态设置img的src不生效的问题？
+`require('@/assets/images/xxx.png')`  
 
 #### 使用vue后怎么针对搜索引擎做SEO优化？
+- ssr,即单页面后台渲染  
+- vue-meta-info 与prerender-spa-plugin 预渲染  
+- nuxt  
 
 #### 跟keep-alive有关的生命周期是哪些？描述下这些生命周期
-
-#### 如果现在让你从vue/react/angularjs三个中选择一个，你会选哪个？说说你的理由
+keep-alive的生命周期  
+1. activated： 页面第一次进入的时候，钩子触发的顺序是created->mounted->activated  
+2. deactivated: 页面退出的时候会触发deactivated，当再次前进或者后退的时候只触发activated  
 
 #### 你知道vue2.0兼容IE哪个版本以上吗？
+不兼容ie8及以下  
+是因为vue的响应式原理是基于es5的Object.defineProperty的,而这个方法不支持ie8及以下  
 
 #### 使用vue开发一个todo小应用，谈下你的思路
 
 #### 你有看过vue推荐的风格指南吗？列举出你知道的几条
+- 组件名为多个单词  
+- 组件数据：组件的 data 必须是一个函数  
+- 细致的 Prop 定义  
+- 总是用 :key 配合 v-for  
+- 避免 v-if 和 v-for 用在一起  
+- 为组件样式设置作用域  
+- 私有属性名：自定义私有属性使用 $_ 前缀。并附带一个命名空间以回避和其它作者的冲突 (比如 $_yourPluginName_)  
 
 #### 你是从vue哪个版本开始用的？你知道1.x和2.x有什么区别吗？
 
 #### 你知道vue中key的原理吗？说说你对它的理解
+便于diff算法的更新，key的唯一性，能让算法更快的找到需要更新的dom，需要注意的是，key要唯一，不然会出现很隐蔽性的更新问题  
 
 #### vue中怎么重置data？
+`Object.assign(this.$data, this.$options.data())`  
+使用Object.assign()，vm.$data可以获取当前状态下的data，vm.$options.data可以获取到组件初始化状态下的data  
 
 #### vue渲染模板时怎么保留模板中的HTML注释呢？
+```js
+<template comments>
+...
+<template>
+```
 
 #### Vue.observable你有了解过吗？说说看
+vue2.6发布一个新的API，可以处理一些简单的跨组件共享数据状态的问题  
+```js
+//store.js
+import Vue from 'vue';
+ 
+export let store =Vue.observable({count:0,name:'李四'});
+export let mutations={
+  setCount(count){
+    store.count=count;
+  },
+  changeName(name){
+    store.name=name;
+  }
+}
+//Home.vue
+import {store,mutations} from '@/store'
+export default { 
+    data () { 
+    return { 
+        name1:'主页的name'
+    } 
+    }, 
+    components: { 
+    HomeHeader 
+    }, 
+    computed:{
+    count(){
+        return store.count
+    },
+    name(){
+        return store.name
+    }
+    },
+    methods:{
+        setCount:mutations.setCount,
+        changeName:mutations.changeName  
+    }
+} 
+```
 
 #### 你知道style加scoped属性的用途和原理吗？
+在标签上绑定了自定义属性(data-v-x形式)，防止css全局污染  
+可以使用/deep/或者>>>穿透CSS  
 
 #### 你期待vue3.0有什么功能或者改进的地方？
 
 #### vue边界情况有哪些？
+- 访问根实例  
+- 问父级组件实例  
+- 访问子组件实例或子元素  
+- 依赖注入  
+- 递归组件  
+- 组件之间的循环引用  
+- 强制更新  
+- 通过 v-once 创建低开销的静态组件  
 
 #### 如何在子组件中访问父组件的实例？
+- this.$parent拿到父组件实例  
+- this.$children拿到子组件实例（数组）  
 
 #### watch的属性用箭头函数定义结果会怎么样？
+因为箭头函数默绑定父级作用域的上下文，所以不会绑定vue实例，所以 this 是undefind  
 
 #### 在vue项目中如果methods的方法用箭头函数定义结果会怎么样？
+因为箭头函数默绑定父级作用域的上下文，所以不会绑定vue实例，所以 this 是undefind  
 
 #### 在vue项目中如何配置favicon？
+- 人工在index.html中引入  
+- 在Vue-cli3可以修改vue.config.js的baseurl设定  
 
 #### 你有使用过babel-polyfill模块吗？主要是用来做什么的？
+ES6的转码。IE的兼容  
+babel默认只转换语法,而不转换新的API,如需使用新的API,还需要使用对应的转换插件或者polyfill去模拟这些新特性。  
 
 #### 说说你对vue的错误处理的了解？
+分为errorCaptured与errorHandler  
+- `errorCaptured`是组件内部钩子，可捕捉本组件与子孙组件抛出的错误，接收error、vm、info三个参数，return false后可以阻止错误继续向上抛出  
+- `errorHandler`为全局钩子，使用Vue.config.errorHandler配置，接收参数与errorCaptured一致，2.6后可捕捉v-on与promise链的错误，可用于统一错误处理与错误兜底  
 
 #### 在vue事件中传入$event，使用e.target和e.currentTarget有什么区别？
+event.currentTarget指向事件所绑定的元素，而event.target始终指向事件发生时的元素。  
 
 #### 在.vue文件中style是必须的吗？那script是必须的吗？为什么？
+template是必须的，而script与style都不是必须的  
 
 #### vue怎么实现强制刷新组件？
+- 使用this.$forceUpdate强制重新渲染  
+- 使用v-if指令  
 
 #### vue自定义事件中父组件怎么接收子组件的多个参数？
+子组件传递多个参数，父组件用展开运算符获取  
 
 #### 实际工作中，你总结的vue最佳实践有哪些？
 
 #### vue给组件绑定自定义事件无效怎么解决？
+1. 组件外部加修饰符.navtive  
+2. 组件内部声明$emit('自定义事件')  
 
 #### vue的属性名称与method的方法名称一样时会发生什么问题？
+报错 `"Method 'xxx' has already been defined as a data property"`  
+键名优先级：props > data > methods  
 
 #### vue变量名如果以_、$开头的属性会发生什么问题？怎么访问到它们的值？
+以 _ 或 $ 开头的属性不会被 Vue 实例代理，因为可能和 Vue 内置的属性、API 方法冲突。可以使用例如 `vm.$data._property`  
 
 #### vue使用v-for遍历对象时，是按什么顺序遍历的？如何保证顺序？
+1. 会先判断是否有iterator接口，如果有循环执行next()方法  
+2. 没有iterator的情况下，会调用Object.keys()方法，在不同浏览器中，JS引擎不能保证输出顺序一致  
+3. 保证对象的输出顺序可以把对象放在数组中，作为数组的元素  
 
 #### vue如果想扩展某个现有的组件时，怎么做呢？
+- 使用Vue.extend直接扩展  
+- 使用Vue.mixin全局混入  
+- HOC封装  
+- 加slot扩展  
 
 #### 说下$attrs和$listeners的使用场景
+一般我对一些UI库进行二次封装用，比如element-ui，里面的组件不能满足自己的使用场景的时候，会二次封装，但是又想保留他自己的属性和方法，那么这个时候时候$attrs和$listners是个完美的解决方案。
+简单的例子，对el-button二次封装  
+```html
+<el-button v-on="$listeners" v-bind="$attrs" :loading="loading" @click="myClick">
+
+<script> 
+export default { 
+    name: 'mButton', 
+    inheritAttrs: false, 
+    props: { 
+        debounce: { 
+            type: [Boolean, Number] 
+        } 
+    }, 
+    data() { 
+        return { 
+            timer: 0, 
+            loading: false 
+        } 
+    }, 
+    methods: { 
+        myClick() { 
+            if (!this.debounce) return this.loading = true 
+            clearTimeout(this.timer) 
+            this.timer = setTimeout(() => { 
+                this.loading = false 
+            }, typeof this.debounce === 'boolean' ? 500 : this.debounce )
+        } 
+    } 
+} 
+</script>
+```
 
 #### 分析下vue项目本地开发完成后部署到服务器后报404是什么原因呢？
+- 使用了history模式，而后端又没有进行相关资源配置  
+- 检查nginx配置，是否正确设置了资源映射条件  
+- 检查vue.config.js中是否配置了publicPath，若有则检查是否和项目资源文件在服务器摆放位置一致  
 
 #### v-once的使用场景有哪些？
+单次触发的场景,创建低开销的静态组件  
 
 #### 说说你对vue的表单修饰符.lazy的理解
+v-model 在每次 input 事件触发后将输入框的值与数据进行同步 (除了上述输入法组合文字时)。你可以添加 lazy 修饰符，从而转变为使用 change 事件进行同步  
 
 #### vue为什么要求组件模板只能有一个根元素？
 
