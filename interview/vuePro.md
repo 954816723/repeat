@@ -239,38 +239,132 @@ export default {
 v-model 在每次 input 事件触发后将输入框的值与数据进行同步 (除了上述输入法组合文字时)。你可以添加 lazy 修饰符，从而转变为使用 change 事件进行同步  
 
 #### vue为什么要求组件模板只能有一个根元素？
+为了让组件能够正常的生成一个vue实例,需要指定这个vue实例的根入口  
+通过这个‘根节点’，来递归遍历整个vue‘树’下的所有节点，并处理为vdom，最后再渲染成真正的HTML，插入在正确的位置  
 
 #### EventBus注册在全局上时，路由切换时会重复触发事件，如何解决呢？
+当页面跳转时，原来的vue组件被注销，但是原来vue组件向Bus容器中添加的事件监听器并不会被移除  
+当下次进入这个vue组件对应的页面时,执行到$on时，又会向Bus容器中添加一个重复的事件监听器  
+在vue组件的beforeDetory钩子函数中将本vue组件往Bus容器中添加的时间监听器全部手动移除  
+PS: vue-router组件切换过程  
+新組件： beforeCreate
+新組件： created
+新組件： beforeMount
+旧組件： beforeDestroy
+旧組件： destroy
+新組件： mounted
+
 
 #### 怎么修改vue打包后生成文件路径？
+webpack：output.path  
+vue-cli3: outputDir  
 
 #### 你有使用做过vue与原生app交互吗？说说vue与ap交互的方法
+用`WebViewJavascriptBridge`建立连接，然后相互调用  
+```js
+export const connectWebViewJavascriptBridge = callback => { 
+    if (window.WebViewJavascriptBridge) { 
+        callback(WebViewJavascriptBridge) 
+    } else { 
+        document.addEventListener( 'WebViewJavascriptBridgeReady', function() { 
+            callback(WebViewJavascriptBridge) }, false ) 
+    }}
+```
 
 #### 使用vue写一个tab切换
+```html
+<template>
+    <div>
+        <ul>
+            <li 
+                v-for="(item,index) in tabList"
+                @click="changeTab(index)"
+                class="tab"
+                :class="index===nowIndex ? active : '' ">
+                {{item}}
+            </li>
+        </ul>
+        <div v-show="nowIndex === 0"></div>
+        <div v-show="nowIndex === 1"></div>
+        <div v-show="nowIndex === 2"></div>
+    </div>
+</template>
+<script>
+    export default {
+        data(){
+            return {
+                nowIndex:0,
+                tabList:['tab1','tab2','tab3']
+            }
+        },
+        methods:{
+            changeTab(index){
+                this.nowIndex = index
+            }
+        }
+    }
+</script>
+<style>
+</style>
+```
 
 #### vue中什么是递归组件？举个例子说明下？
+用过组件的name属性，调用自身。例如生成树型菜单  
 
 #### 怎么访问到子组件的实例或者子元素？
+用过组件的name属性，调用自身。例如生成树型菜单  
 
 #### 在子组件中怎么访问到父组件的实例？
+this.$parent  
 
 #### 在组件中怎么访问到根实例？
+this.$root  
 
 #### 说说你对Object.defineProperty的理解
+Object.defineProperty定义新属性或修改原有的属性  
+vue的数据双向绑定的原理就是用的Object.defineProperty这个方法，里面定义了setter和getter方法，通过观察者模式（发布订阅模式）来监听数据的变化，从而做相应的逻辑处理  
 
 #### vue组件里写的原生addEventListeners监听事件，要手动去销毁吗？为什么？
+vue生命周期destroyed会在Vue实例销毁后调用,调用后,Vue实例指示的所有东西都会被解绑定,所有的事件监听器都会被移除,所有的子实例也会被销毁  
+挂载在实例上的事件都会被销毁  
+但有的事件绑定在文档或者其他与实例不相关的节点上是必须要取消监听的,因为该事件与实例无关,因此不会自动销毁  
 
 #### vue组件里的定时器要怎么销毁？
+在生命周期的beforeDestroy或者destroyed进行手动销毁  
+```js
+const timer = setInterval(() =>{
+// 某些定时器操作
+}, 500);
+// 通过$once来监听定时器，在beforeDestroy钩子可以被清除。
+this.$once('hook:beforeDestroy', () => {
+    clearInterval(timer);
+})
+```
 
 #### vue组件会在什么时候下被销毁？
+没有使用keep-alive时的路由切换  
 
 #### 使用vue渲染大量数据时应该怎么优化？说下你的思路！
+- `Object.freeze`  `this.item = Object.freeze(Object.assign({}, this.item))`  
+    取消数据的响应式变化,减少`observer`的开销,减少不少内存开销  
+- `clusterize.js`
+    `https://github.com/NeXTs/Clusterize.js`
+    大概就是保持 一个ul里面只有40个li。通过CSS transition 进行定位  
+    当向下滚动的时候 不断把滚动到屏幕上方，已经看不到的节点 修改内容 & 样式 移到最下方，作为新节点展示出来  
+    向上滚动的时候就不断把滚动到屏幕下方，已经看不到的节点 修改内容 & 样式 移到最上方，作为新节点展示出来  
 
 #### 在vue中使用this应该注意哪些问题？
+vue中使用匿名函数，会出现this指针改变  
+解决方法  
+1. 使用箭头函数  
+2. 定义变量绑定this至vue对象  
 
 #### 你有使用过JSX吗？说说你对JSX的理解
+jsx不是一门新的语言，是一种新的语法糖。让我们在js中可以编写像html一样的代码  
+允许XML语法直接加入到JavaScript代码中，让你能够高效的通过代码而不是模板来定义界面  
 
 #### 说说组件的命名规范
+单文件组件的文件名应该要么始终是单词大写开头 (PascalCase)，要么始终是横线连接 (kebab-case)  
 
 #### 怎么配置使vue2.0+支持TypeScript写法？
 
