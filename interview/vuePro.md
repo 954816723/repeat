@@ -365,14 +365,30 @@ jsx不是一门新的语言，是一种新的语法糖。让我们在js中可以
 
 #### 说说组件的命名规范
 单文件组件的文件名应该要么始终是单词大写开头 (PascalCase)，要么始终是横线连接 (kebab-case)  
+和父组件紧密耦合的子组件应该以父组件名作为前缀命名  
+对于绝大多数项目来说，在单文件组件和字符串模板中组件名应该总是 PascalCase 的——但是在 DOM 模板中总是 kebab-case 的  
+组件名应该倾向于完整单词而不是缩写  
 
 #### 怎么配置使vue2.0+支持TypeScript写法？
+配置ts-loader，tsconfig  
+增加类型扩展，让ts识别vue文件  
+vue文件中script里面换成ts写法， 需要增加几个ts扩展的package， 比如vue-property-decorator  
 
 #### <template></template>有什么用？
+template标签，HTML5提供的新标签，更加规范和语义化  
+template标签内容天生不可见，设置了display：none  
+标签里的任何HTML内容都是无效的，不会起任何作用  
+标签可以写在页面的任何地方，甚至是head、body、sciprt标签内  
+主要用于分组的条件判断和列表渲染  
 
 #### vue的is这个特性你有用过吗？主要用在哪些方面？
+用于动态组件且基于 DOM 内模板的限制来工作  
+`<component v-bind:is="currentView"></component>`  
+有些 HTML 元素，诸如 `<ul>、<ol>、<table> 和 <select>`，对于哪些元素可以出现在其内部是有严格限制的。而有些元素，诸如 `<li>、<tr> 和 <option>`，只能出现在其它某些特定的元素内部  
 
 #### vue的:class和:style有几种表示方式？
+:class 绑定变量 绑定对象 绑定一个数组 绑定三元表达式  
+:style 绑定变量 绑定对象 绑定函数返回值 绑定三元表达式  
 
 #### 你了解什么是函数式组件吗？
 
