@@ -391,32 +391,97 @@ template标签内容天生不可见，设置了display：none
 :style 绑定变量 绑定对象 绑定函数返回值 绑定三元表达式  
 
 #### 你了解什么是函数式组件吗？
+函数式组件：  
+> 需要提供一个render方法， 接受一个参数（createElement函数）， 方法内根据业务逻辑，通过createElement创建vnodes，最后return vnodes  
+
+createElement函数， 三个参数， 第一个参数是html标签或自定义组件，第二个参数一个obj（包含props， on...等等）， 第三个参数children(通过createElement构建， 或者字符串)  
 
 #### vue怎么改变插入模板的分隔符？
+`delimiters`  
+```js
+new Vue({
+  delimiters: ['${', '}']
+})
+```
 
 #### 组件中写name选项有什么作用？
+项目使用keep-alive时，可搭配组件name进行缓存过滤  
+DOM做递归组件时需要调用自身name  
+vue-devtools调试工具里显示的组见名称是由vue中组件name决定的  
 
 #### 说说你对provide和inject的理解
+这对选项需要一起使用，以允许一个祖先组件向其所有子孙后代注入一个依赖,所有子组件中都可以通过inject获取使用该参数,不论组件层次有多深，并在起上下游关系成立的时间里始终生效  
 
 #### 开发过程中有使用过devtools吗？
+看组件，参数，传值等，尤其是用的vuex的时候  
 
 #### 说说你对slot的理解有多少？slot使用场景有哪些？
+slot, 插槽, 在使用组件的时候, 在组建内部插入东西  
+组件封装的时候最常使用到  
+```html
+<!-- myslot.vue -->
+<div>
+    <slot name="header"></slot>
+</div>
+<!-- index.vue -->
+<myslot>
+    <template>
+        <h1 v-slot="header"></h1>
+    </template>
+</mysolt>
+```
 
 #### 你有使用过动态组件吗？说说你对它的理解
+渲染一个“元组件”为动态组件。依 is 的值，来决定哪个组件被渲染  
+`<component :is="componentId"></component>`
 
 #### prop验证的type类型有哪几种？
+Number, String, Boolean, Array, Function, Object, Promise(// or any other constructor)  
 
 #### prop是怎么做验证的？可以设置默认值吗？
+`validator`   
+```js
+props:{
+    validator:function(value){
+        return ['success','failed'].indexOf(value) !== -1
+    }
+}
+```
+prop会在组将创建前验证,所以实例的属性(如`data`,`computed`)等在`default`,`validator`中不可用  
+可以通过`default`设置默认值  
 
 #### 怎么缓存当前打开的路由组件，缓存后想更新当前组件怎么办呢？
+将需要被缓存在路由组件包裹`<keep-alive></keep-alive>`  
+可以在路由meta中加入参数, 对打开的路由进行keep-alive的判断, 通过钩子active等  
 
 #### 说说你对vue组件的设计原则的理解
+第一: 容错处理, 这个要做好, 极端场景要考虑到, 不能我传错了一个参数你就原地爆炸  
+第二: 缺省值(默认值)要有, 一般把应用较多的设为缺省值  
+第三: 颗粒化, 把组件拆分出来  
+第四: 一切皆可配置, 如有必要, 组件里面使用中文标点符号, 还是英文的标点符号, 都要考虑到  
+第五: 场景化, 如一个dialog弹出, 还需要根据不同的状态封装成success, waring, 等  
+第六: 有详细的文档/注释和变更历史, 能查到来龙去脉, 新版本加了什么功能是因为什么  
+第七: 组件名称, 参数prop, emit, 名称设计要通俗易懂, 最好能做到代码即注释这种程度  
+第八: 可拓展性, 前期可能不需要这个功能, 但是后期可能会用上, 要预留什么, 要注意什么, 心里要有逼数  
+第九: 规范化,我这个input组件, 叫on-change, 我另外一个select组件叫change, 信不信老子捶死你  
+第十: 分阶段: 不是什么都要一期开发完成看具体业务, 如果一个select, 我只是个简单的select功能, 什么multi老子这个版本压根不需要, 别TM瞎折腾! 给自己加戏  
 
 #### 你了解vue的diff算法吗？
+`https://www.cnblogs.com/wind-lanyan/p/9061684.html`
 
 #### vue如何优化首页的加载速度？
+异步路由和异步加载  
+还有分屏加载, 按需加载, 延时加载图片等, cdn, 域名拆分  
 
 #### vue打包成最终的文件有哪些？
+vendor.js, app.js, app.css,  
+1.xxx.js  
+2.xxx.js  
+
+如果有设置到单独提取css的话  
+还有  
+1.xxx.css  
+......  
 
 #### ajax、fetch、axios这三都有什么区别？
 
