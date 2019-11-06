@@ -484,238 +484,602 @@ vendor.js, app.js, app.css,
 ......  
 
 #### ajax、fetch、axios这三都有什么区别？
+1. ajax是最早出现发送后端请求的技术，属于原生js范畴,核心是使用XMLHttpRequest对象,使用较多并有先后顺序的话，容易产生回调地狱  
+2. fetch是基于es6中的Promise对象设计的，参数和jQuery中的ajax类似，它并不是对ajax进一步封装，它属于原生js范畴。没有使用XMLHttpRequest对象  
+3. axios不是原生js,使用时需要对其进行安装，客户端和服务器端都可以使用，可以在请求和相应阶段进行拦截，基于promise对象  
 
 #### vue能监听到数组变化的方法有哪些？为什么这些方法能监听到呢？
+`push()`  
+`pop()`  
+`shift()`  
+`unshift()`  
+`splice()`  
+`sort()`  
+`reverse()`  
+Vue框架内将上面的方法进行了重写,新的方法里增加了监听  
 
 #### vue中是如何使用event对象的？
+`@click=“func”` 默认第一个参数传入`event`对象  
+`@click="func(0, $event)"` 如果自己需要传入参数和`event`对象，则需要使用$event来获取`event`对象并传入`func`  
 
 #### vue首页白屏是什么问题引起的？如何解决呢？
+找到config/index.js 配置文件，找build打包对象里的assetsPublicPath属性,默认值为/，更改为./就好了  
+最新的vue-cli 需要在根目录下建一个vue.config.js 在里面配置publicPath即可  
+
+项目中使用了es6的语法，一些浏览器不支持es6，造成编译错误不能解析而造成白屏  
 
 #### 说说你对单向数据流和双向数据流的理解
+单向数据流：所有状态的改变可记录、可跟踪，源头易追溯；所有数据只有一份，组件数据只有唯一的入口和出口，使得程序更直观更容易理解，有利于应用的可维护性  
+双向数据流：无论数据改变，或是用户操作，都能带来互相的变动，自动更新,十分方便,但会导致数据问题的源头难以被跟踪到  
 
 #### 移动端ui你用的是哪个ui库？有遇到过什么问题吗？
+vant  mint  
 
 #### 你知道nextTick的原理吗？
+`https://juejin.im/post/5ae3f0956fb9a07ac90cf43e`  
 
 #### 说说你对v-clock和v-pre指令的理解
+这个指令保持在元素上在标签中加入一个`v-cloak`自定义属性直到关联实例结束编译。和 CSS 规则如 `[v-cloak] { display: none }` 一起用时，这个指令可以隐藏未编译的 Mustache 标签直到实例准备完毕  
+```css
+[v-cloak] {
+  display: none;
+}
+```
+
+`v-pre`可以用来阻止预编译，有`v-pre`指令的标签内部的内容不会被编译，会原样输出  
+如果已知页面内部有大段内容无需编译，使用v-pre指令阻止编译可以提高性能，同时可以防止页面内有可能导致Vue编译出错的代码存在  
 
 #### 写出你知道的表单修饰符和事件修饰符
+事件修饰符.stop .prevent .capture .self .once .passive  
+表单修饰符.number .lazy .trim  
 
 #### 说说你对proxy的理解
+vue的数据劫持有两个缺点:  
+1. 无法监听通过索引修改数组的值的变化  
+2. 无法监听object也就是对象的值的变化  
+所以vue2.x中才会有$set属性的存在  
+
+proxy是es6中推出的新api，可以弥补以上两个缺点，所以vue3.x版本用proxy替换object.defineproperty  
 
 #### 你有自己用vue写过UI组件库吗？
 
 #### 用vue怎么实现一个换肤的功能？
 
 #### 有在vue中使用过echarts吗？踩过哪些坑？如何解决的？
-
-#### 如果让你教一个2-3年经验前端经验的同事使用vue，你该怎么教？
+注意dom的渲染时机 和chart的实例化时机 在相应的生命周期方法中做操作。结合强制刷新 应该就能解决大部分问题  
 
 #### vue性能的优化的方法有哪些？
+1. 项目中小图片图片转base64，通过工具如webpack进行图片压缩，文件进行压缩混淆等  
+2. vue-router 懒加载，异步路由  
+3. 第三方依赖按需加载，比如使用element-ui框架，但是里面的组件只用到了其中一部分，可以单独建一个引入element组件的文件，在里面引入我们项目中需要的组件，然后vue.use它  
+4. 通过webpack进行处理，有一个externals属性，可以在里面设置不需要打包的文件，比如可以设置将vue、vue-router、element-ui等等设置进去，打包的时候就不会打包他们，然后将vue、vue-router、element-ui等资源在html中引入  
+5. 可以借助开启gzip压缩文件，减小文件大小  
+6. 生产环境build时不生成map文件  
+7. 图片懒加载  
+8. v-if与v-show根据具体业务场景适当选取  
+9. 善用kee-alive  
+10. 通用方法封装为模块，减少代码冗余  
+11. 细分vuejs组件  
+12. 可以通过一些加载loading动画，以及资源加载完成前，可以通过占位符占位的方式，避免渲染时出现空白页，视觉上提升加载速度  
 
 #### SSR解决了什么问题？有做过SSR吗？你是怎么做的？
+SEO 优化首屏加载速度  
 
 #### 说说你觉得认为的vue开发规范有哪些？
+合理的命名规范  
+语义化的变量命名  
+详细的注释  
+统一的编码规范  
 
 #### vue部署上线前需要做哪些准备工作？
+router 是不是hash 是否需要配置nginx , publicPath , 是不是要配置cdn  
 
 #### vue过渡动画实现的方式有哪些？
+1. 使用vue的transition标签结合css样式完成动画  
+2. 利用animate.css结合transition实现动画  
+3. 利用 vue中的钩子函数实现动画  
 
 #### vue在created和mounted这两个生命周期中请求数据有什么区别呢？
+在created的时候，视图中的html并没有渲染出来，所以此时如果直接去操作html的dom节点，一定找不到相关的元素  
+而在mounted中，由于此时html已经渲染出来了，所以可以直接操作dom节点  
 
 #### vue父子组件双向绑定的方法有哪些？
+1. 利用对象的引用关系来实现  
+2. 父子组件之间的数据传递  
+3. 使用.sync修饰符  
+4. v-model  
+`https://blog.csdn.net/w390058785/article/details/81076569`
 
 #### vue怎么获取DOM节点？
+`this.$ref.xxx`  
 
 #### vue项目有做过单元测试吗？
 
 #### vue项目有使用过npm run build --report吗？
+会根据构建统计生成报告，它会帮助分析包中包含的模块们的大小  
+给 process.env 对象添加了一个属性 npm_config_report: "true",调用webpack-bundle-analyzer插件  
 
 #### 如何解决vue打包vendor过大的问题？
+1. 新增externals配置，表示不需要打包的文件，然后在index.html中通过CDN引入  
+```js
+externals: {
+    "vue": "Vue",
+    "vue-router": "VueRouter",
+    "vuex": "Vuex",
+    "element-ui": "ELEMENT",
+    "BMap": "BMap"
+}
+```
+2. 使用路由懒加载  
 
 #### webpack打包vue速度太慢怎么办？
 
 #### vue在开发过程中要同时跟N个不同的后端人员联调接口（请求的url不一样）时你该怎么办？
+devServer中把所有的服务人员的地址代理都写进去  
+然后动态更改接口的baseUrl，这样切换不同后端人员的时候不用重启   
 
 #### vue要做权限管理该怎么做？如果控制到按钮级别的权限怎么做？
+通过指令  
 
 #### 说下你的vue项目的目录结构，如果是大型项目你该怎么划分结构和划分组件呢？
 
 #### 在移动端使用vue，你觉得最佳实践有哪些？
+vant mint  
 
 #### 你们项目为什么会选vue而不选择其它的框架呢？
+快  
 
 #### 对于即将到来的vue3.0特性你有什么了解的吗？
+使用Proxy代替Object.defineProperty  
 
 #### vue开发过程中你有使用什么辅助工具吗？
+vue-devtools  
 
 #### vue和微信小程序写法上有什么区别？
+生命周期  数据绑定  显示隐藏元素  事件绑定  取值  
 
 #### 怎么缓存当前的组件？缓存后怎么更新？
+keep-alive  
+通过actived钩子  
 
 #### 你了解什么是高阶组件吗？可否举个例子说明下？
+所谓高阶组件其实就是一个高阶函数, 即返回一个组件函数的函数  
+1. 高阶组件(HOC)应该是无副作用的纯函数，且不应该修改原组件,即原组件不能有变动  
+2. 高阶组件(HOC)不关心你传递的数据(props)是什么，并且新生成组件不关心数据来源  
+3. 高阶组件(HOC)接收到的 props 应该透传给被包装组件即直接将原组件prop传给包装组件  
+4. 高阶组件完全可以添加、删除、修改 props  
+`https://blog.csdn.net/z609373067/article/details/81258966`
 
 #### 为什么我们写组件的时候可以写在.vue里呢？可以是别的文件名后缀吗？
+可以,配置相应的loader  
 
 #### vue-loader是什么？它有什么作用？
+解析和转换 .vue 文件，提取出其中的逻辑代码 script、样式代码 style、以及 HTML 模版 template，再分别把它们交给对应的 Loader 去处理  
 
 #### 说说你对vue的extend（构造器）的理解，它主要是用来做什么的？
+构建一个组件和vue.components注册组件一起使用  
 
-#### 如果将axios异步请求同步化处理？
+#### 如何将axios异步请求同步化处理？
+async await  
 
 #### 怎么捕获组件vue的错误信息？
+errorCaptured  
 
 #### 为什么vue使用异步更新组件？
+批量更新 收集当前的改动一次性更新 节省diff开销吧  
 
 #### 如何实现一个虚拟DOM？说说你的思路
+虚拟Dom在vue底层实现中是一个类，每次_render的时候都会实例化Vnode为一个虚拟dom对象。也就是说本质上是用一个js对象来描述dom节点  
 
 #### 写出多种定义组件模板的方法
+1. 字符串  
+2. 模板字面量  
+3. x-template  
+4. 内联模板  
+5. render 函数  
+6. JSF  
+7. 单文件组件  
+`https://blog.csdn.net/alphapersonality/article/details/80248005`  
 
 #### SPA单页面的实现方式有哪些？
+1. 监听地址栏中hash变化驱动界面变化  
+2. 用pushsate记录浏览器的历史，驱动界面发送变化  
+3. 直接在界面用普通事件驱动界面变化  
+它们都是遵循同一种原则：div 的显示与隐藏  
 
 #### 说说你对SPA单页面的理解，它的优缺点分别是什么？
+是一种只需要将单个页面加载到服务器之中的web应用程序。当浏览器向服务器发出第一个请求时，服务器会返回一个index.html文件，它所需的js，css等会在显示时统一加载，部分页面需要时加载  
+优点：  
+1. 良好的交互式体验。意思是：用户无需刷新页面，获取数据通过异步ajax获取，页面显示流畅  
+2. 良好的前后端分离模式（MVVM），减轻服务端压力。服务器只需要输出数据就可以，不用管逻辑和页面展示，吞吐能力会提高几倍  
+3. 共用同一套后端程序代码，不用修改就可用于web界面，手机和平板等客户端设备  
+缺点：  
+1. 不利于SEO优化  
+2. 由于单页应用在一个页面中显示，所以不可以使用浏览器自带的前进后退功能，想要实现页面切换需要自己进行管理  
+3. 首屏加载过慢（初次加载耗时多）  
 
 #### 说说你都用vue做过哪些类型的项目？
 
 #### 在vue项目中如何引入第三方库（比如jQuery）？有哪些方法可以做到？
+1. 绝对路径直接引入，全局可用  
+主入口页面 index.html 中用 script 标签引入：  
+`<script src="./static/jquery-1.12.4.js"></script>`  
+由于开启了 ESLint 检测，所以会报一个 warning[警告] ：`'$' is not defined` 。需要加 `/* eslint-disable */`  
+2. 绝对路径直接引入，配置后，import 引入后再使用  
+还是先在主入口页面 index.html 中用 script 标签引入：  
+`<script src="./static/jquery-1.12.4.js"></script>`  
+然后，在 webpack 中配置一个 externals   
+```js
+externals: { 'jquery': 'jQuery' }
+// 这样，就可以在每一个组件中用 import 来引用这个 jquery 了
+import $ from 'jquery'
+export default {
+    created() {
+    console.log($)
+    }
+}
+```
+3. webpack中配置 alias，import 引入后再使用  
+只需要在 webpack 的配置文件中，在 resolve 中为 jQuery 添加一个 alias[别名]  
+```js
+resolve: { 
+    extensions: ['.js', '.vue', '.json'], 
+    alias: { 
+        '@': resolve('src'), 
+        'jquery': resolve('static/jquery-1.12.4.js') 
+    } 
+}
+```
+在任意组件中，通过 import 的方式来使用 jquery 了  
+4. webpack 中配置 plugins，无需 import 全局可用  
+在第三种的基础上，如果我们增加一个 plugins 的配置，那么，我们在使用的时候，无需 import $ from 'jquery' 也可以  
+```js
+resolve: { 
+    extensions: ['.js', '.vue', '.json'], 
+    alias: { 
+        '@': resolve('src'), 
+        'jquery': resolve('static/jquery-1.12.4.js') 
+    } 
+}, 
+plugins: [ new webpack.ProvidePlugin({ $: 'jquery' }) ]
+```
+在项目中，就可以直接使用 $ 了  
 
 #### 使用vue手写一个过滤器
+```js
+// {{600 | money}} //￥600.00
+filters:{
+  money:val=>{
+      return `￥${val}.00`
+}
+}
+```
 
 #### 你有使用过render函数吗？有什么好处？
 
 #### 写出你常用的指令有哪些？
+v-model v-if v-else v-show v-for v-bind  
 
 #### 手写一个自定义指令及写出如何调用
+```js
+vue.directive('custom-module', {
+    insetred: function(el,binding,vnode){
+
+    }
+});
+```
 
 #### 组件进来请求接口时你是放在哪个生命周期？为什么？
+一般在created 因为在这个生命周期我们常用到的都已经初始化好了  
+如果涉及dom 那就mounted  
 
 #### 你有用过事件总线(EventBus)吗？说说你的理解
+组件传值的一种方式（例如兄弟组件）  
 
 #### 说说vue的优缺点分别是什么？
 
 #### DOM渲染在哪个周期中就已经完成了？
+mounted生命周期  
 
 #### 第一次加载页面时会触发哪几个钩子？
+beforeCreate, created, beforeMount, mounted  
 
 #### vue生命周期总共有几个阶段？
+8  
 
 #### vue生命周期的作用是什么？
-
-#### vue和angular有什么区别呢？
+准确地控制数据流和其对DOM的影响  
 
 #### 如何引入scss？引入后如何使用？
+安装scss依赖包：  
+`npm install sass-loader --save-dev npm install node-sass --save-dev`  
+在build文件夹下修改 webpack.base.conf.js 文件：  
+在 module 下的 rules 里添加配置，如下：  
+`{ test: /\.scss$/, loaders: ['style', 'css', 'sass'] }`  
+应用：  
+在vue文件中应用scss时，需要在style样式标签上添加lang="scss"，即<style lang="scss">  
 
 #### 使用vue开发过程你是怎么做接口管理的？
+在request.js中对 axios 请求 和 响应进行劫持，统一处理，然后在 api 文件夹中引入 request.js 后再使用 封装后的方法进行请求  
 
 #### 为何官方推荐使用axios而不用vue-resource？
+vue-resources不再更新了  
+axios就是一个基于ES6的Promise的网络请求库,更加方便强大  
 
 #### 你了解axios的原理吗？有看过它的源码吗？
 
 #### 你有封装过axios吗？主要是封装哪方面的？
+封装处理配置（路径、时间、token）、统一管理接口、错误处理、不同形式的请求、消息提示、loading等  
 
 #### 如何中断axios的请求？
+可以使用cancel token取消一个请求  
+`https://segmentfault.com/a/1190000008470355`  
+```js
+var CancelToken = axios.CancelToken;
+var source = CancelToken.source();
+
+axios.get('/user/12345', {
+    cancelToken:source.toke
+}).catch(function(thrown){
+    if(axiso.isCancel(thrown)){
+        console.log('Rquest canceled', thrown.message);
+    }else{
+        //handle error
+    }
+});
+
+//取消请求(信息参数设可设置的)
+source.cancel("操作被用户取消");
+```
 
 #### axios是什么？怎样使用它？怎么解决跨域的问题？
+axios 的是一种异步请求，用法和ajax类似，安装npm install axios --save 即可使用  
+请求中包括get,post,put, patch ,delete等五种请求方式  
+解决跨域可以在请求头中添加Access-Control-Allow-Origin，也可以在index.js文件中更改proxyTable配置等解决跨域问题   
 
 #### 说说你对vue的template编译的理解？
+首先，通过compile编译器把template编译成AST语法树（abstract syntax tree 即 源代码的抽象语法结构的树状表现形式），compile是createCompiler的返回值，createCompiler是用以创建编译器的。另外compile还负责合并option  
+然后，AST会经过generate（将AST语法树转化成render funtion字符串的过程）得到render函数，render的返回值是VNode，VNode是Vue的虚拟DOM节点，里面有（标签名、子节点、文本等等）  
 
 #### v-on可以绑定多个方法吗？
+可以  
 
 #### vue常用的修饰符有哪些？列举并说明
+事件修饰符.stop .prevent .capture .self .once .passive  
+表单修饰符.number .lazy .trim  
 
 #### 你认为vue的核心是什么？
+1. 数据->虚拟dom->dom  
+2. 响应式数据  
+这两部分大大节省了开发者对数据变动转换到页面显示的操作，可以让开发者聚焦业务，聚焦数据的处理  
 
 #### v-model是什么？有什么用呢？
 
 #### 说说你对vue的mixin的理解，有什么应用场景？
+多个实例引用了相同或相似的方法或属性等，可将这些重复的内容抽取出来作为mixins的js，export出去，在需要引用的vue文件通过mixins属性注入，与当前实例的其他内容进行merge  
 
 #### SPA首屏加载速度慢的怎么解决？
+1. 通过Gzip压缩  
+2. 使用路由懒加载  
+3. 利用webpack中的externals这个属性把打包后不需要打包的库文件都分离出去，减小项目打包后的大小  
+4. 使用SSR渲染  
 
 #### 删除数组用delete和Vue.delete有什么区别？
+delete：只是被删除数组成员变为 empty / undefined，其他元素键值不变  
+Vue.delete：直接删了数组成员，并改变了数组的键值,触发vue的响应式更新  
 
 #### 动态给vue的data添加一个新的属性时会发生什么？怎样解决？
+直接添加属性会因为新的属性没有监听导致页面不能响应该数据的变化。通过vue.$set方法来动态添加响应式属性  
 
 #### 组件和插件有什么区别？
 
 #### 说说你使用vue过程中遇到的问题（坑）有哪些，你是怎么解决的？
 
 #### 说说你对选项el,template,render的理解
+el: 把当前实例挂载在元素上  
+template: 实例模版, 可以是.vue中的template, 也可以是template选项, 最终会编译成render函数  
+render: 不需要通过编译的可执行函数  
+
+template和render, 开发时各有优缺点, 不过在线上尽量不要有template  
 
 #### vue实例挂载的过程是什么？
+render, 没有则去编译  
+编译vdom  
+对实例进行watch  
 
 #### vue在组件中引入插件的方法有哪些？
 
 #### v-if和v-for的优先级是什么？如果这两个同时出现时，那应该怎么优化才能得到更好的性能？
+v-for 的优先级更高  
+避免出现这种情况，如果实在需要，则在外嵌套template，在这一层进行v-if判断，然后在内部进行v-for循环  
 
 #### 分别说说vue能监听到数组或对象变化的场景，还有哪些场景是监听不到的？无法监听时有什么解决方案？
 
 #### $nextTick有什么作用？
+在下次 DOM 更新循环结束之后执行延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM  
 
 #### 为什么data属性必须声明为返回一个初始数据对应的函数呢？
+对象为引用类型，当重用组件时，由于数据对象都指向同一个data对象，当在一个组件中修改data时，其他重用的组件中的data会同时被修改；而使用返回对象的函数，由于每次返回的都是一个新对象（Object的实例），引用地址不同，则不会出现这个问题  
 
 #### 怎么在watch监听开始之后立即被调用？
+参数immediate  
 
 #### watch怎么深度监听对象变化？
+deep:true  
 
 #### watch和计算属性有什么区别？
+计算属性是依赖的值改变会重新执行函数，计算属性是取返回值作为最新结果，所以里面不能异步的返回结果。不能写异步逻辑  
+
+侦听属性是侦听的值改变会重新执行函数，将一个值重新赋值作为最新结果，所以赋值的时候可以进行一些异步操作  
 
 #### vue如何监听键盘事件？
+@keyup.按键别名  
 
 #### v-for循环中key有什么作用？
+性能优化,diff时更快更准确找到变化的位置  
 
 #### 怎么在vue中使用插件？
+npm 安装 然后再main.js 引入 最后 vue.use(插件名)  
 
 #### 你有写过自定义组件吗？
 
 #### 说说你对keep-alive的理解是什么？
+保留组件状态 避免重新渲染  
 
 #### 怎么使css样式只在当前组件中生效？
+scoped  
 
 #### 你有看过vue的源码吗？如果有那就说说看
 
 #### 你有写过自定义指令吗？自定义指令的生命周期（钩子函数）有哪些？
 
 #### v-show和v-if有什么区别？使用场景分别是什么？
+v-if 是DOM 销毁和重建,如果在初始渲染时条件为假，则什么也不做——直到条件第一次变为真时，才会开始渲染条件块  
+v-show 是css的display显示和隐藏,不管初始条件是什么，元素总是会被渲染  
+v-if 有更高的切换开销，而 v-show 有更高的初始渲染开销。因此，如果需要非常频繁地切换，则使用 v-show 较好；如果在运行时条件很少改变，则使用 v-if 较好  
 
 #### 说说你对MVC、MVP、MVVM模式的理解
 
 #### 说下你对指令的理解？
 
 #### 请描述下vue的生命周期是什么？
+生命周期就是vue从开始创建到销毁的过程，分为四大步（创建，挂载，更新，销毁）  
+每一步又分为两小步，如beforeCreate，created。beforeCreate前，也就是new Vue的时候会初始化事件和生命周期  
+beforeCreate和created之间会挂载Data，绑定事件；接下来会根据el挂载页面元素，如果没有设置el则生命周期结束，直到手动挂载；el挂载结束后，根据templete/outerHTML(el)渲染页面  
+在beforeMount前虚拟DOM已经创建完成  
+之后在mounted前，将vm.$el替换掉页面元素el;mounted将虚拟dom挂载到真实页面（此时页面已经全部渲染完成）  
+之后发生数据变化时触发beforeUpdate和updated进行一些操作  
+最后主动调用销毁函数或者组件自动销毁时beforeDestroy，手动撤销监听事件，计时器等  
+destroyed时仅存在Dom节点，其他所有东西已自动销毁。这就是我所理解的vue的一个完整的生命周期  
 
 #### vue组件之间的通信都有哪些？
+1. props  
+2. $emit/$on  
+3. ( $parents/$children ) / $refs  
+4. Vuex  
+5. Bus  
+6. ( provide/inject )  
+7. ( $attrs/$listeners )  
 
 #### 什么是虚拟DOM？
 
 #### 什么是双向绑定？原理是什么？
+通过Observer 把数据劫持(Object.defineProperty())  
+加入到订阅器(Dep) 订阅器收集订阅者(Watcher )、视图通过编译(Compile)、解析指令(Directive)等一些列操作收集给订阅者  
+最后通过触发数据变化update 通知所有订阅者完成数据驱动  
 
 #### vue和react有什么不同？使用场景是什么？
 
 #### 说说vue的优缺点
+优点：  
+1. 数据驱动
+2. 模块化
+3. 轻量级
+4. SPA
+5. 版本3.0的界面化管理工具比较好使
+6.vue易入门
+缺点：  
+1. 不支持低版本浏览器  
 
 #### 有使用过vue吗？说说你对vue的理解
+优点：  
+1. 数据驱动
+2. 模块化
+3. 轻量级
+4. SPA
+5. 版本3.0的界面化管理工具比较好使
+6.vue易入门
+缺点：  
+1. 不支持低版本浏览器  
 
 #### 聊聊 Vue 的双向数据绑定，Model 如何改变 View，View 又是如何改变 Model 的
 
 #### 为什么 Vuex 的 mutation 和 Redux 的 reducer 中不能做异步操作？
+为了能用 devtools 追踪状态变化  
 
 #### 在 Vue 中，子组件为何不可以修改父组件传递的 Prop
 如果修改了，Vue 是如何监控到属性的修改并给出警告的。  
 
+数据流向的单一保证了数据变化的可追踪性  
+
 #### 双向绑定和 vuex 是否冲突
+当在严格模式中使用 Vuex 时，在属于 Vuex 的 state 上使用 v-model,会抛出一个错误  
+用“Vuex 的思维”去解决这个问题的方法是：给 <input> 中绑定 value，然后侦听 input 或者 change 事件，在事件回调中调用 action  
 
 #### Vue 的父组件和子组件生命周期钩子执行顺序是什么
+父beforeCreate->父created->父beforeMount->子beforeCreate->子created->子beforeMount->子mounted->父mounted  
 
 #### vue 在 v-for 时给每项元素绑定事件需要用事件代理吗？为什么？
 
 #### vue 渲染大量数据时应该怎么优化？
+虚拟列表，Object.freeze冻结对象,分页,loading  
 
 #### vue 如何优化首页的加载速度？vue 首页白屏是什么问题引起的？如何解决呢？
+为什么  
+这类问题不仅是vue。因为是spa，而且所有的渲染都在脚本上，js执行需要时间。另外加载js也要时间，所以页面越大，加载时间越长，而且js执行的时间也长，dcl发生的时间点就更晚，所以会白屏  
+
+怎么办  
+代码拆分。code split、动态import  
+多页面+单页面组合，不是整个网站都是同一个页面切换前端路由，酌情拆分一些其他页面作为新页面  
+直出ssr。使用ssr减少前端跑js的时间，逻辑放服务端处理把完整的页面返回  
+部分直出。使用ssr服务端压力会变大，所以可以把页面重要的部分先直出，非重要部分放前端  
+接入quicklink，实际上就是检查页面链接然后在浏览器空闲时间进行prefetch  
+接入service worker缓存，和ssr一起搭配使用更佳  
+体验上。增加lodaing、骨架屏  
+有了各种缓存，热启动是没什么问题了。最后要优化冷启动时间，使用prefetch  
+前端渲染上。使用raf渲染，不阻塞主线程。react里面已使用异步渲染  
+服务端rpc上。使用pb协议而不是文本协议  
+传输层使用quic协议传输。貌似没多少个团队用上～  
+常规操作。cdn、减少请求、雪碧图、gzip、浏览器缓存什么的就不多说了  
 
 #### vue 是如何对数组方法进行变异的？例如 push、pop、splice 等方法
+对于这些变异方法vue做了包裹，在原型上进行了拦截，调用原生的数组方法后，还会执行发布和变更的操作来触发视图的更新  
+```js
+const arrayProto = Array.prototype
+export const arrayMethods = Object.create(arrayProto)
+const methodsToPatch = [
+  'push',
+  'pop',
+  'shift',
+  'unshift',
+  'splice',
+  'sort',
+  'reverse'
+]
+
+/**
+ * Intercept mutating methods and emit events
+ */
+methodsToPatch.forEach(function (method) {  
+  // cache original method
+  const original = arrayProto[method]
+  def(arrayMethods, method, function mutator (...args) {
+    const result = original.apply(this, args)
+    const ob = this.__ob__
+    let inserted
+    switch (method) {
+      case 'push':
+      case 'unshift':
+        inserted = args
+        break
+      case 'splice':
+        inserted = args.slice(2)
+        break
+    }
+    if (inserted) ob.observeArray(inserted)
+    // notify change
+    ob.dep.notify()
+    return result
+  })
+})
+```
 
 #### Vue 的响应式原理中 Object.defineProperty 有什么缺陷？
 为什么在 Vue3.0 采用了 Proxy，抛弃了 Object.defineProperty？  
+
+Object.defineProperty无法监控到数组下标的变化，导致通过数组下标添加元素，不能实时响应  
+Object.defineProperty只能劫持对象的属性，从而需要对每个对象，每个属性进行遍历，如果，属性值是对象，还需要深度遍历。Proxy可以劫持整个对象，并返回一个新的对象。  
+Proxy不仅可以代理对象，还可以代理数组。还可以代理动态增加的属性   
 
 #### React 和 Vue 的 diff 时间复杂度从 O(n^3) 优化到 O(n) ，那么 O(n^3) 和 O(n) 是如何计算出来的？
 
