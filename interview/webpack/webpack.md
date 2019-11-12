@@ -1,22 +1,34 @@
 ## Webpack 模块打包工具
 ```js
+// npm install webpack webpack-cli css-loader style-loader url-loader file-loader autoprefixer
+//             babel-loader @babel/core @babel/preset-dev @babel/polyfill @babel/plugin-transform-runtime @babel/runtime-corejs2
+//             html-webpack-plugin clean-webpack-plugin webpack-dev-server
+//             webpack-dev-middleware webpack-merge -D 
 // webpack.config.js
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
+const webpack = require('webpack')
+
 module.exports = {
     mode:'development',
     // devtool:'cheap-module-eval-source-map', //development
     // devtool:'cheap-module-source-map',  //production
+    // cheap只有行信息没有列信息 inline不会单独生成映射文件 module包含loader的sourcemap eval使用eval打包源文件模块
     devServer:{
-        contentBase:'./dist'
+        contentBase:'./dist',
+        open:true,
+        port:3000,
+        hot:true,   //HMR
+        hotOnly:true //不刷新浏览器
     },
     entry:{
         main:'./src/index.js',
         sub:'./src/index.js'
     },
     output:{
-        // publickPath:'http://cdn.com',  //配置cdn
+        // publicPath:'http://cdn.com',  //配置cdn
+        publicPath:'/',
         filename:'[name].js',
         path:path.resolve(__dirname,'dist')
     },
@@ -24,8 +36,35 @@ module.exports = {
         new HtmlWebpackPlugin({
             template:'src/index.html'
         }),
-        new CleanWebpackPlugin(['dist'])
+        new CleanWebpackPlugin(['dist']),
+        new webpack.HotModuleReplacementPlugin()
     ],
+    //Tree Shaking 生产环境默认开启，开发环境配置此项，但还是会打包，只是在代码中会提示(package.json中 sideEffects:false )
+    optimization:{
+        // usedExports:true,    
+        splitChunks: {
+            chunks: 'async',    //代码分割只对异步代码生效  all
+            minSize: 30000,     //大于此字节才会进行分割
+            maxSize: 0,
+            minChunks: 1,
+            maxAsyncRequests: 5,
+            maxInitialRequests: 3,
+            automaticNameDelimiter: '~',
+            name: true,
+            cacheGroups: {
+                vendors: {
+                    test: /[\\/]node_modules[\\/]/, //如果代码是node_modules中的就会进行分割
+                    priority: -10,
+                    filename:'vendors.js'
+                },
+                default: {
+                    minChunks: 2,
+                    priority: -20,
+                    reuseExistingChunk: true
+                }
+            }
+        }
+    },
     module:{
         rules:[
             // {
@@ -48,6 +87,23 @@ module.exports = {
                         limit:2048
                     }
                 }
+            },
+            {
+                test:/\.js$/,
+                exclude:/node_modules/,
+                loader:'babel-loader',
+                // .babelrc
+                // options:{
+                //     presets:[['@babel/preset-dev',{
+                //         useBuiltIns:'usage'
+                //     }]],
+                //     plugins:[['@babel/plugin-transform-runtime',{
+                //         "corejs":2,
+                //         "helpers":true,
+                //         "regenerator":true,
+                //         "useESModules":false
+                //     }]]
+                // }
             },
             {
                 test:/\.scss$/,
@@ -74,6 +130,19 @@ module.exports = {
     }
 }
 
+// .babelrc
+{
+    presets:[['@babel/preset-dev',{
+        useBuiltIns:'usage'
+    }]],
+    plugins:[['@babel/plugin-transform-runtime',{
+        "corejs":2,
+        "helpers":true,
+        "regenerator":true,
+        "useESModules":false
+    }]]
+}
+
 // postcss.config.js
 // npm install autoprefixer -D
 module.exports = {
@@ -81,4 +150,20 @@ module.exports = {
         require('autoprefixer')
     ]
 }
+
+// server.js
+const express = require('express')
+const webpack = require('webpack')
+const WebpackDevMiddleware = require('webpack-dev-middleware')
+const config = require('./webpack.config.js')
+const complier = webpack(config)
+
+const app = express()
+app.use(WebpackDevMiddleware(complier,{
+    publicPath:config.output.publicPath
+}))
+
+app.listen(8080,() => {
+    console.log('server is running')
+})
 ```
