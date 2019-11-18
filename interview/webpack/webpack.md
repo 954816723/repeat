@@ -43,24 +43,25 @@ module.exports = {
     optimization:{
         // usedExports:true,    
         splitChunks: {
-            chunks: 'async',    //代码分割只对异步代码生效  all
+            chunks: 'async',    //代码分割只对异步代码生效  all全部
             minSize: 30000,     //大于此字节才会进行分割
-            maxSize: 0,
-            minChunks: 1,
-            maxAsyncRequests: 5,
-            maxInitialRequests: 3,
-            automaticNameDelimiter: '~',
-            name: true,
-            cacheGroups: {
+            // maxSize: 0,
+            minChunks: 1,       //当代码被至少引入多少次后会被进行代码分割
+            maxAsyncRequests: 5,    //同时加载的模块数
+            maxInitialRequests: 3,  //入口文件代码分割数 
+            automaticNameDelimiter: '~',    //分割后文件名连接符
+            name: true,     //cacheGroups中的文件命名生效
+            cacheGroups: {  //缓存组
                 vendors: {
                     test: /[\\/]node_modules[\\/]/, //如果代码是node_modules中的就会进行分割
-                    priority: -10,
+                    priority: -10,  //权重,优先级
                     filename:'vendors.js'
                 },
                 default: {
-                    minChunks: 2,
+                    // minChunks: 2,
                     priority: -20,
-                    reuseExistingChunk: true
+                    reuseExistingChunk: true,   //忽略已经打包的模块,避免重复打包
+                    filename:'common.js'
                 }
             }
         }
