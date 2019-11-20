@@ -39,6 +39,7 @@ module.exports = {
         new CleanWebpackPlugin(['dist']),
         new webpack.HotModuleReplacementPlugin()
     ],
+    // lazy loading js文件中通过import语法写异步代码,实现lazy loading
     //Tree Shaking 生产环境默认开启，开发环境配置此项，但还是会打包，只是在代码中会提示(package.json中 sideEffects:false )
     optimization:{
         // usedExports:true,    
@@ -167,4 +168,11 @@ app.use(WebpackDevMiddleware(complier,{
 app.listen(8080,() => {
     console.log('server is running')
 })
+
+// index.js
+document.addEventListener('click',()=>{
+    import(/*webpackPrefetch:true*/'./click.js').then(({default:func}) => {
+        func()
+    })
+}) 
 ```
