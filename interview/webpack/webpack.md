@@ -2,7 +2,9 @@
 ```js
 // npm install webpack webpack-cli css-loader style-loader url-loader file-loader autoprefixer
 //             babel-loader @babel/core @babel/preset-dev @babel/polyfill @babel/plugin-transform-runtime @babel/runtime-corejs2
+//             eslint-loader
 //             html-webpack-plugin clean-webpack-plugin mini-css-extract-plugin optimize-css-assets-plugin webpack-dev-server
+//             add-asset-html-webpack-plugin(dll引入到html中)
 //             webpack-dev-middleware webpack-merge imports-loader(this->window) 
 //             workbox-webpack-plugin     -D 
 // webpack.config.js
@@ -12,6 +14,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssExtractPlugin = require('optimize-css-assets-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
+const AddAssetHtmlWebpackPlugin = require('add-asset-html-webpack-plugin')
 const webpack = require('webpack')
 
 module.exports = {
@@ -20,6 +23,7 @@ module.exports = {
     // devtool:'cheap-module-source-map',  //production
     // cheap只有行信息没有列信息 inline不会单独生成映射文件 module包含loader的sourcemap eval使用eval打包源文件模块
     devServer:{
+        overlay:true, //浏览器中弹层显示错误信息
         contentBase:'./dist',
         open:true,
         port:3000,
@@ -35,6 +39,13 @@ module.exports = {
                 } 
             }
         }
+    },
+    resolve:{
+        extensions:['.js','.jsx'],
+        alias:{
+            @:path.resolve(__dirname,'./src')
+        }
+        // mainFiles:['index','child']
     },
     entry:{
         main:'./src/index.js',
@@ -55,13 +66,21 @@ module.exports = {
             template:'src/index.html'
         }),
         new CleanWebpackPlugin(['dist']),
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
         new MiniCssExtractPlugin({
             filename:'[name].css',
             chunkFilename:'[name].chunk.css'
-        })
+        }),
         new webpack.ProvidePlugin({
             $:'jquery'
+        }),
+        // dll文件引入到html中
+        new AddAssetHtmlWebpackPlugin({
+            filepath:path.resolve(__dirname,'../dll/vendors.dll.js')
+        })
+        // dllPlugin
+        new webpack.DllReferencePlugin({
+            manifest:path.resolve(__dirname,'../dll/vendors.manifest.json')
         })
         // PWA
         new WorkboxPlugin.GenerateSW({
@@ -130,9 +149,12 @@ module.exports = {
                     {
                         loader:'babel-loader'
                     },
-                    {
-                        loader:'imports-loader?this=>window'
-                    }
+                    // {
+                    //     loader:'imports-loader?this=>window'
+                    // },
+                    // {
+                    //     loader:'eslint-loader'
+                    // }
                 ]
                 // .babelrc
                 // options:{
@@ -228,4 +250,39 @@ if('serviceWorker' in navigator){
             })
     })
 }
+
+// webpack.dll.js
+const path = require('path')
+const webpack = require('webpack')
+
+module.exports = {
+    mode:'production',
+    entry:{
+        vendors:['react','react-dom','lodash']
+    },
+    output:{
+        filename:'[name].dll.js',
+        path:path.resolve(__dirname,'../dll'),
+        library:'[name]'
+    },
+    plugins:[
+        // 检查映射关系,引入第三方模块的时候,去使用dll文件引入
+        new webpack.DllPlugin({
+            name:'[name]',
+            path:path.resolve(__dirname,'../dll/[name].manifest.json')
+        })
+    ]
+}
 ```
+
+## webpack性能优化
+1. 跟上技术迭代,更新webpack,node,npm  
+2. 在尽可能少的模块上应用loader,合理使用exclude,include  
+3. Plugin尽可能精简并确保可靠  
+4. resolve参数合理配置  
+5. 使用DllPlugin提高打包速度  
+6. 控制包文件大小 tree shaking,splitchunks  
+7. thread-loader,parallel-webpack(多页面打包),happypack多进程打包  
+8. 合理使用sourceMap  
+9. 开发环境内存编译  
+10. 开发环境无用插件剔除  
