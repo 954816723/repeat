@@ -1,16 +1,12 @@
 ## Node
-- 服务稳定性  
-server端可能会遭受各种恶意攻击和误操作  
-单个客户端可以以外挂掉,但是服务端不能  
-使用PM2做进程守护  
-- 考虑CPU和内存(优化,扩展)  
-使用stream写日志,使用redis存session  
-- 日志记录  
-server端要记录日志,存储日志,分析日志  
-- 安全  
-随时准备接收各种恶意攻击,如越权操作,数据库攻击等  
-登录验证,xss攻击,sql注入  
-- 集群和服务拆分  
+## 事件循环
+事件循环分成6个不同的阶段,每个阶段都维护着一个回调函数队列,在不同的阶段,事件循环会处理不同类型的事件  
+- Timers: 用来处理setTimeout()和setInterval()的回调  
+- I/O callbacks: 大多数的回调方法在这个阶段执行,除了timers,close和seImmediate事件的回调  
+- idle,prepare: 仅仅在内部使用  
+- Poll: 轮询,不断检查有没有新的I/O事件,事件循环可能在这里阻塞  
+- Check: 处理setImmediate()事件的回调  
+- close callbacks: 处理一些close相关的事件,例如socket.on('close',...)  
 
 
 ## Express

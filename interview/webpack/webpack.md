@@ -286,3 +286,8 @@ module.exports = {
 8. 合理使用sourceMap  
 9. 开发环境内存编译  
 10. 开发环境无用插件剔除  
+
+## webpack-chain
+通过提供可链式或顺流式的API创建和修改webpack配置  
+`npm install --save-dev webpack-chain`  
+
