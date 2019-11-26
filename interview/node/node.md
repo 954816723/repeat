@@ -205,7 +205,7 @@ rs.on('error',function(data){})
 rs.on('end',function(data){})
 rs.on('close',function(data){})//文件流才有
 ```
-######可写流
+###### 可写流
 - 当往可写流里写数据的时候,不会立刻写入文件中,而是写入缓存区,缓存区的大小就是highWaterMark,默认16k  
 - 等缓存区满了之后,才真正的写入文件里  
 ```js
