@@ -72,3 +72,44 @@ var addTwoNumbers = function(l1, l2) {
     return result.next
 };
 ```
+
+3. 无重复字符的最长子串
+给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度  
+```js
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLongestSubstring = function(s) {
+    let num = 0
+    let str = ''
+    let res = 0
+    for(n of s){
+        if(str.indexOf(n) === -1){
+            str += n
+            num++
+            res = res > num ? res : num
+        }else{
+            str += n
+            str = str.slice(str.indexOf(n) + 1)
+            num = str.length
+        }
+    }
+    return res
+};
+var lengthOfLongestSubstring = function(s) {
+    let num = 0,
+        start = 0,
+        t = 0;
+    for(let i = 0;i < s.length; i++){
+        t = s.slice(start,i).indexOf(s[i]);
+        if(t === -1){
+            num = Math.max(num,i-start+1);
+        }else{
+            start = start + t + 1;
+        }
+    }
+    return num
+};
+```
+
